@@ -1,0 +1,56 @@
+# --- Python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# --- Virtual environments --------------------------------------------------
+venv/
+env/
+ENV/
+.venv/
+.env
+
+# --- PyInstaller -----------------------------------------------------------
+build/
+dist/
+*.spec.bak
+*.manifest
+*.exe
+*.dll
+
+# --- Distribution / packaging ----------------------------------------------
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- IDE / editor ----------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.claude/
+
+# --- OS --------------------------------------------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+~$*
+
+# --- Logs / temp -----------------------------------------------------------
+*.log
+*.tmp
+*.bak
+*.cache
+
+# --- Local secrets (must NEVER be committed) -------------------------------
+.env.local
+*.local
+secrets.*
+credentials.*

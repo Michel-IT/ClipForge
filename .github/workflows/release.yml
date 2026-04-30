@@ -1,0 +1,99 @@
+name: Release
+
+# Builds ClipForge on Windows, Linux and macOS when a version tag is pushed
+# (e.g. v1.0.0), then attaches the three binaries to a GitHub Release.
+#
+# Trigger:    git tag v1.0.0 && git push origin v1.0.0
+# Manual run: Actions tab -> "Release" workflow -> "Run workflow"
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows
+            artifact_name: ClipForge.exe
+            release_name: ClipForge-windows.exe
+            build_cmd: scripts\build.bat
+          - os: ubuntu-latest
+            platform: linux
+            artifact_name: ClipForge
+            release_name: ClipForge-linux
+            build_cmd: bash scripts/build.sh
+          - os: macos-latest
+            platform: macos
+            artifact_name: ClipForge
+            release_name: ClipForge-macos
+            build_cmd: bash scripts/build.sh
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Linux Tk
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y python3-tk
+
+      - name: Build
+        shell: bash
+        run: |
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            cmd /c "${{ matrix.build_cmd }}" || true
+          else
+            chmod +x scripts/build.sh
+            ${{ matrix.build_cmd }}
+          fi
+
+      - name: Rename artifact
+        shell: bash
+        run: |
+          src="dist/${{ matrix.platform }}/${{ matrix.artifact_name }}"
+          dst="dist/${{ matrix.platform }}/${{ matrix.release_name }}"
+          mv "$src" "$dst"
+          ls -la "dist/${{ matrix.platform }}/"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clipforge-${{ matrix.platform }}
+          path: dist/${{ matrix.platform }}/${{ matrix.release_name }}
+          retention-days: 7
+
+  release:
+    name: Publish Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List downloaded artifacts
+        run: find artifacts -type f
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false
