@@ -19,6 +19,28 @@ except Exception:
 URL_RE = re.compile(r"^https?://", re.IGNORECASE)
 
 
+def _apply_window_icon(window):
+    """Cross-platform window icon setter.
+
+    Windows: iconbitmap(.ico) — the native format, sets EXE + title bar.
+    macOS / Linux: iconphoto(.png) — .ico is not native and on macOS
+    leaves a generic placeholder document icon in the title bar's proxy
+    slot. iconphoto with a PNG works on both X11 and Aqua.
+
+    The PhotoImage is stashed on the window itself so Tk doesn't garbage-
+    collect the underlying pixmap.
+    """
+    try:
+        if sys.platform == "win32":
+            window.iconbitmap(resource_path("assets/icon.ico"))
+        else:
+            img = tk.PhotoImage(file=resource_path("assets/clipforge_icon4.png"))
+            window._cf_icon_ref = img
+            window.iconphoto(True, img)
+    except Exception:
+        pass
+
+
 PLATFORMS = [
     {"name": "YouTube",     "hosts": ("youtube.com", "youtu.be"),    "video": True, "audio": True, "subs": True,  "color": "#ff0033", "label": "YouTube",     "notes": "Video, audio, automatic and manual subtitles."},
     {"name": "TikTok",      "hosts": ("tiktok.com",),                "video": True, "audio": True, "subs": False, "color": "#ff0050", "label": "TikTok",      "notes": "Video (no watermark by default) and audio."},
@@ -305,10 +327,7 @@ class DisclaimerDialog(ctk.CTkToplevel):
         self.title("ClipForge — Legal Disclaimer")
         self.geometry("740x640")
         self.resizable(False, False)
-        try:
-            self.iconbitmap(resource_path("assets/icon.ico"))
-        except Exception:
-            pass
+        _apply_window_icon(self)
 
         self.transient(master)
         self.grab_set()
@@ -425,10 +444,7 @@ class App(ctk.CTk):
         self.title("ClipForge")
         self.geometry("900x740")
         self.minsize(820, 640)
-        try:
-            self.iconbitmap(resource_path("assets/icon.ico"))
-        except Exception:
-            pass
+        _apply_window_icon(self)
         if sys.platform == "darwin":
             # Re-apply: the previous root (disclaimer) was destroyed and that
             # may have reset the dock icon back to the default. Schedule via
@@ -1186,10 +1202,7 @@ def _show_disclaimer():
     root.withdraw()
     if sys.platform == "darwin":
         root.after(80, lambda: _set_macos_dock_icon(resource_path("assets/icon.icns")))
-    try:
-        root.iconbitmap(resource_path("assets/icon.ico"))
-    except Exception:
-        pass
+    _apply_window_icon(root)
     accepted = DisclaimerDialog(root, mode="accept").show()
     root.destroy()
     return accepted

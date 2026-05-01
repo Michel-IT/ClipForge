@@ -9,11 +9,16 @@ yt_dlp_datas, yt_dlp_binaries, yt_dlp_hiddenimports = collect_all('yt_dlp')
 ctk_datas, ctk_binaries, ctk_hiddenimports = collect_all('customtkinter')
 ff_datas, ff_binaries, ff_hiddenimports = collect_all('imageio_ffmpeg')
 
-# PyInstaller wants the platform-native icon format. We always bundle the .ico
-# for the running app (so the in-window iconbitmap call has something to read),
-# and additionally pass an .icns to PyInstaller's --icon flag on macOS when
-# present.
-_datas = [('assets/icon.ico', 'assets')]
+# Per-platform icon bundling:
+#   - icon.ico  → Windows iconbitmap() at runtime AND embedded as the EXE icon
+#   - icon.icns → macOS NSApplication.setApplicationIconImage at runtime AND
+#                 passed to PyInstaller's --icon flag for the bundle
+#   - clipforge_icon4.png → fed to Tk's iconphoto() for cross-platform window
+#                 title-bar icons (on macOS .ico produces a generic placeholder)
+_datas = [
+    ('assets/icon.ico', 'assets'),
+    ('assets/clipforge_icon4.png', 'assets'),
+]
 if sys.platform == 'darwin' and os.path.exists('assets/icon.icns'):
     _datas.append(('assets/icon.icns', 'assets'))
 
