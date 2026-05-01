@@ -68,46 +68,53 @@ cd ClipForge
 From the project root in `cmd.exe` or PowerShell:
 
 ```bat
-scripts\build.bat
+scripts\build-windows.bat
 ```
 
 What happens:
 1. Creates `venv\` (only on the first run).
 2. `pip install --upgrade pip pyinstaller`.
 3. `pip install --upgrade -r requirements.txt` → fresh `yt-dlp`, `customtkinter`, `imageio-ffmpeg`.
-4. Wipes `build\` and `dist\`.
+4. Wipes `build\` and `dist\windows\`.
 5. `pyinstaller --clean --noconfirm clipforge.spec` → produces `dist\windows\ClipForge.exe` (~56 MB).
-6. Pauses for any final keypress.
+6. Pauses for any final keypress (skipped automatically when run from CI via the `%CI%` env var).
 
 **Output:** `dist\windows\ClipForge.exe`. Double-click to launch. The disclaimer dialog appears first; you must scroll to the bottom and click "I Accept" before the main window opens.
 
 ### Linux
 
 ```bash
-chmod +x scripts/build.sh scripts/run.sh
-scripts/build.sh
+chmod +x scripts/build-linux.sh scripts/run-unix.sh
+scripts/build-linux.sh
 ```
 
-**Output:** `dist/<platform>/ClipForge` — a single ELF binary. Make it executable if it isn't already (`chmod +x dist/<platform>/ClipForge`) and launch with:
+**Output:** `dist/linux/ClipForge` — a single ELF binary. Make it executable if it isn't already (`chmod +x dist/linux/ClipForge`) and launch with:
 
 ```bash
-./dist/<platform>/ClipForge
+./dist/linux/ClipForge
 ```
 
 ### macOS
 
-```bash
-chmod +x scripts/build.sh scripts/run.sh
-scripts/build.sh
-```
-
-**Output:** `dist/<platform>/ClipForge` — a single Mach-O binary. Launch with:
+macOS has its own dedicated script because the bundled Tcl/Tk inherits the SDK target of whichever Python you used to build. A python.org installer compiled against macOS 15.7 SDK will hard-refuse to launch on macOS 15.6 — even on a freshly-updated Mac, you can be just one point release behind. `scripts/build-macos.sh` sidesteps this by forcing a Homebrew-built Python (which always tracks the running OS version):
 
 ```bash
-./dist/<platform>/ClipForge
+chmod +x scripts/build-macos.sh
+scripts/build-macos.sh                # build + auto-launch as smoke test
+scripts/build-macos.sh --no-run       # build only (used by CI)
 ```
 
-Want a real `.app` bundle? Drop a `assets/icon.icns` next to `assets/icon.ico` and re-run `scripts/build.sh`. PyInstaller will pick up the `.icns` and embed it. (For a true `.app` package with `Info.plist` and code signing you'll need to extend [clipforge.spec](../clipforge.spec) — see the [PyInstaller macOS docs](https://pyinstaller.org/en/stable/feature-notes.html#macos-app-bundles).)
+What it does:
+1. Auto-installs Homebrew if missing.
+2. Installs `python@3.12` and `python-tk@3.12` via Homebrew (idempotent).
+3. Recreates `venv/` using `$(brew --prefix python@3.12)/bin/python3.12`.
+4. Runs PyInstaller against `clipforge.spec`.
+5. Renames the output to `ClipForge-macos-arm64` or `ClipForge-macos-intel` based on host architecture (`uname -m`).
+6. Unless `--no-run` is passed, launches the binary as a smoke test.
+
+**Output:** `dist/macos/ClipForge-macos-arm64` (Apple Silicon) or `dist/macos/ClipForge-macos-intel` (Intel) — a single Mach-O binary.
+
+Want a real `.app` bundle? Drop a `assets/icon.icns` next to `assets/icon.ico` and re-run `scripts/build-macos.sh`. PyInstaller will pick up the `.icns` and embed it. (For a true `.app` package with `Info.plist` and code signing you'll need to extend [clipforge.spec](../clipforge.spec) — see the [PyInstaller macOS docs](https://pyinstaller.org/en/stable/feature-notes.html#macos-app-bundles).)
 
 > macOS Gatekeeper will refuse to launch unsigned binaries downloaded from the internet. For your own builds this isn't a problem (Gatekeeper trusts files you compiled locally). To distribute the binary to other Macs you need an Apple Developer ID and a code signature — out of scope for this guide.
 
@@ -119,8 +126,8 @@ If you just want to develop / debug, skip PyInstaller and run the Python script 
 
 | Platform | Command |
 |---|---|
-| Windows | `scripts\run.bat` |
-| Linux / macOS | `scripts/run.sh` |
+| Windows | `scripts\run-windows.bat` |
+| Linux / macOS | `scripts/run-unix.sh` |
 
 Both scripts upgrade `yt-dlp` on every invocation, so you always pick up the latest extractor changes without rebuilding.
 
@@ -190,7 +197,7 @@ The system Python doesn't include the Tk bindings. Install them:
 - Fedora: `sudo dnf install python3-tkinter`
 - Arch: `sudo pacman -S tk`
 
-Then delete `venv/`, re-run `scripts/build.sh`.
+Then delete `venv/`, re-run `scripts/build-linux.sh`.
 
 ### macOS: `Failed to execute script 'clipforge'` on launch
 
@@ -233,7 +240,7 @@ All three are uploaded to a Release titled with the tag name, with auto-generate
 
 To re-run the build for an existing tag (e.g. after fixing a CI bug), use the **Run workflow** button on the Actions → Release page.
 
-To dry-run locally without publishing, just run `scripts/build.bat` (Windows) or `scripts/build.sh` (Linux/macOS).
+To dry-run locally without publishing, just run the platform-specific script: `scripts\build-windows.bat`, `scripts/build-linux.sh`, or `scripts/build-macos.sh`.
 
 ---
 

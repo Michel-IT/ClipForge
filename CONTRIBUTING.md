@@ -13,7 +13,7 @@ Requirements: Python 3.10+, Git. Tested on Windows; the cross-platform build/run
 ```bat
 git clone https://github.com/Michel-IT/ClipForge.git
 cd ClipForge
-scripts\run.bat
+scripts\run-windows.bat
 ```
 
 **Linux / macOS**
@@ -21,15 +21,16 @@ scripts\run.bat
 ```bash
 git clone https://github.com/Michel-IT/ClipForge.git
 cd ClipForge
-chmod +x scripts/build.sh scripts/run.sh
-scripts/run.sh
+chmod +x scripts/run-unix.sh
+scripts/run-unix.sh
 ```
 
-To produce the bundled binary (`dist\ClipForge.exe` on Windows, `dist/ClipForge` on Linux/macOS):
+To produce the bundled binary:
 
 ```bash
-scripts/build.sh   # Linux / macOS
-scripts\build.bat  # Windows
+scripts\build-windows.bat   # Windows  → dist\windows\ClipForge.exe
+scripts/build-linux.sh      # Linux    → dist/linux/ClipForge
+scripts/build-macos.sh      # macOS    → dist/macos/ClipForge-macos-{arm64,intel}
 ```
 
 The build scripts auto-upgrade `yt-dlp` and the other Python dependencies on every run, so each fresh build tracks the latest extractor changes.
@@ -49,7 +50,7 @@ ClipForge is a small single-file GUI app. We optimize for **readability and mini
 
 Before opening a PR, please confirm:
 
-- [ ] You ran the build script for your platform (`scripts\build.bat` on Windows, `scripts/build.sh` on Linux/macOS) and the resulting binary launches, accepts the disclaimer, and runs at least one happy-path download.
+- [ ] You ran the build script for your platform (`scripts\build-windows.bat`, `scripts/build-linux.sh`, or `scripts/build-macos.sh`) and the resulting binary launches, accepts the disclaimer, and runs at least one happy-path download.
 - [ ] You ran `python -c "import ast; ast.parse(open('clipforge.py').read())"` and got `OK`.
 - [ ] You did not add a new third-party dependency without discussing it in an issue first.
 - [ ] You did not introduce wording (in code, UI, or documentation) that could be read as encouragement to bypass DRM, scrape commercial content, or violate any platform's Terms of Service.

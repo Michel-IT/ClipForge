@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # ClipForge run-from-source script for Linux and macOS.
+# (No SDK / Tcl/Tk version pitfall here — running from the user's own Python
+# uses whatever Tk that Python links against, which already matches their OS.)
 # On every invocation upgrades yt-dlp so the latest extractors are picked up
 # without rebuilding the venv from scratch.
 

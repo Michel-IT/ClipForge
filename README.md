@@ -107,24 +107,36 @@ The build scripts always upgrade `yt-dlp` (and the other Python deps) before bui
 ```bat
 git clone https://github.com/Michel-IT/ClipForge.git
 cd ClipForge
-scripts\build.bat
+scripts\build-windows.bat
 ```
-Output: `dist\ClipForge.exe`.
+Output: `dist\windows\ClipForge.exe`.
 
-**Linux / macOS**
+**Linux**
 
 ```bash
 git clone https://github.com/Michel-IT/ClipForge.git
 cd ClipForge
-chmod +x scripts/build.sh scripts/run.sh
-scripts/build.sh
+chmod +x scripts/build-linux.sh scripts/run-unix.sh
+scripts/build-linux.sh
 ```
-Output: `dist/ClipForge` (single executable). On macOS, drop a `assets/icon.icns` next to `assets/icon.ico` to embed an icon in the binary.
+Output: `dist/linux/ClipForge`.
+
+**macOS** (Apple Silicon or Intel — script auto-detects)
+
+```bash
+git clone https://github.com/Michel-IT/ClipForge.git
+cd ClipForge
+chmod +x scripts/build-macos.sh
+scripts/build-macos.sh                 # build + auto-launch as smoke test
+scripts/build-macos.sh --no-run        # build only
+```
+Output: `dist/macos/ClipForge-macos-arm64` or `dist/macos/ClipForge-macos-intel` (named after host arch).
+The script auto-installs Homebrew + `python@3.12` + `python-tk@3.12` if missing — needed to avoid the Tcl/Tk SDK mismatch that bites python.org-installed Pythons on point-version macOS.
 
 ### Run from source without building
 
-**Windows**: `scripts\run.bat`
-**Linux / macOS**: `scripts/run.sh`
+**Windows**: `scripts\run-windows.bat`
+**Linux / macOS**: `scripts/run-unix.sh`
 
 Both scripts create the venv on first run and `pip install --upgrade yt-dlp` on every subsequent run, so the latest extractors are picked up without rebuilding.
 
@@ -169,10 +181,11 @@ ClipForge/
 │  ├─ BUILD.md               # Cross-platform build guide (prereqs, steps, troubleshooting)
 │  └─ screenshots/           # README images
 ├─ scripts/
-│  ├─ build.bat              # Windows build (venv + PyInstaller, auto-upgrades yt-dlp)
-│  ├─ build.sh               # Linux / macOS build (same behaviour)
-│  ├─ run.bat                # Windows: run from source without building
-│  └─ run.sh                 # Linux / macOS: run from source without building
+│  ├─ build-windows.bat      # Windows build (venv + PyInstaller, auto-upgrades yt-dlp)
+│  ├─ build-linux.sh         # Linux build (same behaviour)
+│  ├─ build-macos.sh         # macOS build (handles Tcl/Tk SDK mismatch via Homebrew Python; auto-launches as smoke test)
+│  ├─ run-windows.bat        # Windows: run from source without building
+│  └─ run-unix.sh            # Linux / macOS: run from source without building
 ├─ clipforge.py              # Single-file application (~1000 lines)
 ├─ clipforge.spec            # PyInstaller spec (bundles ffmpeg, yt-dlp, customtkinter, icon)
 ├─ requirements.txt          # Pinned runtime dependencies

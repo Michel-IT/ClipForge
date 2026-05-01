@@ -28,26 +28,24 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            platform: windows
-            artifact_name: ClipForge.exe
+            build_cmd: scripts\build-windows.bat
+            produced_path: dist/windows/ClipForge.exe
             release_name: ClipForge-windows.exe
-            build_cmd: scripts\build.bat
           - os: ubuntu-latest
-            platform: linux
-            artifact_name: ClipForge
+            build_cmd: bash scripts/build-linux.sh
+            produced_path: dist/linux/ClipForge
             release_name: ClipForge-linux
-            build_cmd: bash scripts/build.sh
           - os: macos-latest
-            platform: macos
-            artifact_name: ClipForge
+            build_cmd: bash scripts/build-macos.sh --no-run
+            produced_path: dist/macos/ClipForge-macos-arm64
             release_name: ClipForge-macos-arm64
-            build_cmd: bash scripts/build.sh
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Python
+        if: matrix.os != 'macos-latest'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -62,23 +60,21 @@ jobs:
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             cmd //c "${{ matrix.build_cmd }}"
           else
-            chmod +x scripts/build.sh
             ${{ matrix.build_cmd }}
           fi
 
-      - name: Rename artifact
+      - name: Stage release artifact
         shell: bash
         run: |
-          src="dist/${{ matrix.platform }}/${{ matrix.artifact_name }}"
-          dst="dist/${{ matrix.platform }}/${{ matrix.release_name }}"
-          mv "$src" "$dst"
-          ls -la "dist/${{ matrix.platform }}/"
+          mkdir -p release-staging
+          cp "${{ matrix.produced_path }}" "release-staging/${{ matrix.release_name }}"
+          ls -la release-staging/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.release_name }}
-          path: dist/${{ matrix.platform }}/${{ matrix.release_name }}
+          path: release-staging/${{ matrix.release_name }}
           retention-days: 7
 
   build-intel:
@@ -89,28 +85,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - name: Build
         shell: bash
-        run: |
-          chmod +x scripts/build.sh
-          bash scripts/build.sh
+        run: bash scripts/build-macos.sh --no-run
 
-      - name: Rename artifact
+      - name: Stage release artifact
         shell: bash
         run: |
-          mv "dist/macos/ClipForge" "dist/macos/ClipForge-macos-intel"
-          ls -la "dist/macos/"
+          mkdir -p release-staging
+          cp dist/macos/ClipForge-macos-intel release-staging/ClipForge-macos-intel
+          ls -la release-staging/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ClipForge-macos-intel
-          path: dist/macos/ClipForge-macos-intel
+          path: release-staging/ClipForge-macos-intel
           retention-days: 7
 
   release:
