@@ -1041,58 +1041,26 @@ class App(ctk.CTk):
             self._set_busy(False)
 
 
-def _set_macos_process_name(name: str) -> None:
-    """Override the process name shown in the macOS menu bar.
+def _set_tk_app_name(tk_root, name: str) -> None:
+    """Override the app name reported by Tk to the OS.
 
-    Without a proper .app bundle (Info.plist with CFBundleName), macOS displays
-    the executable's filename — for us that's "ClipForge-macos-intel" or
-    "ClipForge-macos-arm64". Overriding via [NSProcessInfo setProcessName:]
-    at startup makes the menu bar read just "ClipForge".
+    On macOS this is what shows up in the menu bar (top-left of the screen)
+    and in System Events' "frontmost process" — without a proper .app bundle,
+    the OS would otherwise show the binary's filename
+    (e.g. "ClipForge-macos-intel"). Calling Tcl's `tk appname` early on the
+    first interpreter is the canonical way to override that.
 
-    Implemented via libobjc directly (no PyObjC dependency).
+    No-op on platforms where the menu bar doesn't apply (Windows, Linux).
     """
-    if sys.platform != "darwin":
-        return
     try:
-        import ctypes
-        from ctypes import c_void_p, c_char_p
-
-        objc = ctypes.cdll.LoadLibrary("/usr/lib/libobjc.A.dylib")
-        objc.objc_getClass.restype = c_void_p
-        objc.objc_getClass.argtypes = [c_char_p]
-        objc.sel_registerName.restype = c_void_p
-        objc.sel_registerName.argtypes = [c_char_p]
-        objc.objc_msgSend.restype = c_void_p
-
-        # NSString *nsname = [NSString stringWithUTF8String:name]
-        objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_char_p]
-        nsname = objc.objc_msgSend(
-            objc.objc_getClass(b"NSString"),
-            objc.sel_registerName(b"stringWithUTF8String:"),
-            name.encode("utf-8"),
-        )
-
-        # NSProcessInfo *info = [NSProcessInfo processInfo]
-        objc.objc_msgSend.argtypes = [c_void_p, c_void_p]
-        proc_info = objc.objc_msgSend(
-            objc.objc_getClass(b"NSProcessInfo"),
-            objc.sel_registerName(b"processInfo"),
-        )
-
-        # [info setProcessName:nsname]
-        objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_void_p]
-        objc.objc_msgSend.restype = None
-        objc.objc_msgSend(
-            proc_info,
-            objc.sel_registerName(b"setProcessName:"),
-            nsname,
-        )
+        tk_root.tk.call("tk", "appname", name)
     except Exception:
         pass
 
 
 def _show_disclaimer():
     root = ctk.CTk()
+    _set_tk_app_name(root, "ClipForge")
     root.withdraw()
     try:
         root.iconbitmap(resource_path("assets/icon.ico"))
@@ -1104,7 +1072,8 @@ def _show_disclaimer():
 
 
 if __name__ == "__main__":
-    _set_macos_process_name("ClipForge")
     if not _show_disclaimer():
         sys.exit(0)
-    App().mainloop()
+    app = App()
+    _set_tk_app_name(app, "ClipForge")
+    app.mainloop()
