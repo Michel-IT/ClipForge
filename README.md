@@ -70,13 +70,26 @@ For the full list see the [yt-dlp supported sites page](https://github.com/yt-dl
 |---|---|---|
 | Windows | [⬇️ ClipForge-windows.exe](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-windows.exe) | Single `.exe`, ~56 MB. Just double-click. |
 | Linux | [⬇️ ClipForge-linux](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-linux) | `chmod +x ClipForge-linux && ./ClipForge-linux` |
-| macOS | [⬇️ ClipForge-macos](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-macos) | First launch: right-click → Open (Gatekeeper). |
+| macOS — Apple Silicon (M1/M2/M3/M4) | [⬇️ ClipForge-macos-arm64](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-macos-arm64) | See macOS notes below. |
+| macOS — Intel (x86_64) | [⬇️ ClipForge-macos-intel](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-macos-intel) | See macOS notes below. |
 
-All three direct links always point to the **latest release**. Browse all versions on the [Releases page](https://github.com/Michel-IT/ClipForge/releases).
+All direct links always point to the **latest release**. Browse all versions on the [Releases page](https://github.com/Michel-IT/ClipForge/releases).
+
+**Which macOS build do I need?** Open Terminal and run `uname -m` — `arm64` → use Apple Silicon, `x86_64` → use Intel. Picking the wrong one fails with `bad CPU type in executable`.
+
+**macOS first launch (both builds).** The binary is unsigned, so Gatekeeper blocks it. Open Terminal in the download folder and run:
+
+```bash
+chmod +x ClipForge-macos-arm64        # or ClipForge-macos-intel
+xattr -d com.apple.quarantine ClipForge-macos-arm64
+./ClipForge-macos-arm64
+```
+
+The Finder "right-click → Open" trick only works for `.app` bundles — for raw executables like this, the Terminal commands above are the supported path.
 
 That's it — no installer, no Python, no `ffmpeg` to set up. On first launch, accept the legal disclaimer.
 
-> Each release is built automatically by GitHub Actions on Windows, Linux and macOS the moment a `vX.Y.Z` tag is pushed. The bundled `yt-dlp` is upgraded to the latest version at build time, so every release tracks the current YouTube / TikTok / Instagram / etc. extractors.
+> Each release is built automatically by GitHub Actions on Windows, Linux, macOS Apple Silicon (`macos-latest`) and macOS Intel (`macos-13`) the moment a `vX.Y.Z` tag is pushed. The bundled `yt-dlp` is upgraded to the latest version at build time, so every release tracks the current YouTube / TikTok / Instagram / etc. extractors.
 
 ### Option B — Build from source
 

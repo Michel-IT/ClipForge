@@ -33,9 +33,14 @@ jobs:
             release_name: ClipForge-linux
             build_cmd: bash scripts/build.sh
           - os: macos-latest
-            platform: macos
+            platform: macos-arm64
             artifact_name: ClipForge
-            release_name: ClipForge-macos
+            release_name: ClipForge-macos-arm64
+            build_cmd: bash scripts/build.sh
+          - os: macos-13
+            platform: macos-intel
+            artifact_name: ClipForge
+            release_name: ClipForge-macos-intel
             build_cmd: bash scripts/build.sh
     runs-on: ${{ matrix.os }}
     steps:
