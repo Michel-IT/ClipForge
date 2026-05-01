@@ -1,12 +1,15 @@
 name: Release
 
-# Builds ClipForge on Windows, Linux and macOS when a version tag is pushed
-# (e.g. v1.0.0), then attaches the binaries to a GitHub Release.
+# Builds ClipForge on Windows, Linux and macOS Apple Silicon when a version
+# tag is pushed (e.g. v1.0.0), then attaches the three binaries to a GitHub
+# Release.
 #
-# macOS Intel (x86_64) builds run on the slow `macos-13` runner pool and are
-# kept on a SEPARATE non-blocking track: the main Release publishes as soon as
-# the fast trio (Windows / Linux / macOS arm64) is done; the Intel asset is
-# uploaded later, against the same tag, when its runner finally picks up.
+# macOS Intel (x86_64) is currently built locally and attached to the Release
+# manually. The dedicated `build-intel` job that used to run on `macos-13` was
+# disabled because GitHub's free `macos-13` runner pool is effectively
+# saturated — jobs queue for hours and never start, blocking the publish step.
+# Re-enable the commented block below if/when the Intel pool recovers, or
+# switch to the paid `macos-13-large` runner.
 #
 # Trigger:    git tag v1.0.0 && git push origin v1.0.0
 # Manual run: Actions tab -> "Release" workflow -> "Run workflow"
@@ -77,31 +80,34 @@ jobs:
           path: release-staging/${{ matrix.release_name }}
           retention-days: 7
 
-  build-intel:
-    name: Build (macos-13 Intel)
-    runs-on: macos-13
-    timeout-minutes: 90
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build
-        shell: bash
-        run: bash scripts/build-macos.sh --no-run
-
-      - name: Stage release artifact
-        shell: bash
-        run: |
-          mkdir -p release-staging
-          cp dist/macos/ClipForge-macos-intel release-staging/ClipForge-macos-intel
-          ls -la release-staging/
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ClipForge-macos-intel
-          path: release-staging/ClipForge-macos-intel
-          retention-days: 7
+  # ----------------------------------------------------------------------
+  # macOS Intel job — DISABLED. The free macos-13 pool is currently saturated;
+  # jobs queue indefinitely. Build locally on an Intel Mac and upload the
+  # resulting binary manually to the Release page. To re-enable, uncomment
+  # the block below and add `release-intel` back to the bottom of the file.
+  # ----------------------------------------------------------------------
+  # build-intel:
+  #   name: Build (macos-13 Intel)
+  #   runs-on: macos-13
+  #   timeout-minutes: 90
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Build
+  #       shell: bash
+  #       run: bash scripts/build-macos.sh --no-run
+  #     - name: Stage release artifact
+  #       shell: bash
+  #       run: |
+  #         mkdir -p release-staging
+  #         cp dist/macos/ClipForge-macos-intel release-staging/ClipForge-macos-intel
+  #         ls -la release-staging/
+  #     - name: Upload artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: ClipForge-macos-intel
+  #         path: release-staging/ClipForge-macos-intel
+  #         retention-days: 7
 
   release:
     name: Publish Release
@@ -130,20 +136,19 @@ jobs:
           draft: false
           prerelease: false
 
-  release-intel:
-    name: Add macOS Intel asset
-    needs: [build-intel, release]
-    if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Intel artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ClipForge-macos-intel
-          path: intel
-
-      - name: Upload Intel asset to existing Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: intel/ClipForge-macos-intel
-          fail_on_unmatched_files: true
+  # release-intel:  # Disabled together with build-intel above.
+  #   name: Add macOS Intel asset
+  #   needs: [build-intel, release]
+  #   if: startsWith(github.ref, 'refs/tags/')
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download Intel artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: ClipForge-macos-intel
+  #         path: intel
+  #     - name: Upload Intel asset to existing Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: intel/ClipForge-macos-intel
+  #         fail_on_unmatched_files: true
