@@ -368,12 +368,13 @@ class DisclaimerDialog(ctk.CTkToplevel):
         # macOS Tk workaround: when the parent root is withdraw()n (as in
         # _show_disclaimer), a transient Toplevel can stay un-realized — it
         # exists in Tk's tree but never gets an NSWindow, so wait_window()
-        # blocks forever. Force-realize it here.
+        # blocks forever. A bare deiconify() is enough to force realization.
+        # Do NOT call lift()/focus_force() here: in the PyInstaller-bundled
+        # binary they raced with Tk's bootstrap timing and caused the dialog
+        # to be torn down immediately after creation (orphan after-callbacks
+        # complaining about "invalid command name … _click_animation" etc).
         if sys.platform == "darwin":
-            self.update_idletasks()
             self.deiconify()
-            self.lift()
-            self.focus_force()
 
     def _center(self):
         self.update_idletasks()
