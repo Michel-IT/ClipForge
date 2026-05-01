@@ -1102,8 +1102,80 @@ def _set_macos_app_name(name: str) -> None:
         pass
 
 
+def _set_macos_dock_icon(icon_path: str) -> None:
+    """Set the macOS dock icon at runtime to the file at icon_path.
+
+    Without an .app bundle, the dock shows the generic Python rocket. The
+    documented Cocoa runtime API is
+        [[NSApplication sharedApplication] setApplicationIconImage:
+            [[NSImage alloc] initWithContentsOfFile:path]]
+    which works for non-bundled binaries too. Implemented via libobjc/ctypes
+    to keep zero PyObjC dependency.
+    """
+    if sys.platform != "darwin":
+        return
+    if not icon_path or not os.path.exists(icon_path):
+        return
+    try:
+        import ctypes
+        from ctypes import c_void_p, c_char_p
+
+        # Loading AppKit registers the NSImage / NSApplication classes so
+        # objc_getClass can find them.
+        ctypes.cdll.LoadLibrary(
+            "/System/Library/Frameworks/AppKit.framework/AppKit"
+        )
+        objc = ctypes.cdll.LoadLibrary("/usr/lib/libobjc.A.dylib")
+        objc.objc_getClass.restype = c_void_p
+        objc.objc_getClass.argtypes = [c_char_p]
+        objc.sel_registerName.restype = c_void_p
+        objc.sel_registerName.argtypes = [c_char_p]
+
+        def msg0(obj, sel):
+            objc.objc_msgSend.restype = c_void_p
+            objc.objc_msgSend.argtypes = [c_void_p, c_void_p]
+            return objc.objc_msgSend(obj, objc.sel_registerName(sel))
+
+        def msg_str(obj, sel, s):
+            objc.objc_msgSend.restype = c_void_p
+            objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_char_p]
+            return objc.objc_msgSend(obj, objc.sel_registerName(sel), s.encode("utf-8"))
+
+        def msg_obj(obj, sel, arg):
+            objc.objc_msgSend.restype = None
+            objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_void_p]
+            objc.objc_msgSend(obj, objc.sel_registerName(sel), arg)
+
+        ns_string_cls = objc.objc_getClass(b"NSString")
+        ns_image_cls = objc.objc_getClass(b"NSImage")
+        ns_app_cls = objc.objc_getClass(b"NSApplication")
+        if not (ns_string_cls and ns_image_cls and ns_app_cls):
+            return
+
+        path_ns = msg_str(ns_string_cls, b"stringWithUTF8String:", icon_path)
+
+        # NSImage *img = [[NSImage alloc] initWithContentsOfFile:path]
+        img_alloc = msg0(ns_image_cls, b"alloc")
+        objc.objc_msgSend.restype = c_void_p
+        objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_void_p]
+        img = objc.objc_msgSend(
+            img_alloc, objc.sel_registerName(b"initWithContentsOfFile:"), path_ns
+        )
+        if not img:
+            return
+
+        # [[NSApplication sharedApplication] setApplicationIconImage:img]
+        app = msg0(ns_app_cls, b"sharedApplication")
+        if not app:
+            return
+        msg_obj(app, b"setApplicationIconImage:", img)
+    except Exception:
+        pass
+
+
 def _show_disclaimer():
     _set_macos_app_name("ClipForge")
+    _set_macos_dock_icon(resource_path("assets/icon.icns"))
     root = ctk.CTk()
     root.withdraw()
     try:
