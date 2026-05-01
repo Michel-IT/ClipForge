@@ -429,6 +429,11 @@ class App(ctk.CTk):
             self.iconbitmap(resource_path("assets/icon.ico"))
         except Exception:
             pass
+        if sys.platform == "darwin":
+            # Re-apply: the previous root (disclaimer) was destroyed and that
+            # may have reset the dock icon back to the default. Schedule via
+            # after() to run after Tk has finished re-bootstrapping NSApp.
+            self.after(80, lambda: _set_macos_dock_icon(resource_path("assets/icon.icns")))
 
         self.url_var = tk.StringVar()
         self.out_dir_var = tk.StringVar(value=default_output_dir())
@@ -1102,10 +1107,85 @@ def _set_macos_app_name(name: str) -> None:
         pass
 
 
+def _set_macos_dock_icon(icon_path: str) -> None:
+    """Set the macOS dock icon at runtime.
+
+    MUST be called only after a Tk root has been created and its event loop
+    is running — Tk installs its own NSApplication subclass (TKApplication)
+    when it boots, and calling [NSApplication sharedApplication] before
+    that happens replaces the shared instance with a vanilla NSApplication,
+    after which Tk crashes during color/event handling with:
+
+        -[NSApplication macOSVersion]: unrecognized selector
+
+    Schedule this via root.after(N, lambda: _set_macos_dock_icon(...)) to
+    guarantee Tk's NSApp is already in place when we hand AppKit the image.
+    """
+    if sys.platform != "darwin":
+        return
+    if not icon_path or not os.path.exists(icon_path):
+        return
+    try:
+        import ctypes
+        from ctypes import c_void_p, c_char_p
+
+        ctypes.cdll.LoadLibrary(
+            "/System/Library/Frameworks/AppKit.framework/AppKit"
+        )
+        objc = ctypes.cdll.LoadLibrary("/usr/lib/libobjc.A.dylib")
+        objc.objc_getClass.restype = c_void_p
+        objc.objc_getClass.argtypes = [c_char_p]
+        objc.sel_registerName.restype = c_void_p
+        objc.sel_registerName.argtypes = [c_char_p]
+
+        def msg0(obj, sel):
+            objc.objc_msgSend.restype = c_void_p
+            objc.objc_msgSend.argtypes = [c_void_p, c_void_p]
+            return objc.objc_msgSend(obj, objc.sel_registerName(sel))
+
+        def msg_str(obj, sel, s):
+            objc.objc_msgSend.restype = c_void_p
+            objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_char_p]
+            return objc.objc_msgSend(obj, objc.sel_registerName(sel), s.encode("utf-8"))
+
+        def msg_obj(obj, sel, arg):
+            objc.objc_msgSend.restype = None
+            objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_void_p]
+            objc.objc_msgSend(obj, objc.sel_registerName(sel), arg)
+
+        ns_string_cls = objc.objc_getClass(b"NSString")
+        ns_image_cls = objc.objc_getClass(b"NSImage")
+        ns_app_cls = objc.objc_getClass(b"NSApplication")
+        if not (ns_string_cls and ns_image_cls and ns_app_cls):
+            return
+
+        path_ns = msg_str(ns_string_cls, b"stringWithUTF8String:", icon_path)
+        img_alloc = msg0(ns_image_cls, b"alloc")
+        objc.objc_msgSend.restype = c_void_p
+        objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_void_p]
+        img = objc.objc_msgSend(
+            img_alloc, objc.sel_registerName(b"initWithContentsOfFile:"), path_ns
+        )
+        if not img:
+            return
+
+        # By the time we're called via root.after(), Tk has already set
+        # itself up as the shared NSApplication, so this returns Tk's
+        # subclass instance (TKApplication) — not a fresh NSApplication.
+        app = msg0(ns_app_cls, b"sharedApplication")
+        if not app:
+            return
+        msg_obj(app, b"setApplicationIconImage:", img)
+    except Exception:
+        pass
+
+
 def _show_disclaimer():
     _set_macos_app_name("ClipForge")
     root = ctk.CTk()
     root.withdraw()
+    if sys.platform == "darwin":
+        root.after(80, lambda: _set_macos_dock_icon(resource_path("assets/icon.icns")))
     try:
         root.iconbitmap(resource_path("assets/icon.ico"))
     except Exception:
