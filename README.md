@@ -74,8 +74,6 @@ For the full list see the [yt-dlp supported sites page](https://github.com/yt-dl
 
 All three direct links always point to the **latest release**. Browse all versions on the [Releases page](https://github.com/Michel-IT/ClipForge/releases).
 
-> **Prebuilt Windows binary in repo:** a ready-to-run executable is also tracked directly in this repository at [`dist/windows/ClipForge.exe`](dist/windows/ClipForge.exe) — grab it via [⬇️ direct download](https://github.com/Michel-IT/ClipForge/raw/main/dist/windows/ClipForge.exe) without needing the Releases page.
-
 That's it — no installer, no Python, no `ffmpeg` to set up. On first launch, accept the legal disclaimer.
 
 > Each release is built automatically by GitHub Actions on Windows, Linux and macOS the moment a `vX.Y.Z` tag is pushed. The bundled `yt-dlp` is upgraded to the latest version at build time, so every release tracks the current YouTube / TikTok / Instagram / etc. extractors.
