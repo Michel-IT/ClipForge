@@ -41,12 +41,21 @@ esac
 echo "==> Host architecture: $ARCH → output will be $RELEASE_NAME"
 
 if ! command -v brew >/dev/null 2>&1; then
-    echo "==> Homebrew not found. Installing…"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    if [ "$ARCH" = "arm64" ]; then
+    # Brew might already be installed but its PATH wasn't sourced from a
+    # non-login / non-interactive shell (SSH sessions, CI runners). Try the
+    # standard install paths before falling back to a fresh install.
+    if [ -x /opt/homebrew/bin/brew ]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
-    else
+    elif [ -x /usr/local/bin/brew ]; then
         eval "$(/usr/local/bin/brew shellenv)"
+    else
+        echo "==> Homebrew not found. Installing…"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        if [ "$ARCH" = "arm64" ]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        else
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
     fi
 fi
 
