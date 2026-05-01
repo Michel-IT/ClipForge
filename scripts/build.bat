@@ -18,4 +18,4 @@ pyinstaller --clean --noconfirm --distpath dist\windows clipforge.spec
 
 echo.
 echo Build complete: dist\windows\ClipForge.exe
-pause
+if "%CI%"=="" pause
