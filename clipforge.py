@@ -1041,26 +1041,70 @@ class App(ctk.CTk):
             self._set_busy(False)
 
 
-def _set_tk_app_name(tk_root, name: str) -> None:
-    """Override the app name reported by Tk to the OS.
+def _set_macos_app_name(name: str) -> None:
+    """Override the app name shown in macOS menu bar / System Events.
 
-    On macOS this is what shows up in the menu bar (top-left of the screen)
-    and in System Events' "frontmost process" — without a proper .app bundle,
-    the OS would otherwise show the binary's filename
-    (e.g. "ClipForge-macos-intel"). Calling Tcl's `tk appname` early on the
-    first interpreter is the canonical way to override that.
+    Without an .app bundle, macOS reads CFBundleName / CFBundleDisplayName
+    from the binary's filename. The known runtime workaround is to mutate
+    the in-memory dictionary returned by [NSBundle mainBundle] infoDictionary]:
+    although declared as NSDictionary (immutable), Apple internally backs it
+    with a mutable instance, and setObject:forKey: actually sticks for the
+    duration of the process — long enough for AppKit to read it when it
+    builds the menu bar.
 
-    No-op on platforms where the menu bar doesn't apply (Windows, Linux).
+    Implemented with ctypes against libobjc, no PyObjC dependency.
     """
+    if sys.platform != "darwin":
+        return
     try:
-        tk_root.tk.call("tk", "appname", name)
+        import ctypes
+        from ctypes import c_void_p, c_char_p
+
+        objc = ctypes.cdll.LoadLibrary("/usr/lib/libobjc.A.dylib")
+        objc.objc_getClass.restype = c_void_p
+        objc.objc_getClass.argtypes = [c_char_p]
+        objc.sel_registerName.restype = c_void_p
+        objc.sel_registerName.argtypes = [c_char_p]
+
+        def msg0(obj, sel):
+            objc.objc_msgSend.restype = c_void_p
+            objc.objc_msgSend.argtypes = [c_void_p, c_void_p]
+            return objc.objc_msgSend(obj, objc.sel_registerName(sel))
+
+        def msg_str(obj, sel, s):
+            objc.objc_msgSend.restype = c_void_p
+            objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_char_p]
+            return objc.objc_msgSend(obj, objc.sel_registerName(sel), s.encode("utf-8"))
+
+        def msg_set(obj, sel, value, key):
+            objc.objc_msgSend.restype = None
+            objc.objc_msgSend.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p]
+            objc.objc_msgSend(obj, objc.sel_registerName(sel), value, key)
+
+        ns_string_cls = objc.objc_getClass(b"NSString")
+        ns_bundle_cls = objc.objc_getClass(b"NSBundle")
+
+        bundle = msg0(ns_bundle_cls, b"mainBundle")
+        if not bundle:
+            return
+
+        # Try the localized dictionary first (overrides infoDictionary), then
+        # fall back to the plain infoDictionary.
+        info = msg0(bundle, b"localizedInfoDictionary") or msg0(bundle, b"infoDictionary")
+        if not info:
+            return
+
+        nsname = msg_str(ns_string_cls, b"stringWithUTF8String:", name)
+        for key_cstr in (b"CFBundleName", b"CFBundleDisplayName"):
+            key = msg_str(ns_string_cls, b"stringWithUTF8String:", key_cstr.decode("ascii"))
+            msg_set(info, b"setObject:forKey:", nsname, key)
     except Exception:
         pass
 
 
 def _show_disclaimer():
+    _set_macos_app_name("ClipForge")
     root = ctk.CTk()
-    _set_tk_app_name(root, "ClipForge")
     root.withdraw()
     try:
         root.iconbitmap(resource_path("assets/icon.ico"))
@@ -1072,8 +1116,7 @@ def _show_disclaimer():
 
 
 if __name__ == "__main__":
+    _set_macos_app_name("ClipForge")
     if not _show_disclaimer():
         sys.exit(0)
-    app = App()
-    _set_tk_app_name(app, "ClipForge")
-    app.mainloop()
+    App().mainloop()
