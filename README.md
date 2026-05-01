@@ -1,4 +1,8 @@
-# ClipForge
+<p align="center">
+  <img src="assets/clipforge_icon4.png" alt="ClipForge logo" width="160">
+</p>
+
+<h1 align="center">ClipForge</h1>
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
@@ -146,6 +150,7 @@ ClipForge/
 │  │  └─ release.yml         # GitHub Actions: builds Win/Linux/macOS on tag push, attaches to Release
 │  └─ ISSUE_TEMPLATE/        # Bug report / feature request templates
 ├─ assets/
+│  ├─ clipforge_icon4.png    # Project logo (used in README)
 │  └─ icon.ico               # Application icon (window + EXE)
 ├─ docs/
 │  ├─ BUILD.md               # Cross-platform build guide (prereqs, steps, troubleshooting)
