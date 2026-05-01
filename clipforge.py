@@ -377,6 +377,7 @@ class DisclaimerDialog(ctk.CTkToplevel):
             self.textbox.bind("<MouseWheel>", lambda _e: self.after(50, self._check_scroll))
             self.textbox.bind("<KeyRelease>", lambda _e: self.after(50, self._check_scroll))
             self.textbox.bind("<ButtonRelease-1>", lambda _e: self.after(50, self._check_scroll))
+            self.after(300, self._poll_scroll)
         else:
             ctk.CTkButton(
                 btn_row, text="Close", width=160, command=self.destroy,
@@ -411,6 +412,19 @@ class DisclaimerDialog(ctk.CTkToplevel):
         if end >= 0.99:
             self.accept_btn.configure(state="normal")
             self.scroll_hint.configure(text="")
+
+    def _poll_scroll(self):
+        # Belt-and-suspenders against the CTkTextbox/macOS issue where the
+        # <MouseWheel> binding on the wrapper does not fire when the user
+        # trackpad-scrolls inside the underlying tk.Text — Accept would
+        # otherwise stay greyed out forever even with the cursor at the
+        # bottom of the document. Poll until Accept is enabled, then stop.
+        self._check_scroll()
+        try:
+            if self.accept_btn.cget("state") != "normal":
+                self.after(200, self._poll_scroll)
+        except Exception:
+            pass
 
     def _accept(self):
         self.accepted = True
