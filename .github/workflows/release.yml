@@ -1,7 +1,12 @@
 name: Release
 
 # Builds ClipForge on Windows, Linux and macOS when a version tag is pushed
-# (e.g. v1.0.0), then attaches the three binaries to a GitHub Release.
+# (e.g. v1.0.0), then attaches the binaries to a GitHub Release.
+#
+# macOS Intel (x86_64) builds run on the slow `macos-13` runner pool and are
+# kept on a SEPARATE non-blocking track: the main Release publishes as soon as
+# the fast trio (Windows / Linux / macOS arm64) is done; the Intel asset is
+# uploaded later, against the same tag, when its runner finally picks up.
 #
 # Trigger:    git tag v1.0.0 && git push origin v1.0.0
 # Manual run: Actions tab -> "Release" workflow -> "Run workflow"
@@ -36,11 +41,6 @@ jobs:
             platform: macos
             artifact_name: ClipForge
             release_name: ClipForge-macos-arm64
-            build_cmd: bash scripts/build.sh
-          - os: macos-13
-            platform: macos
-            artifact_name: ClipForge
-            release_name: ClipForge-macos-intel
             build_cmd: bash scripts/build.sh
     runs-on: ${{ matrix.os }}
     steps:
@@ -81,24 +81,79 @@ jobs:
           path: dist/${{ matrix.platform }}/${{ matrix.release_name }}
           retention-days: 7
 
+  build-intel:
+    name: Build (macos-13 Intel)
+    runs-on: macos-13
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build
+        shell: bash
+        run: |
+          chmod +x scripts/build.sh
+          bash scripts/build.sh
+
+      - name: Rename artifact
+        shell: bash
+        run: |
+          mv "dist/macos/ClipForge" "dist/macos/ClipForge-macos-intel"
+          ls -la "dist/macos/"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ClipForge-macos-intel
+          path: dist/macos/ClipForge-macos-intel
+          retention-days: 7
+
   release:
     name: Publish Release
     needs: build
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
-      - name: Download all artifacts
+      - name: Download main artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+          pattern: ClipForge-*
+          merge-multiple: false
 
-      - name: List downloaded artifacts
-        run: find artifacts -type f
+      - name: Flatten artifact directory
+        run: |
+          mkdir -p release-files
+          find artifacts -type f -exec cp {} release-files/ \;
+          ls -la release-files/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/**/*
+          files: release-files/*
           generate_release_notes: true
           draft: false
           prerelease: false
+
+  release-intel:
+    name: Add macOS Intel asset
+    needs: [build-intel, release]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Intel artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ClipForge-macos-intel
+          path: intel
+
+      - name: Upload Intel asset to existing Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: intel/ClipForge-macos-intel
+          fail_on_unmatched_files: true
