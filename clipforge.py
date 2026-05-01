@@ -365,16 +365,6 @@ class DisclaimerDialog(ctk.CTkToplevel):
 
         self._center()
 
-        # macOS Tk workaround: when the parent root is withdraw()n (as in
-        # _show_disclaimer), a transient Toplevel can stay un-realized — it
-        # exists in Tk's tree but never gets an NSWindow, so wait_window()
-        # blocks forever. Force-realize it here.
-        if sys.platform == "darwin":
-            self.update_idletasks()
-            self.deiconify()
-            self.lift()
-            self.focus_force()
-
     def _center(self):
         self.update_idletasks()
         w = self.winfo_width()
@@ -1041,13 +1031,26 @@ class App(ctk.CTk):
 
 
 def _show_disclaimer():
+    # On macOS, a transient(master) Toplevel created while master is already
+    # withdraw()n can stay un-realized in Tk's window tree — wait_window()
+    # then blocks indefinitely (or worse, in PyInstaller-bundled builds, the
+    # dialog appears to be created and immediately torn down without ever
+    # showing). Workaround: keep the root momentarily visible (1x1, off-screen)
+    # while the Toplevel is constructed — long enough for the OS to realize
+    # the parent NSWindow — then withdraw the root behind the dialog.
     root = ctk.CTk()
-    root.withdraw()
+    root.title("ClipForge")
+    root.geometry("1x1+99999+99999")
     try:
         root.iconbitmap(resource_path("assets/icon.ico"))
     except Exception:
         pass
-    accepted = DisclaimerDialog(root, mode="accept").show()
+    root.update_idletasks()
+
+    dlg = DisclaimerDialog(root, mode="accept")
+    root.update_idletasks()
+    root.withdraw()  # AFTER the dialog has been created and parented
+    accepted = dlg.show()
     root.destroy()
     return accepted
 
