@@ -56,9 +56,21 @@ The full legal terms — including the limitation of liability and the list of p
 
 For the full list see the [yt-dlp supported sites page](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
 
-## Screenshot
+## Screenshots
 
-![ClipForge main window](docs/screenshots/main.png)
+<details open>
+<summary><b>macOS</b></summary>
+
+![ClipForge main window — macOS](docs/screenshots/main-mac.png)
+
+</details>
+
+<details>
+<summary><b>Windows</b></summary>
+
+![ClipForge main window — Windows](docs/screenshots/main-win.png)
+
+</details>
 
 ---
 
