@@ -365,6 +365,16 @@ class DisclaimerDialog(ctk.CTkToplevel):
 
         self._center()
 
+        # macOS Tk workaround: when the parent root is withdraw()n (as in
+        # _show_disclaimer), a transient Toplevel can stay un-realized — it
+        # exists in Tk's tree but never gets an NSWindow, so wait_window()
+        # blocks forever. Force-realize it here.
+        if sys.platform == "darwin":
+            self.update_idletasks()
+            self.deiconify()
+            self.lift()
+            self.focus_force()
+
     def _center(self):
         self.update_idletasks()
         w = self.winfo_width()
