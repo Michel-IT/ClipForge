@@ -2,6 +2,22 @@
 
 Thanks for considering a contribution! This document explains how to set up your environment, what we expect from a pull request, and the Contributor License Agreement that every non-trivial contribution must be made under.
 
+ClipForge ships **two parallel builds** (see [README — Two builds available](README.md#two-builds-available)):
+
+- **Stable Python build** at the repo root — see _Development setup_ below for the Python flow.
+- **Preview Tauri build** under [`tauri/`](tauri/) — see [`tauri/README.md`](tauri/README.md) for the Rust + React + pnpm flow. For Tauri-specific translations, see [`tauri/src/locales/README.md`](tauri/src/locales/README.md).
+
+### Release tag conventions
+
+The two builds are released independently from the same `main` branch via different tag patterns. The CI workflows are scoped so they never trigger each other.
+
+| Build | Tag pattern | CI workflow | Output |
+|---|---|---|---|
+| Python (stable) | `vX.Y.Z` (e.g. `v1.0.0`) | [`.github/workflows/release.yml`](.github/workflows/release.yml) | `ClipForge-windows.exe`, `ClipForge-linux`, `ClipForge-macos-arm64` |
+| Tauri (preview) | `tauri-vX.Y.Z` (e.g. `tauri-v0.1.0`) | [`.github/workflows/release-tauri.yml`](.github/workflows/release-tauri.yml) | `.msi`/`.exe` (Win), `.deb`/`.AppImage` (Linux), `.dmg` (macOS arm64 + Intel best-effort) |
+
+To cut a release: `git tag <pattern> && git push --tags`. Both workflows publish to a draft GitHub Release that you promote manually.
+
 ---
 
 ## Development setup
