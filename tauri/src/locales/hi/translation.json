@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.892720+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "यूनिवर्सल मीडिया डाउनलोडर"
+  },
+  "titlebar": {
+    "minimize": "छोटा करें",
+    "maximize": "बड़ा करें",
+    "restore": "पुनर्स्थापित",
+    "close": "बंद करें"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "के बारे में"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "कानूनी अस्वीकरण",
+      "loading": "अस्वीकरण लोड हो रहा है…",
+      "loadError": "लोड विफल: {{error}}",
+      "languageLabel": "भाषा:",
+      "scrollHint": "पहले अंत तक स्क्रॉल करें",
+      "agree": "मैं सहमत हूँ",
+      "disagree": "मैं सहमत नहीं हूँ (ऐप बंद करें)"
+    }
+  },
+  "url": {
+    "placeholder": "वीडियो URL पेस्ट करें (YouTube, Reddit, TikTok, ...)",
+    "detect": "पहचानें",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "वीडियो",
+    "audio": "ऑडियो",
+    "subs": "उप."
+  },
+  "outputDir": {
+    "label": "गंतव्य:",
+    "browse": "ब्राउज़…",
+    "placeholder": "(डिफ़ॉल्ट: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "उपशीर्षक → पाठ"
+  },
+  "video": {
+    "quality": "गुणवत्ता:",
+    "qualityAuto": "ऑटो (सर्वोत्तम)",
+    "playlist": "पूरी प्लेलिस्ट डाउनलोड करें",
+    "start": "MP4 डाउनलोड",
+    "cancel": "रद्द करें"
+  },
+  "audio": {
+    "bitrate": "बिटरेट:",
+    "kbps": "{{value}} kbps",
+    "playlist": "पूरी प्लेलिस्ट डाउनलोड करें",
+    "start": "MP3 निकालें",
+    "cancel": "रद्द करें"
+  },
+  "subs": {
+    "languages": "भाषाएँ (अल्पविराम से अलग):",
+    "playlist": "पूरी प्लेलिस्ट डाउनलोड करें",
+    "start": "उपशीर्षक निकालें → पाठ",
+    "cancel": "रद्द करें"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा:",
+    "cookieBrowser": {
+      "label": "ब्राउज़र से कुकीज़:",
+      "none": "कोई नहीं",
+      "warning": "डाउनलोड से पहले <strong>{{browser}}</strong> बंद करें — Windows कुकी फ़ाइल को लॉक करता है। यदि लॉक पढ़ने को रोकता है तो ऐप बिना कुकीज़ के पुनः प्रयास करेगा।"
+    }
+  },
+  "progress": {
+    "ready": "तैयार",
+    "eta": "ETA {{eta}}",
+    "done": "पूर्ण → {{path}}",
+    "error": "त्रुटि: {{message}}"
+  },
+  "phase": {
+    "downloading": "डाउनलोड हो रहा है…",
+    "merging": "विलय हो रहा है…",
+    "extractingAudio": "ऑडियो निकाला जा रहा है…",
+    "embeddingThumbnail": "कवर एम्बेड किया जा रहा है…",
+    "cookieRetry": "ब्राउज़र कुकीज़ लॉक — बिना के पुनः प्रयास"
+  },
+  "error": {
+    "invalidUrl": "अमान्य URL",
+    "sidecar": "Sidecar विफल",
+    "io": "I/O त्रुटि",
+    "json": "पार्सिंग त्रुटि",
+    "other": "त्रुटि"
+  },
+  "about": {
+    "title": "ClipForge के बारे में",
+    "version": "संस्करण {{version}}",
+    "license": "AGPL-3.0 के तहत लाइसेंस प्राप्त",
+    "author": "द्वारा {{author}}",
+    "builtWith": "के साथ निर्मित",
+    "dependencies": {
+      "ytdlp": "yt-dlp — एक्सट्रैक्शन इंजन (Unlicense)",
+      "ffmpeg": "FFmpeg — मीडिया प्रोसेसर (LGPL/GPL)",
+      "tauri": "Tauri — डेस्कटॉप रनटाइम (MIT/Apache-2.0)",
+      "react": "React — UI लाइब्रेरी (MIT)"
+    },
+    "ffmpegNote": "यह बाइनरी LGPL/GPL के तहत FFmpeg को बंडल करती है। बंडल किए गए बिल्ड का स्रोत कोड FFmpeg प्रोजेक्ट से उपलब्ध है।",
+    "close": "बंद करें"
+  }
+}

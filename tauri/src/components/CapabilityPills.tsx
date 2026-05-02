@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { PlatformInfo } from "../types";
 
 interface Props {
@@ -5,6 +6,7 @@ interface Props {
 }
 
 export function CapabilityPills({ platform }: Props) {
+  const { t } = useTranslation();
   const pill = (label: string, on: boolean) => (
     <span className={`pill ${on ? "pill-on" : "pill-off"}`} key={label}>
       {label}
@@ -15,13 +17,13 @@ export function CapabilityPills({ platform }: Props) {
     <div className="capability-pills">
       <span
         className="platform-badge"
-        style={{ backgroundColor: platform?.color ?? "#3a3f4b" }}
+        style={{ backgroundColor: platform?.color ?? "var(--surface)" }}
       >
         {platform?.name || "—"}
       </span>
-      {pill("Video", !!platform?.video)}
-      {pill("Audio", !!platform?.audio)}
-      {pill("Subs", !!platform?.subs)}
+      {pill(t("capabilities.video"), !!platform?.video)}
+      {pill(t("capabilities.audio"), !!platform?.audio)}
+      {pill(t("capabilities.subs"),  !!platform?.subs)}
     </div>
   );
 }

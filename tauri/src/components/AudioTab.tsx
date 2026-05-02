@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { downloadAudio, cancelDownload } from "../api";
 import { BITRATES, Bitrate } from "../types";
 
@@ -26,6 +27,7 @@ export function AudioTab({
   onJobStarted,
   disabled,
 }: Props) {
+  const { t } = useTranslation();
   const start = async () => {
     const { job_id } = await downloadAudio({
       url,
@@ -44,14 +46,14 @@ export function AudioTab({
   return (
     <div className="tab-content">
       <label>
-        Bitrate:
+        {t("audio.bitrate")}
         <select
           value={bitrate}
           onChange={(e) => onBitrateChange(e.target.value as Bitrate)}
         >
           {BITRATES.map((b) => (
             <option key={b} value={b}>
-              {b} kbps
+              {t("audio.kbps", { value: b })}
             </option>
           ))}
         </select>
@@ -62,14 +64,14 @@ export function AudioTab({
           checked={playlist}
           onChange={(e) => onPlaylistChange(e.target.checked)}
         />
-        Download whole playlist
+        {t("audio.playlist")}
       </label>
       <div className="tab-actions">
         <button onClick={start} disabled={disabled || !url || activeJobId !== null}>
-          Extract MP3
+          {t("audio.start")}
         </button>
         <button onClick={cancel} disabled={!activeJobId}>
-          Cancel
+          {t("audio.cancel")}
         </button>
       </div>
     </div>

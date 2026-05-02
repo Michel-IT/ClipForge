@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.889357+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "مُنزِّل وسائط شامل"
+  },
+  "titlebar": {
+    "minimize": "تصغير",
+    "maximize": "تكبير",
+    "restore": "استعادة",
+    "close": "إغلاق"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "حول"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "إخلاء مسؤولية قانوني",
+      "loading": "جاري تحميل الإخلاء…",
+      "loadError": "فشل التحميل: {{error}}",
+      "languageLabel": "اللغة:",
+      "scrollHint": "انتقل إلى الأسفل أولاً",
+      "agree": "أوافق",
+      "disagree": "لا أوافق (إغلاق التطبيق)"
+    }
+  },
+  "url": {
+    "placeholder": "الصق عنوان URL لفيديو (YouTube, Reddit, TikTok, ...)",
+    "detect": "كشف",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "فيديو",
+    "audio": "صوت",
+    "subs": "ترجمة"
+  },
+  "outputDir": {
+    "label": "الوجهة:",
+    "browse": "استعراض…",
+    "placeholder": "(افتراضي: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "الترجمات ← نص"
+  },
+  "video": {
+    "quality": "الجودة:",
+    "qualityAuto": "تلقائي (الأفضل)",
+    "playlist": "تنزيل قائمة التشغيل بأكملها",
+    "start": "تنزيل MP4",
+    "cancel": "إلغاء"
+  },
+  "audio": {
+    "bitrate": "معدل البت:",
+    "kbps": "{{value}} kbps",
+    "playlist": "تنزيل قائمة التشغيل بأكملها",
+    "start": "استخراج MP3",
+    "cancel": "إلغاء"
+  },
+  "subs": {
+    "languages": "اللغات (مفصولة بفاصلة):",
+    "playlist": "تنزيل قائمة التشغيل بأكملها",
+    "start": "استخراج الترجمات ← نص",
+    "cancel": "إلغاء"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة:",
+    "cookieBrowser": {
+      "label": "ملفات تعريف الارتباط من المتصفح:",
+      "none": "لا شيء",
+      "warning": "أغلق <strong>{{browser}}</strong> قبل التنزيل — يقوم Windows بقفل ملف ملفات تعريف الارتباط. سيعيد التطبيق المحاولة بدون ملفات تعريف ارتباط إذا منع القفل القراءة."
+    }
+  },
+  "progress": {
+    "ready": "جاهز",
+    "eta": "ETA {{eta}}",
+    "done": "تم ← {{path}}",
+    "error": "خطأ: {{message}}"
+  },
+  "phase": {
+    "downloading": "جاري التنزيل…",
+    "merging": "جاري الدمج…",
+    "extractingAudio": "جاري استخراج الصوت…",
+    "embeddingThumbnail": "جاري تضمين الغلاف…",
+    "cookieRetry": "ملفات تعريف ارتباط المتصفح مقفلة — إعادة المحاولة بدونها"
+  },
+  "error": {
+    "invalidUrl": "URL غير صالح",
+    "sidecar": "فشل sidecar",
+    "io": "خطأ في الإدخال/الإخراج",
+    "json": "خطأ في التحليل",
+    "other": "خطأ"
+  },
+  "about": {
+    "title": "حول ClipForge",
+    "version": "الإصدار {{version}}",
+    "license": "مرخص بموجب AGPL-3.0",
+    "author": "بواسطة {{author}}",
+    "builtWith": "مصمم بـ",
+    "dependencies": {
+      "ytdlp": "yt-dlp — محرك الاستخراج (Unlicense)",
+      "ffmpeg": "FFmpeg — معالج الوسائط (LGPL/GPL)",
+      "tauri": "Tauri — وقت تشغيل سطح المكتب (MIT/Apache-2.0)",
+      "react": "React — مكتبة واجهة المستخدم (MIT)"
+    },
+    "ffmpegNote": "يتضمن هذا الملف الثنائي FFmpeg بموجب LGPL/GPL. كود المصدر للبناء المضمن متاح من مشروع FFmpeg.",
+    "close": "إغلاق"
+  }
+}

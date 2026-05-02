@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { downloadVideo, cancelDownload } from "../api";
 import { VIDEO_QUALITIES, VideoQuality } from "../types";
 
@@ -26,6 +27,7 @@ export function VideoTab({
   onJobStarted,
   disabled,
 }: Props) {
+  const { t } = useTranslation();
   const start = async () => {
     const { job_id } = await downloadVideo({
       url,
@@ -44,14 +46,14 @@ export function VideoTab({
   return (
     <div className="tab-content">
       <label>
-        Quality:
+        {t("video.quality")}
         <select
           value={quality}
           onChange={(e) => onQualityChange(e.target.value as VideoQuality)}
         >
           {VIDEO_QUALITIES.map((q) => (
             <option key={q} value={q}>
-              {q === "Auto" ? "Auto (best)" : q}
+              {q === "Auto" ? t("video.qualityAuto") : q}
             </option>
           ))}
         </select>
@@ -62,14 +64,14 @@ export function VideoTab({
           checked={playlist}
           onChange={(e) => onPlaylistChange(e.target.checked)}
         />
-        Download whole playlist
+        {t("video.playlist")}
       </label>
       <div className="tab-actions">
         <button onClick={start} disabled={disabled || !url || activeJobId !== null}>
-          Download MP4
+          {t("video.start")}
         </button>
         <button onClick={cancel} disabled={!activeJobId}>
-          Cancel
+          {t("video.cancel")}
         </button>
       </div>
     </div>

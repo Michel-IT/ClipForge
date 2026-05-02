@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.874533+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Evrensel medya indirici"
+  },
+  "titlebar": {
+    "minimize": "Küçült",
+    "maximize": "Büyüt",
+    "restore": "Geri Yükle",
+    "close": "Kapat"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Hakkında"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Yasal Uyarı",
+      "loading": "Yasal uyarı yükleniyor…",
+      "loadError": "Yükleme başarısız: {{error}}",
+      "languageLabel": "Dil:",
+      "scrollHint": "Önce sona kadar kaydırın",
+      "agree": "Kabul ediyorum",
+      "disagree": "Kabul etmiyorum (uygulamayı kapat)"
+    }
+  },
+  "url": {
+    "placeholder": "Bir video URL'si yapıştırın (YouTube, Reddit, TikTok, ...)",
+    "detect": "Algıla",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Ses",
+    "subs": "Altyz."
+  },
+  "outputDir": {
+    "label": "Hedef:",
+    "browse": "Gözat…",
+    "placeholder": "(varsayılan: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Altyazılar → Metin"
+  },
+  "video": {
+    "quality": "Kalite:",
+    "qualityAuto": "Auto (en iyi)",
+    "playlist": "Tüm oynatma listesini indir",
+    "start": "MP4 İndir",
+    "cancel": "İptal"
+  },
+  "audio": {
+    "bitrate": "Bit hızı:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Tüm oynatma listesini indir",
+    "start": "MP3 Çıkart",
+    "cancel": "İptal"
+  },
+  "subs": {
+    "languages": "Diller (virgülle ayrılmış):",
+    "playlist": "Tüm oynatma listesini indir",
+    "start": "Altyazıları çıkart → Metin",
+    "cancel": "İptal"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "language": "Dil:",
+    "cookieBrowser": {
+      "label": "Tarayıcıdan çerezler:",
+      "none": "Yok",
+      "warning": "İndirmeden önce <strong>{{browser}}</strong>'ı kapatın — Windows çerez dosyasını kilitler. Kilit okumayı engellerse uygulama çerezsiz tekrar deneyecek."
+    }
+  },
+  "progress": {
+    "ready": "Hazır",
+    "eta": "ETA {{eta}}",
+    "done": "Tamam → {{path}}",
+    "error": "Hata: {{message}}"
+  },
+  "phase": {
+    "downloading": "indiriliyor…",
+    "merging": "birleştiriliyor…",
+    "extractingAudio": "ses çıkarılıyor…",
+    "embeddingThumbnail": "kapak gömülüyor…",
+    "cookieRetry": "tarayıcı çerezleri kilitli — çerezsiz yeniden deneniyor"
+  },
+  "error": {
+    "invalidUrl": "Geçersiz URL",
+    "sidecar": "Sidecar başarısız",
+    "io": "I/O hatası",
+    "json": "Ayrıştırma hatası",
+    "other": "Hata"
+  },
+  "about": {
+    "title": "ClipForge Hakkında",
+    "version": "Sürüm {{version}}",
+    "license": "AGPL-3.0 lisansı altında",
+    "author": "yazan: {{author}}",
+    "builtWith": "Şununla yapıldı",
+    "dependencies": {
+      "ytdlp": "yt-dlp — çıkarma motoru (Unlicense)",
+      "ffmpeg": "FFmpeg — medya işlemcisi (LGPL/GPL)",
+      "tauri": "Tauri — masaüstü runtime (MIT/Apache-2.0)",
+      "react": "React — UI kütüphanesi (MIT)"
+    },
+    "ffmpegNote": "Bu ikili dosya FFmpeg'i LGPL/GPL altında içerir. Dahil edilen yapının kaynak kodu FFmpeg projesinden mevcuttur.",
+    "close": "Kapat"
+  }
+}

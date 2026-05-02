@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.720481+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Descarregador universal de mèdia"
+  },
+  "titlebar": {
+    "minimize": "Minimitza",
+    "maximize": "Maximitza",
+    "restore": "Restaura",
+    "close": "Tanca"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Quant a"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Avís legal",
+      "loading": "Carregant avís legal…",
+      "loadError": "Error en carregar l'avís: {{error}}",
+      "languageLabel": "Idioma:",
+      "scrollHint": "Desplaça't fins al final primer",
+      "agree": "Accepto",
+      "disagree": "No accepto (tanca l'app)"
+    }
+  },
+  "url": {
+    "placeholder": "Enganxa un URL de vídeo (YouTube, Reddit, TikTok, ...)",
+    "detect": "Detecta",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Vídeo",
+    "audio": "Àudio",
+    "subs": "Subt."
+  },
+  "outputDir": {
+    "label": "Destí:",
+    "browse": "Examina…",
+    "placeholder": "(per defecte: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Subtítols → Text"
+  },
+  "video": {
+    "quality": "Qualitat:",
+    "qualityAuto": "Auto (millor)",
+    "playlist": "Descarrega tota la llista",
+    "start": "Descarrega MP4",
+    "cancel": "Cancel·la"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Descarrega tota la llista",
+    "start": "Extreu MP3",
+    "cancel": "Cancel·la"
+  },
+  "subs": {
+    "languages": "Idiomes (separats per coma):",
+    "playlist": "Descarrega tota la llista",
+    "start": "Extreu subtítols → Text",
+    "cancel": "Cancel·la"
+  },
+  "settings": {
+    "title": "Configuració",
+    "language": "Idioma:",
+    "cookieBrowser": {
+      "label": "Cookies del navegador:",
+      "none": "Cap",
+      "warning": "Tanca <strong>{{browser}}</strong> abans de descarregar — Windows bloqueja el fitxer de cookies. L'app reintentarà sense cookies si el bloqueig impedeix la lectura."
+    }
+  },
+  "progress": {
+    "ready": "A punt",
+    "eta": "ETA {{eta}}",
+    "done": "Fet → {{path}}",
+    "error": "Error: {{message}}"
+  },
+  "phase": {
+    "downloading": "descarregant…",
+    "merging": "combinant…",
+    "extractingAudio": "extraient àudio…",
+    "embeddingThumbnail": "incrustant portada…",
+    "cookieRetry": "cookies del navegador bloquejades — reintent sense"
+  },
+  "error": {
+    "invalidUrl": "URL no vàlid",
+    "sidecar": "Error al sidecar",
+    "io": "Error d'E/S",
+    "json": "Error d'anàlisi",
+    "other": "Error"
+  },
+  "about": {
+    "title": "Quant a ClipForge",
+    "version": "Versió {{version}}",
+    "license": "Llicència AGPL-3.0",
+    "author": "per {{author}}",
+    "builtWith": "Construït amb",
+    "dependencies": {
+      "ytdlp": "yt-dlp — motor d'extracció (Unlicense)",
+      "ffmpeg": "FFmpeg — processador multimèdia (LGPL/GPL)",
+      "tauri": "Tauri — runtime d'escriptori (MIT/Apache-2.0)",
+      "react": "React — biblioteca UI (MIT)"
+    },
+    "ffmpegNote": "Aquest binari inclou FFmpeg sota LGPL/GPL. El codi font de la build inclosa està disponible al projecte FFmpeg.",
+    "close": "Tanca"
+  }
+}

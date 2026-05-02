@@ -61,6 +61,15 @@ pub async fn detect_platform(url: String) -> Result<PlatformInfo, AppError> {
     Ok(detect(&url))
 }
 
+// Embed DISCLAIMER.md at build time so the bundle never depends on a runtime
+// file. Mirrors the Python app's DISCLAIMER_TEXT constant.
+const DISCLAIMER: &str = include_str!("../../../DISCLAIMER.md");
+
+#[tauri::command]
+pub async fn get_disclaimer() -> Result<String, AppError> {
+    Ok(DISCLAIMER.to_string())
+}
+
 // Probe-only: yt-dlp --dump-single-json --no-download --no-warnings [--cookies-from-browser X]
 //
 // Skeleton: spawns the sidecar but does not yet parse the JSON or implement the
@@ -152,7 +161,7 @@ pub async fn download_video(
     }
     args.push(url);
 
-    spawn_download(&app, args).await
+    spawn_download(&app, args, None).await
 }
 
 // Mirrors _run_audio (clipforge.py:987-1020).
@@ -193,7 +202,7 @@ pub async fn download_audio(
     }
     args.push(url);
 
-    spawn_download(&app, args).await
+    spawn_download(&app, args, None).await
 }
 
 // Mirrors _run_subs (clipforge.py:920-967).
@@ -230,7 +239,8 @@ pub async fn download_subs(
     }
     args.push(url);
 
-    spawn_download(&app, args).await
+    let subs_dir = std::path::PathBuf::from(&out_dir);
+    spawn_download(&app, args, Some(subs_dir)).await
 }
 
 #[tauri::command]
@@ -278,10 +288,47 @@ mod tests {
     }
 }
 
-async fn spawn_download(app: &AppHandle, args: Vec<String>) -> Result<DownloadStarted, AppError> {
+// Detects the stderr pattern emitted when yt-dlp can't read the browser cookie
+// DB because the browser holds a Windows file lock. Mirrors the heuristic in
+// _run_with_cookie_fallback (clipforge.py:834-850).
+fn looks_like_browser_lock(stderr_text: &str) -> bool {
+    let s = stderr_text.to_lowercase();
+    (s.contains("could not copy") || s.contains("locked") || s.contains("permission denied"))
+        && (s.contains("browser")
+            || s.contains("chrome")
+            || s.contains("firefox")
+            || s.contains("edge")
+            || s.contains("brave")
+            || s.contains("opera")
+            || s.contains("vivaldi")
+            || s.contains("cookie"))
+}
+
+// Strips `--cookies-from-browser <name>` from an arg vec so we can retry the
+// same command without cookies.
+fn strip_cookies_flag(args: &[String]) -> Vec<String> {
+    let mut out = Vec::with_capacity(args.len());
+    let mut i = 0;
+    while i < args.len() {
+        if args[i] == "--cookies-from-browser" && i + 1 < args.len() {
+            i += 2;
+            continue;
+        }
+        out.push(args[i].clone());
+        i += 1;
+    }
+    out
+}
+
+async fn spawn_download(
+    app: &AppHandle,
+    args: Vec<String>,
+    subs_post_dir: Option<std::path::PathBuf>,
+) -> Result<DownloadStarted, AppError> {
     use tauri_plugin_shell::process::CommandEvent;
 
     let job_id = Uuid::new_v4().to_string();
+    let args_for_retry = args.clone();
     let (mut rx, child) = app
         .shell()
         .sidecar("yt-dlp")
@@ -294,8 +341,18 @@ async fn spawn_download(app: &AppHandle, args: Vec<String>) -> Result<DownloadSt
 
     let app_handle = app.app_handle().clone();
     let job_for_task = job_id.clone();
+    let app_for_retry = app.app_handle().clone();
     tauri::async_runtime::spawn(async move {
+        // (legacy_text, canonical_i18n_key) — frontend prefers the key,
+        // legacy text is kept for backward-compat / debug logs.
+        const PHASE_DOWNLOADING:  (&str, &str) = ("downloading",         "phase.downloading");
+        const PHASE_MERGING:      (&str, &str) = ("merging",             "phase.merging");
+        const PHASE_EXTRACT:      (&str, &str) = ("extracting audio",    "phase.extractingAudio");
+        const PHASE_EMBED:        (&str, &str) = ("embedding thumbnail", "phase.embeddingThumbnail");
+
         let mut last_output: Option<String> = None;
+        let mut phase: (&str, &str) = PHASE_DOWNLOADING;
+        let mut stderr_buf = String::new();
         while let Some(event) = rx.recv().await {
             match event {
                 CommandEvent::Stdout(bytes) => {
@@ -304,21 +361,82 @@ async fn spawn_download(app: &AppHandle, args: Vec<String>) -> Result<DownloadSt
                         let _ = app_handle.emit(
                             "download-progress",
                             serde_json::json!({
-                                "job_id": job_for_task,
-                                "percent": p.percent,
-                                "speed":   p.speed,
-                                "eta":     p.eta,
+                                "job_id":    job_for_task,
+                                "percent":   p.percent,
+                                "speed":     p.speed,
+                                "eta":       p.eta,
+                                "phase":     phase.0,
+                                "phase_key": phase.1,
                             }),
                         );
+                    } else {
+                        // Non-PROGRESS lines: send to the log panel (raw yt-dlp output).
+                        let trimmed = line.trim_end();
+                        if !trimmed.is_empty() {
+                            let _ = app_handle.emit(
+                                "download-log",
+                                serde_json::json!({
+                                    "job_id": job_for_task,
+                                    "stream": "stdout",
+                                    "line":   trimmed,
+                                }),
+                            );
+                        }
                     }
+                    // Track final output path through the post-processor chain.
+                    // The relevant prefixes (in order yt-dlp emits them) are:
+                    //   [download]      Destination: <intermediate>.webm/.m4a
+                    //   [Merger]        Merging formats into "<final>.mp4"
+                    //   [ExtractAudio]  Destination: <final>.mp3
+                    //   [EmbedThumbnail] ... (no path; same file as previous step)
                     if let Some(path) = line.strip_prefix("[download] Destination: ") {
                         last_output = Some(path.trim().to_string());
+                    } else if let Some(rest) = line.strip_prefix("[Merger] Merging formats into \"") {
+                        if let Some(end) = rest.rfind('"') {
+                            last_output = Some(rest[..end].to_string());
+                        }
+                        phase = PHASE_MERGING;
+                    } else if let Some(path) = line.strip_prefix("[ExtractAudio] Destination: ") {
+                        last_output = Some(path.trim().to_string());
+                        phase = PHASE_EXTRACT;
+                    } else if line.starts_with("[EmbedThumbnail]") {
+                        phase = PHASE_EMBED;
                     }
                 }
-                CommandEvent::Stderr(_) => { /* TODO: surface warnings */ }
+                CommandEvent::Stderr(bytes) => {
+                    let chunk = String::from_utf8_lossy(&bytes).to_string();
+                    stderr_buf.push_str(&chunk);
+                    for line in chunk.lines() {
+                        let trimmed = line.trim_end();
+                        if !trimmed.is_empty() {
+                            let _ = app_handle.emit(
+                                "download-log",
+                                serde_json::json!({
+                                    "job_id": job_for_task,
+                                    "stream": "stderr",
+                                    "line":   trimmed,
+                                }),
+                            );
+                        }
+                    }
+                }
                 CommandEvent::Terminated(payload) => {
                     let code = payload.code.unwrap_or(-1);
                     if code == 0 {
+                        // For subs jobs: convert .vtt files in the output dir to .txt
+                        // (port of vtt_to_text from clipforge.py:268-288). Failures
+                        // here are non-fatal — the .vtt remains and the user still
+                        // gets a successful download event.
+                        if let Some(dir) = &subs_post_dir {
+                            match crate::subs::convert_vtt_dir(dir) {
+                                Ok(produced) => {
+                                    if let Some(last) = produced.last() {
+                                        last_output = Some(last.to_string_lossy().into_owned());
+                                    }
+                                }
+                                Err(e) => eprintln!("vtt->txt conversion failed: {e}"),
+                            }
+                        }
                         let _ = app_handle.emit(
                             "download-complete",
                             serde_json::json!({
@@ -327,11 +445,61 @@ async fn spawn_download(app: &AppHandle, args: Vec<String>) -> Result<DownloadSt
                             }),
                         );
                     } else {
+                        // If yt-dlp tripped on a locked browser cookie DB AND we
+                        // were actually using --cookies-from-browser, retry once
+                        // without it (mirror of _run_with_cookie_fallback,
+                        // clipforge.py:834-850).
+                        let used_cookies = args_for_retry
+                            .iter()
+                            .any(|a| a == "--cookies-from-browser");
+                        if used_cookies && looks_like_browser_lock(&stderr_buf) {
+                            let retry_args = strip_cookies_flag(&args_for_retry);
+                            let _ = app_handle.emit(
+                                "download-progress",
+                                serde_json::json!({
+                                    "job_id":    job_for_task,
+                                    "percent":   0.0,
+                                    "speed":     "",
+                                    "eta":       "",
+                                    "phase":     "browser cookies locked — retrying without",
+                                    "phase_key": "phase.cookieRetry",
+                                }),
+                            );
+                            sidecar::drop_job(&job_for_task);
+                            // Re-spawn with the same job_id so the frontend stays subscribed
+                            // to the same progress channel.
+                            let respawn = app_for_retry
+                                .shell()
+                                .sidecar("yt-dlp")
+                                .and_then(|c| Ok(c.args(retry_args)))
+                                .and_then(|c| c.spawn());
+                            if let Ok((new_rx, new_child)) = respawn {
+                                sidecar::register(job_for_task.clone(), new_child);
+                                rx = new_rx;
+                                stderr_buf.clear();
+                                phase = PHASE_DOWNLOADING;
+                                continue;
+                            }
+                        }
                         let _ = app_handle.emit(
                             "download-error",
                             serde_json::json!({
                                 "job_id":  job_for_task,
-                                "message": format!("yt-dlp exited with code {code}"),
+                                "message": if stderr_buf.trim().is_empty() {
+                                    format!("yt-dlp exited with code {code}")
+                                } else {
+                                    let tail: String = stderr_buf
+                                        .lines()
+                                        .filter(|l| !l.trim().is_empty())
+                                        .rev()
+                                        .take(3)
+                                        .collect::<Vec<_>>()
+                                        .into_iter()
+                                        .rev()
+                                        .collect::<Vec<_>>()
+                                        .join("\n");
+                                    format!("yt-dlp exited with code {code}: {tail}")
+                                },
                             }),
                         );
                     }

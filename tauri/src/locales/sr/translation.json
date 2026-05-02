@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.864236+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Универзални преузимач медија"
+  },
+  "titlebar": {
+    "minimize": "Умањи",
+    "maximize": "Увећај",
+    "restore": "Врати",
+    "close": "Затвори"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "О програму"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Правно упозорење",
+      "loading": "Учитавам упозорење…",
+      "loadError": "Учитавање није успело: {{error}}",
+      "languageLabel": "Језик:",
+      "scrollHint": "Прво се скролујте до краја",
+      "agree": "Прихватам",
+      "disagree": "Не прихватам (затвори)"
+    }
+  },
+  "url": {
+    "placeholder": "Налепите URL видеа (YouTube, Reddit, TikTok, ...)",
+    "detect": "Препознај",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Видео",
+    "audio": "Звук",
+    "subs": "Тит."
+  },
+  "outputDir": {
+    "label": "Одредиште:",
+    "browse": "Прегледај…",
+    "placeholder": "(подразумевано: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Титлови → Текст"
+  },
+  "video": {
+    "quality": "Квалитет:",
+    "qualityAuto": "Ауто (најбоље)",
+    "playlist": "Преузми целу листу",
+    "start": "Преузми MP4",
+    "cancel": "Откажи"
+  },
+  "audio": {
+    "bitrate": "Битрејт:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Преузми целу листу",
+    "start": "Издвоји MP3",
+    "cancel": "Откажи"
+  },
+  "subs": {
+    "languages": "Језици (раздвојени зарезом):",
+    "playlist": "Преузми целу листу",
+    "start": "Издвоји титлове → Текст",
+    "cancel": "Откажи"
+  },
+  "settings": {
+    "title": "Подешавања",
+    "language": "Језик:",
+    "cookieBrowser": {
+      "label": "Колачићи из прегледача:",
+      "none": "Ниједан",
+      "warning": "Затворите <strong>{{browser}}</strong> пре преузимања — Windows закључава фајл колачића. Апликација ће покушати поново без колачића ако катанац блокира читање."
+    }
+  },
+  "progress": {
+    "ready": "Спреман",
+    "eta": "ETA {{eta}}",
+    "done": "Готово → {{path}}",
+    "error": "Грешка: {{message}}"
+  },
+  "phase": {
+    "downloading": "преузимање…",
+    "merging": "спајање…",
+    "extractingAudio": "издвајање звука…",
+    "embeddingThumbnail": "уграђивање корица…",
+    "cookieRetry": "колачићи прегледача закључани — покушавам поново без"
+  },
+  "error": {
+    "invalidUrl": "Неисправан URL",
+    "sidecar": "Sidecar није успео",
+    "io": "I/O грешка",
+    "json": "Грешка у парсирању",
+    "other": "Грешка"
+  },
+  "about": {
+    "title": "О ClipForge-у",
+    "version": "Верзија {{version}}",
+    "license": "Лиценца AGPL-3.0",
+    "author": "аутор: {{author}}",
+    "builtWith": "Изграђено са",
+    "dependencies": {
+      "ytdlp": "yt-dlp — мотор екстракције (Unlicense)",
+      "ffmpeg": "FFmpeg — медијски процесор (LGPL/GPL)",
+      "tauri": "Tauri — десктоп runtime (MIT/Apache-2.0)",
+      "react": "React — UI библиотека (MIT)"
+    },
+    "ffmpegNote": "Овај бинарни фајл укључује FFmpeg под LGPL/GPL. Изворни код укључене билда је доступан на пројекту FFmpeg.",
+    "close": "Затвори"
+  }
+}

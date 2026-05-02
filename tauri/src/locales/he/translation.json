@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.890736+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "הורדת מדיה אוניברסלית"
+  },
+  "titlebar": {
+    "minimize": "מזער",
+    "maximize": "הגדל",
+    "restore": "שחזר",
+    "close": "סגור"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "אודות"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "הצהרת אחריות משפטית",
+      "loading": "טוען הצהרה…",
+      "loadError": "הטעינה נכשלה: {{error}}",
+      "languageLabel": "שפה:",
+      "scrollHint": "גלול תחילה לתחתית",
+      "agree": "אני מסכים",
+      "disagree": "אני לא מסכים (סגור אפליקציה)"
+    }
+  },
+  "url": {
+    "placeholder": "הדבק כתובת URL של וידאו (YouTube, Reddit, TikTok, ...)",
+    "detect": "זהה",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "וידאו",
+    "audio": "אודיו",
+    "subs": "כתוב."
+  },
+  "outputDir": {
+    "label": "יעד:",
+    "browse": "עיון…",
+    "placeholder": "(ברירת מחדל: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "כתוביות ← טקסט"
+  },
+  "video": {
+    "quality": "איכות:",
+    "qualityAuto": "אוטומטי (הכי טוב)",
+    "playlist": "הורד פלייליסט שלם",
+    "start": "הורד MP4",
+    "cancel": "בטל"
+  },
+  "audio": {
+    "bitrate": "קצב סיביות:",
+    "kbps": "{{value}} kbps",
+    "playlist": "הורד פלייליסט שלם",
+    "start": "חלץ MP3",
+    "cancel": "בטל"
+  },
+  "subs": {
+    "languages": "שפות (מופרדות בפסיקים):",
+    "playlist": "הורד פלייליסט שלם",
+    "start": "חלץ כתוביות ← טקסט",
+    "cancel": "בטל"
+  },
+  "settings": {
+    "title": "הגדרות",
+    "language": "שפה:",
+    "cookieBrowser": {
+      "label": "עוגיות מהדפדפן:",
+      "none": "ללא",
+      "warning": "סגור את <strong>{{browser}}</strong> לפני ההורדה — Windows נועל את קובץ העוגיות. האפליקציה תנסה שוב ללא עוגיות אם הנעילה חוסמת את הקריאה."
+    }
+  },
+  "progress": {
+    "ready": "מוכן",
+    "eta": "ETA {{eta}}",
+    "done": "הושלם ← {{path}}",
+    "error": "שגיאה: {{message}}"
+  },
+  "phase": {
+    "downloading": "מוריד…",
+    "merging": "ממזג…",
+    "extractingAudio": "מחלץ אודיו…",
+    "embeddingThumbnail": "משבץ עטיפה…",
+    "cookieRetry": "עוגיות הדפדפן נעולות — מנסה שוב בלי"
+  },
+  "error": {
+    "invalidUrl": "URL לא חוקי",
+    "sidecar": "Sidecar נכשל",
+    "io": "שגיאת קלט/פלט",
+    "json": "שגיאת ניתוח",
+    "other": "שגיאה"
+  },
+  "about": {
+    "title": "אודות ClipForge",
+    "version": "גרסה {{version}}",
+    "license": "ברישיון AGPL-3.0",
+    "author": "מאת {{author}}",
+    "builtWith": "נבנה עם",
+    "dependencies": {
+      "ytdlp": "yt-dlp — מנוע חילוץ (Unlicense)",
+      "ffmpeg": "FFmpeg — מעבד מדיה (LGPL/GPL)",
+      "tauri": "Tauri — סביבת ריצה לדסקטופ (MIT/Apache-2.0)",
+      "react": "React — ספריית UI (MIT)"
+    },
+    "ffmpegNote": "קובץ בינארי זה כולל את FFmpeg תחת LGPL/GPL. קוד המקור לבנייה הכלולה זמין מפרויקט FFmpeg.",
+    "close": "סגור"
+  }
+}

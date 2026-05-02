@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.895952+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "یونیورسل میڈیا ڈاؤنلوڈر"
+  },
+  "titlebar": {
+    "minimize": "چھوٹا کریں",
+    "maximize": "بڑا کریں",
+    "restore": "بحال کریں",
+    "close": "بند کریں"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "کے بارے میں"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "قانونی دستبرداری",
+      "loading": "دستبرداری لوڈ ہو رہی ہے…",
+      "loadError": "لوڈ ناکام: {{error}}",
+      "languageLabel": "زبان:",
+      "scrollHint": "پہلے آخر تک سکرول کریں",
+      "agree": "میں متفق ہوں",
+      "disagree": "میں متفق نہیں (ایپ بند کریں)"
+    }
+  },
+  "url": {
+    "placeholder": "ویڈیو URL پیسٹ کریں (YouTube, Reddit, TikTok, ...)",
+    "detect": "پتہ لگائیں",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "ویڈیو",
+    "audio": "آڈیو",
+    "subs": "ذیلی"
+  },
+  "outputDir": {
+    "label": "منزل:",
+    "browse": "براؤز…",
+    "placeholder": "(ڈیفالٹ: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "سب ٹائٹل ← متن"
+  },
+  "video": {
+    "quality": "معیار:",
+    "qualityAuto": "آٹو (بہترین)",
+    "playlist": "پوری پلے لسٹ ڈاؤنلوڈ کریں",
+    "start": "MP4 ڈاؤنلوڈ",
+    "cancel": "منسوخ"
+  },
+  "audio": {
+    "bitrate": "بٹ ریٹ:",
+    "kbps": "{{value}} kbps",
+    "playlist": "پوری پلے لسٹ ڈاؤنلوڈ کریں",
+    "start": "MP3 نکالیں",
+    "cancel": "منسوخ"
+  },
+  "subs": {
+    "languages": "زبانیں (کاما سے الگ):",
+    "playlist": "پوری پلے لسٹ ڈاؤنلوڈ کریں",
+    "start": "سب ٹائٹل نکالیں ← متن",
+    "cancel": "منسوخ"
+  },
+  "settings": {
+    "title": "ترتیبات",
+    "language": "زبان:",
+    "cookieBrowser": {
+      "label": "براؤزر سے کوکیز:",
+      "none": "کوئی نہیں",
+      "warning": "ڈاؤنلوڈ سے پہلے <strong>{{browser}}</strong> بند کریں — Windows کوکی فائل کو لاک کرتا ہے۔ اگر لاک پڑھنے کو روکتا ہے تو ایپ بغیر کوکیز کے دوبارہ کوشش کرے گی۔"
+    }
+  },
+  "progress": {
+    "ready": "تیار",
+    "eta": "ETA {{eta}}",
+    "done": "مکمل ← {{path}}",
+    "error": "خرابی: {{message}}"
+  },
+  "phase": {
+    "downloading": "ڈاؤنلوڈ ہو رہا ہے…",
+    "merging": "ضم ہو رہا ہے…",
+    "extractingAudio": "آڈیو نکالا جا رہا ہے…",
+    "embeddingThumbnail": "کور ایمبیڈ ہو رہا ہے…",
+    "cookieRetry": "براؤزر کوکیز لاک — بغیر دوبارہ کوشش"
+  },
+  "error": {
+    "invalidUrl": "غلط URL",
+    "sidecar": "Sidecar ناکام",
+    "io": "I/O خرابی",
+    "json": "پارسنگ خرابی",
+    "other": "خرابی"
+  },
+  "about": {
+    "title": "ClipForge کے بارے میں",
+    "version": "ورژن {{version}}",
+    "license": "AGPL-3.0 کے تحت لائسنس یافتہ",
+    "author": "بذریعہ {{author}}",
+    "builtWith": "کے ساتھ بنایا گیا",
+    "dependencies": {
+      "ytdlp": "yt-dlp — نکالنے کا انجن (Unlicense)",
+      "ffmpeg": "FFmpeg — میڈیا پروسیسر (LGPL/GPL)",
+      "tauri": "Tauri — ڈیسک ٹاپ رن ٹائم (MIT/Apache-2.0)",
+      "react": "React — UI لائبریری (MIT)"
+    },
+    "ffmpegNote": "یہ بائنری LGPL/GPL کے تحت FFmpeg شامل کرتی ہے۔ شامل بلڈ کا سورس کوڈ FFmpeg پروجیکٹ سے دستیاب ہے۔",
+    "close": "بند کریں"
+  }
+}

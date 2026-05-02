@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { open } from "@tauri-apps/plugin-dialog";
 
 interface Props {
@@ -6,6 +7,7 @@ interface Props {
 }
 
 export function OutputDirPicker({ outDir, onChange }: Props) {
+  const { t } = useTranslation();
   const pick = async () => {
     const selected = await open({ directory: true, multiple: false });
     if (typeof selected === "string") onChange(selected);
@@ -13,14 +15,14 @@ export function OutputDirPicker({ outDir, onChange }: Props) {
 
   return (
     <div className="output-dir-picker">
-      <label>Output:</label>
+      <label>{t("outputDir.label")}</label>
       <input
         type="text"
         value={outDir}
         readOnly
-        placeholder="(default: ~/Downloads/ClipForge)"
+        placeholder={t("outputDir.placeholder")}
       />
-      <button onClick={pick}>Browse…</button>
+      <button onClick={pick}>{t("outputDir.browse")}</button>
     </div>
   );
 }

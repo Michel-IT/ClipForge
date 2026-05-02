@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.872662+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Καθολικός λήπτης μέσων"
+  },
+  "titlebar": {
+    "minimize": "Ελαχιστοποίηση",
+    "maximize": "Μεγιστοποίηση",
+    "restore": "Επαναφορά",
+    "close": "Κλείσιμο"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Σχετικά"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Νομική Αποποίηση",
+      "loading": "Φόρτωση αποποίησης…",
+      "loadError": "Η φόρτωση απέτυχε: {{error}}",
+      "languageLabel": "Γλώσσα:",
+      "scrollHint": "Κάντε πρώτα κύλιση μέχρι το τέλος",
+      "agree": "Συμφωνώ",
+      "disagree": "Δεν συμφωνώ (κλείσιμο)"
+    }
+  },
+  "url": {
+    "placeholder": "Επικολλήστε URL βίντεο (YouTube, Reddit, TikTok, ...)",
+    "detect": "Ανίχνευση",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Βίντεο",
+    "audio": "Ήχος",
+    "subs": "Υπότ."
+  },
+  "outputDir": {
+    "label": "Προορισμός:",
+    "browse": "Αναζήτηση…",
+    "placeholder": "(προεπιλογή: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Υπότιτλοι → Κείμενο"
+  },
+  "video": {
+    "quality": "Ποιότητα:",
+    "qualityAuto": "Αυτόματο (καλύτερο)",
+    "playlist": "Λήψη ολόκληρης λίστας",
+    "start": "Λήψη MP4",
+    "cancel": "Ακύρωση"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Λήψη ολόκληρης λίστας",
+    "start": "Εξαγωγή MP3",
+    "cancel": "Ακύρωση"
+  },
+  "subs": {
+    "languages": "Γλώσσες (χωρισμένες με κόμμα):",
+    "playlist": "Λήψη ολόκληρης λίστας",
+    "start": "Εξαγωγή υπότιτλων → Κείμενο",
+    "cancel": "Ακύρωση"
+  },
+  "settings": {
+    "title": "Ρυθμίσεις",
+    "language": "Γλώσσα:",
+    "cookieBrowser": {
+      "label": "Cookies από περιηγητή:",
+      "none": "Κανένα",
+      "warning": "Κλείστε τον <strong>{{browser}}</strong> πριν τη λήψη — τα Windows κλειδώνουν το αρχείο cookies. Η εφαρμογή θα προσπαθήσει ξανά χωρίς cookies αν το κλείδωμα εμποδίζει την ανάγνωση."
+    }
+  },
+  "progress": {
+    "ready": "Έτοιμο",
+    "eta": "ETA {{eta}}",
+    "done": "Ολοκληρώθηκε → {{path}}",
+    "error": "Σφάλμα: {{message}}"
+  },
+  "phase": {
+    "downloading": "λήψη…",
+    "merging": "συγχώνευση…",
+    "extractingAudio": "εξαγωγή ήχου…",
+    "embeddingThumbnail": "ενσωμάτωση εξωφύλλου…",
+    "cookieRetry": "cookies περιηγητή κλειδωμένα — επανάληψη χωρίς"
+  },
+  "error": {
+    "invalidUrl": "Μη έγκυρο URL",
+    "sidecar": "Αποτυχία sidecar",
+    "io": "Σφάλμα I/O",
+    "json": "Σφάλμα ανάλυσης",
+    "other": "Σφάλμα"
+  },
+  "about": {
+    "title": "Σχετικά με το ClipForge",
+    "version": "Έκδοση {{version}}",
+    "license": "Αδειοδότηση AGPL-3.0",
+    "author": "από {{author}}",
+    "builtWith": "Κατασκευάστηκε με",
+    "dependencies": {
+      "ytdlp": "yt-dlp — μηχανή εξαγωγής (Unlicense)",
+      "ffmpeg": "FFmpeg — επεξεργαστής μέσων (LGPL/GPL)",
+      "tauri": "Tauri — desktop runtime (MIT/Apache-2.0)",
+      "react": "React — βιβλιοθήκη UI (MIT)"
+    },
+    "ffmpegNote": "Αυτό το εκτελέσιμο περιλαμβάνει το FFmpeg υπό LGPL/GPL. Ο πηγαίος κώδικας του εκτελέσιμου είναι διαθέσιμος από το έργο FFmpeg.",
+    "close": "Κλείσιμο"
+  }
+}

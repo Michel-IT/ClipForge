@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.877654+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "通用媒體下載器"
+  },
+  "titlebar": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "還原",
+    "close": "關閉"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "關於"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "法律免責聲明",
+      "loading": "正在載入免責聲明…",
+      "loadError": "載入失敗: {{error}}",
+      "languageLabel": "語言：",
+      "scrollHint": "請先捲動至底部",
+      "agree": "我同意",
+      "disagree": "我不同意（關閉應用）"
+    }
+  },
+  "url": {
+    "placeholder": "貼上視訊 URL (YouTube, Reddit, TikTok, ...)",
+    "detect": "偵測",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "視訊",
+    "audio": "音訊",
+    "subs": "字幕"
+  },
+  "outputDir": {
+    "label": "輸出：",
+    "browse": "瀏覽…",
+    "placeholder": "(預設: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "字幕 → 文字"
+  },
+  "video": {
+    "quality": "畫質：",
+    "qualityAuto": "自動（最佳）",
+    "playlist": "下載整個播放清單",
+    "start": "下載 MP4",
+    "cancel": "取消"
+  },
+  "audio": {
+    "bitrate": "位元率：",
+    "kbps": "{{value}} kbps",
+    "playlist": "下載整個播放清單",
+    "start": "擷取 MP3",
+    "cancel": "取消"
+  },
+  "subs": {
+    "languages": "語言（逗號分隔）：",
+    "playlist": "下載整個播放清單",
+    "start": "擷取字幕 → 文字",
+    "cancel": "取消"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "語言：",
+    "cookieBrowser": {
+      "label": "瀏覽器 Cookie：",
+      "none": "無",
+      "warning": "下載前請關閉 <strong>{{browser}}</strong> — Windows 會鎖定 cookie 檔案。若鎖定阻止讀取，應用將無 cookie 重試。"
+    }
+  },
+  "progress": {
+    "ready": "就緒",
+    "eta": "ETA {{eta}}",
+    "done": "完成 → {{path}}",
+    "error": "錯誤: {{message}}"
+  },
+  "phase": {
+    "downloading": "下載中…",
+    "merging": "合併中…",
+    "extractingAudio": "擷取音訊…",
+    "embeddingThumbnail": "嵌入封面…",
+    "cookieRetry": "瀏覽器 cookie 已鎖定 — 無 cookie 重試"
+  },
+  "error": {
+    "invalidUrl": "無效 URL",
+    "sidecar": "Sidecar 失敗",
+    "io": "I/O 錯誤",
+    "json": "解析錯誤",
+    "other": "錯誤"
+  },
+  "about": {
+    "title": "關於 ClipForge",
+    "version": "版本 {{version}}",
+    "license": "基於 AGPL-3.0 授權",
+    "author": "作者：{{author}}",
+    "builtWith": "技術堆疊",
+    "dependencies": {
+      "ytdlp": "yt-dlp — 擷取引擎 (Unlicense)",
+      "ffmpeg": "FFmpeg — 媒體處理器 (LGPL/GPL)",
+      "tauri": "Tauri — 桌面執行階段 (MIT/Apache-2.0)",
+      "react": "React — UI 函式庫 (MIT)"
+    },
+    "ffmpegNote": "此二進位檔案綁定 FFmpeg（LGPL/GPL）。綁定建置的原始碼可從 FFmpeg 專案取得。",
+    "close": "關閉"
+  }
+}

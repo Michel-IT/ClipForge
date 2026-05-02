@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { downloadSubs, cancelDownload } from "../api";
 
 interface Props {
@@ -25,6 +26,7 @@ export function SubsTab({
   onJobStarted,
   disabled,
 }: Props) {
+  const { t } = useTranslation();
   const start = async () => {
     const { job_id } = await downloadSubs({
       url,
@@ -43,7 +45,7 @@ export function SubsTab({
   return (
     <div className="tab-content">
       <label>
-        Languages (comma-separated):
+        {t("subs.languages")}
         <input
           type="text"
           value={langs}
@@ -57,14 +59,14 @@ export function SubsTab({
           checked={playlist}
           onChange={(e) => onPlaylistChange(e.target.checked)}
         />
-        Download whole playlist
+        {t("subs.playlist")}
       </label>
       <div className="tab-actions">
         <button onClick={start} disabled={disabled || !url || activeJobId !== null}>
-          Extract Subtitles → Text
+          {t("subs.start")}
         </button>
         <button onClick={cancel} disabled={!activeJobId}>
-          Cancel
+          {t("subs.cancel")}
         </button>
       </div>
     </div>

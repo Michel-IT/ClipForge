@@ -7,10 +7,13 @@ import {
   ProgressEvent,
   CompleteEvent,
   ErrorEvent,
+  LogEvent,
 } from "./types";
 
 export const detectPlatform = (url: string) =>
   invoke<PlatformInfo>("detect_platform", { url });
+
+export const getDisclaimer = () => invoke<string>("get_disclaimer");
 
 export const fetchInfo = (url: string, cookiesBrowser?: string) =>
   invoke<VideoInfo>("fetch_info", { url, cookiesBrowser });
@@ -50,3 +53,6 @@ export const onDownloadComplete = (cb: (e: CompleteEvent) => void): Promise<Unli
 
 export const onDownloadError = (cb: (e: ErrorEvent) => void): Promise<UnlistenFn> =>
   listen<ErrorEvent>("download-error", (evt) => cb(evt.payload));
+
+export const onDownloadLog = (cb: (e: LogEvent) => void): Promise<UnlistenFn> =>
+  listen<LogEvent>("download-log", (evt) => cb(evt.payload));

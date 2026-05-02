@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface Props {
   percent: number;
   speed: string;
@@ -6,6 +8,7 @@ interface Props {
 }
 
 export function ProgressBar({ percent, speed, eta, status }: Props) {
+  const { t } = useTranslation();
   return (
     <div className="progress-bar">
       <div className="progress-track">
@@ -17,7 +20,7 @@ export function ProgressBar({ percent, speed, eta, status }: Props) {
       <div className="progress-meta">
         <span>{status}</span>
         {speed && <span>{speed}</span>}
-        {eta && <span>ETA {eta}</span>}
+        {eta && <span>{t("progress.eta", { eta })}</span>}
         <span>{percent.toFixed(1)}%</span>
       </div>
     </div>

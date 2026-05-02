@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.724514+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Multimedia deskargatzaile unibertsala"
+  },
+  "titlebar": {
+    "minimize": "Minimizatu",
+    "maximize": "Maximizatu",
+    "restore": "Berrezarri",
+    "close": "Itxi"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Honi buruz"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Lege-oharra",
+      "loading": "Lege-oharra kargatzen…",
+      "loadError": "Errorea oharra kargatzean: {{error}}",
+      "languageLabel": "Hizkuntza:",
+      "scrollHint": "Korritu beheraino aurrena",
+      "agree": "Onartzen dut",
+      "disagree": "Ez dut onartzen (itxi)"
+    }
+  },
+  "url": {
+    "placeholder": "Itsatsi bideo URL bat (YouTube, Reddit, TikTok, ...)",
+    "detect": "Detektatu",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Bideoa",
+    "audio": "Audioa",
+    "subs": "Azp."
+  },
+  "outputDir": {
+    "label": "Helburua:",
+    "browse": "Arakatu…",
+    "placeholder": "(lehenetsia: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Azpitituluak → Testua"
+  },
+  "video": {
+    "quality": "Kalitatea:",
+    "qualityAuto": "Auto (onena)",
+    "playlist": "Deskargatu zerrenda osoa",
+    "start": "Deskargatu MP4",
+    "cancel": "Utzi"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Deskargatu zerrenda osoa",
+    "start": "Atera MP3",
+    "cancel": "Utzi"
+  },
+  "subs": {
+    "languages": "Hizkuntzak (komaz banatuta):",
+    "playlist": "Deskargatu zerrenda osoa",
+    "start": "Atera azpitituluak → Testua",
+    "cancel": "Utzi"
+  },
+  "settings": {
+    "title": "Ezarpenak",
+    "language": "Hizkuntza:",
+    "cookieBrowser": {
+      "label": "Nabigatzaileko cookieak:",
+      "none": "Bat ere ez",
+      "warning": "Itxi <strong>{{browser}}</strong> deskargatu aurretik — Windowsek cookie fitxategia blokeatzen du. Aplikazioak cookierik gabe saiatuko da blokeoak irakurketa eragozten badu."
+    }
+  },
+  "progress": {
+    "ready": "Prest",
+    "eta": "ETA {{eta}}",
+    "done": "Eginda → {{path}}",
+    "error": "Errorea: {{message}}"
+  },
+  "phase": {
+    "downloading": "deskargatzen…",
+    "merging": "batzen…",
+    "extractingAudio": "audioa ateratzen…",
+    "embeddingThumbnail": "azala kapsulatzen…",
+    "cookieRetry": "nabigatzaileko cookieak blokeatuta — saiakera berriro gabe"
+  },
+  "error": {
+    "invalidUrl": "URL baliogabea",
+    "sidecar": "Sidecar-ak huts egin du",
+    "io": "S/I errorea",
+    "json": "Analisi errorea",
+    "other": "Errorea"
+  },
+  "about": {
+    "title": "ClipForge-ri buruz",
+    "version": "Bertsioa {{version}}",
+    "license": "AGPL-3.0 lizentzia",
+    "author": "{{author}}-(r)ena",
+    "builtWith": "Honekin eraikia",
+    "dependencies": {
+      "ytdlp": "yt-dlp — erauzte motorra (Unlicense)",
+      "ffmpeg": "FFmpeg — multimedia prozesatzailea (LGPL/GPL)",
+      "tauri": "Tauri — mahaigaineko runtime (MIT/Apache-2.0)",
+      "react": "React — UI liburutegia (MIT)"
+    },
+    "ffmpegNote": "Bitar honek FFmpeg LGPL/GPL pean dakar. Sartutako buildaren iturburu kodea FFmpeg proiektutik eskuragarri dago.",
+    "close": "Itxi"
+  }
+}

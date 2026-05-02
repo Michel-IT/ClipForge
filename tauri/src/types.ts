@@ -22,6 +22,8 @@ export interface ProgressEvent {
   percent: number;
   speed: string;
   eta: string;
+  phase: string;       // legacy EN, fallback
+  phase_key?: string;  // canonical i18n key, preferred
 }
 
 export interface CompleteEvent {
@@ -32,6 +34,13 @@ export interface CompleteEvent {
 export interface ErrorEvent {
   job_id: string;
   message: string;
+  error_key?: string;  // canonical i18n key when known
+}
+
+export interface LogEvent {
+  job_id: string;
+  stream: "stdout" | "stderr";
+  line: string;
 }
 
 export type VideoQuality = "Auto" | "1080p" | "720p" | "480p" | "360p";

@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.727322+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Universele media-downloader"
+  },
+  "titlebar": {
+    "minimize": "Minimaliseren",
+    "maximize": "Maximaliseren",
+    "restore": "Herstellen",
+    "close": "Sluiten"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Over"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Juridische disclaimer",
+      "loading": "Disclaimer laden…",
+      "loadError": "Disclaimer kon niet worden geladen: {{error}}",
+      "languageLabel": "Taal:",
+      "scrollHint": "Eerst naar beneden scrollen",
+      "agree": "Ik ga akkoord",
+      "disagree": "Ik ga niet akkoord (app sluiten)"
+    }
+  },
+  "url": {
+    "placeholder": "Plak een video-URL (YouTube, Reddit, TikTok, ...)",
+    "detect": "Detecteren",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Audio",
+    "subs": "Ondt."
+  },
+  "outputDir": {
+    "label": "Doel:",
+    "browse": "Bladeren…",
+    "placeholder": "(standaard: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Ondertitels → Tekst"
+  },
+  "video": {
+    "quality": "Kwaliteit:",
+    "qualityAuto": "Auto (beste)",
+    "playlist": "Hele afspeellijst downloaden",
+    "start": "MP4 downloaden",
+    "cancel": "Annuleren"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Hele afspeellijst downloaden",
+    "start": "MP3 extraheren",
+    "cancel": "Annuleren"
+  },
+  "subs": {
+    "languages": "Talen (komma-gescheiden):",
+    "playlist": "Hele afspeellijst downloaden",
+    "start": "Ondertitels → Tekst",
+    "cancel": "Annuleren"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "language": "Taal:",
+    "cookieBrowser": {
+      "label": "Cookies van browser:",
+      "none": "Geen",
+      "warning": "Sluit <strong>{{browser}}</strong> vóór downloaden — Windows blokkeert de cookie-database. De app probeert het zonder cookies opnieuw als de vergrendeling het lezen blokkeert."
+    }
+  },
+  "progress": {
+    "ready": "Klaar",
+    "eta": "ETA {{eta}}",
+    "done": "Klaar → {{path}}",
+    "error": "Fout: {{message}}"
+  },
+  "phase": {
+    "downloading": "downloaden…",
+    "merging": "samenvoegen…",
+    "extractingAudio": "audio extraheren…",
+    "embeddingThumbnail": "cover insluiten…",
+    "cookieRetry": "browsercookies vergrendeld — opnieuw proberen zonder"
+  },
+  "error": {
+    "invalidUrl": "Ongeldige URL",
+    "sidecar": "Sidecar mislukt",
+    "io": "I/O-fout",
+    "json": "Parseerfout",
+    "other": "Fout"
+  },
+  "about": {
+    "title": "Over ClipForge",
+    "version": "Versie {{version}}",
+    "license": "Onder AGPL-3.0 licentie",
+    "author": "door {{author}}",
+    "builtWith": "Gebouwd met",
+    "dependencies": {
+      "ytdlp": "yt-dlp — extractie-engine (Unlicense)",
+      "ffmpeg": "FFmpeg — mediaprocessor (LGPL/GPL)",
+      "tauri": "Tauri — desktop-runtime (MIT/Apache-2.0)",
+      "react": "React — UI-bibliotheek (MIT)"
+    },
+    "ffmpegNote": "Deze binary bevat FFmpeg onder LGPL/GPL. De broncode voor de meegeleverde build is beschikbaar bij het FFmpeg-project.",
+    "close": "Sluiten"
+  }
+}

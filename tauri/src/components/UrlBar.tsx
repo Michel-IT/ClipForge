@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { detectPlatform } from "../api";
 import { PlatformInfo } from "../types";
 
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export function UrlBar({ url, onUrlChange, onPlatformDetected }: Props) {
+  const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
 
   const handleDetect = async () => {
@@ -31,7 +33,7 @@ export function UrlBar({ url, onUrlChange, onPlatformDetected }: Props) {
     <div className="url-bar">
       <input
         type="text"
-        placeholder="Paste a video URL (YouTube, Reddit, TikTok, ...)"
+        placeholder={t("url.placeholder")}
         value={url}
         onChange={(e) => onUrlChange(e.target.value)}
         onBlur={handleDetect}
@@ -40,7 +42,7 @@ export function UrlBar({ url, onUrlChange, onPlatformDetected }: Props) {
         }}
       />
       <button onClick={handleDetect} disabled={busy}>
-        {busy ? "..." : "Detect"}
+        {busy ? t("url.detecting") : t("url.detect")}
       </button>
     </div>
   );

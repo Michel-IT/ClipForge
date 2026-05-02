@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.884042+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Pemuat turun media universal"
+  },
+  "titlebar": {
+    "minimize": "Kecilkan",
+    "maximize": "Besarkan",
+    "restore": "Pulihkan",
+    "close": "Tutup"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Mengenai"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Penafian Undang-undang",
+      "loading": "Memuatkan penafian…",
+      "loadError": "Gagal memuat: {{error}}",
+      "languageLabel": "Bahasa:",
+      "scrollHint": "Skrol ke bawah dahulu",
+      "agree": "Saya bersetuju",
+      "disagree": "Saya tidak bersetuju (tutup app)"
+    }
+  },
+  "url": {
+    "placeholder": "Tampal URL video (YouTube, Reddit, TikTok, ...)",
+    "detect": "Kesan",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Audio",
+    "subs": "Sari"
+  },
+  "outputDir": {
+    "label": "Destinasi:",
+    "browse": "Layari…",
+    "placeholder": "(lalai: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Sari Kata → Teks"
+  },
+  "video": {
+    "quality": "Kualiti:",
+    "qualityAuto": "Auto (terbaik)",
+    "playlist": "Muat turun seluruh senarai main",
+    "start": "Muat turun MP4",
+    "cancel": "Batal"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Muat turun seluruh senarai main",
+    "start": "Ekstrak MP3",
+    "cancel": "Batal"
+  },
+  "subs": {
+    "languages": "Bahasa (dipisah koma):",
+    "playlist": "Muat turun seluruh senarai main",
+    "start": "Ekstrak sari kata → Teks",
+    "cancel": "Batal"
+  },
+  "settings": {
+    "title": "Tetapan",
+    "language": "Bahasa:",
+    "cookieBrowser": {
+      "label": "Cookies dari pelayar:",
+      "none": "Tiada",
+      "warning": "Tutup <strong>{{browser}}</strong> sebelum memuat turun — Windows mengunci fail cookies. Aplikasi akan cuba lagi tanpa cookies jika kunci menghalang bacaan."
+    }
+  },
+  "progress": {
+    "ready": "Sedia",
+    "eta": "ETA {{eta}}",
+    "done": "Siap → {{path}}",
+    "error": "Ralat: {{message}}"
+  },
+  "phase": {
+    "downloading": "memuat turun…",
+    "merging": "menggabungkan…",
+    "extractingAudio": "mengekstrak audio…",
+    "embeddingThumbnail": "membenamkan kulit…",
+    "cookieRetry": "cookies pelayar terkunci — cuba lagi tanpa"
+  },
+  "error": {
+    "invalidUrl": "URL tidak sah",
+    "sidecar": "Sidecar gagal",
+    "io": "Ralat I/O",
+    "json": "Ralat parsing",
+    "other": "Ralat"
+  },
+  "about": {
+    "title": "Mengenai ClipForge",
+    "version": "Versi {{version}}",
+    "license": "Berlesen AGPL-3.0",
+    "author": "oleh {{author}}",
+    "builtWith": "Dibina dengan",
+    "dependencies": {
+      "ytdlp": "yt-dlp — enjin pengekstrakan (Unlicense)",
+      "ffmpeg": "FFmpeg — pemproses media (LGPL/GPL)",
+      "tauri": "Tauri — runtime desktop (MIT/Apache-2.0)",
+      "react": "React — pustaka UI (MIT)"
+    },
+    "ffmpegNote": "Binari ini menyertakan FFmpeg di bawah LGPL/GPL. Kod sumber untuk binaan yang disertakan boleh didapati dari projek FFmpeg.",
+    "close": "Tutup"
+  }
+}

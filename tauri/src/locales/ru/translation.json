@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.817685+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Универсальный загрузчик медиа"
+  },
+  "titlebar": {
+    "minimize": "Свернуть",
+    "maximize": "Развернуть",
+    "restore": "Восстановить",
+    "close": "Закрыть"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "О программе"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Юридическое уведомление",
+      "loading": "Загрузка уведомления…",
+      "loadError": "Не удалось загрузить уведомление: {{error}}",
+      "languageLabel": "Язык:",
+      "scrollHint": "Сначала прокрутите до конца",
+      "agree": "Я согласен",
+      "disagree": "Я не согласен (закрыть)"
+    }
+  },
+  "url": {
+    "placeholder": "Вставьте URL видео (YouTube, Reddit, TikTok, ...)",
+    "detect": "Определить",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Видео",
+    "audio": "Аудио",
+    "subs": "Субт."
+  },
+  "outputDir": {
+    "label": "Папка:",
+    "browse": "Обзор…",
+    "placeholder": "(по умолчанию: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Субтитры → Текст"
+  },
+  "video": {
+    "quality": "Качество:",
+    "qualityAuto": "Авто (лучшее)",
+    "playlist": "Скачать весь плейлист",
+    "start": "Скачать MP4",
+    "cancel": "Отмена"
+  },
+  "audio": {
+    "bitrate": "Битрейт:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Скачать весь плейлист",
+    "start": "Извлечь MP3",
+    "cancel": "Отмена"
+  },
+  "subs": {
+    "languages": "Языки (через запятую):",
+    "playlist": "Скачать весь плейлист",
+    "start": "Извлечь субтитры → Текст",
+    "cancel": "Отмена"
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык:",
+    "cookieBrowser": {
+      "label": "Cookies из браузера:",
+      "none": "Нет",
+      "warning": "Закройте <strong>{{browser}}</strong> перед загрузкой — Windows блокирует файл cookies. Приложение повторит попытку без cookies, если блокировка препятствует чтению."
+    }
+  },
+  "progress": {
+    "ready": "Готов",
+    "eta": "ETA {{eta}}",
+    "done": "Готово → {{path}}",
+    "error": "Ошибка: {{message}}"
+  },
+  "phase": {
+    "downloading": "загрузка…",
+    "merging": "объединение…",
+    "extractingAudio": "извлечение аудио…",
+    "embeddingThumbnail": "встраивание обложки…",
+    "cookieRetry": "cookies браузера заблокированы — повтор без них"
+  },
+  "error": {
+    "invalidUrl": "Неверный URL",
+    "sidecar": "Ошибка sidecar",
+    "io": "Ошибка ввода/вывода",
+    "json": "Ошибка разбора",
+    "other": "Ошибка"
+  },
+  "about": {
+    "title": "О ClipForge",
+    "version": "Версия {{version}}",
+    "license": "Лицензия AGPL-3.0",
+    "author": "автор: {{author}}",
+    "builtWith": "Создано с использованием",
+    "dependencies": {
+      "ytdlp": "yt-dlp — движок извлечения (Unlicense)",
+      "ffmpeg": "FFmpeg — медиапроцессор (LGPL/GPL)",
+      "tauri": "Tauri — десктопный runtime (MIT/Apache-2.0)",
+      "react": "React — UI-библиотека (MIT)"
+    },
+    "ffmpegNote": "Этот бинарник содержит FFmpeg под LGPL/GPL. Исходный код включенной сборки доступен на сайте проекта FFmpeg.",
+    "close": "Закрыть"
+  }
+}

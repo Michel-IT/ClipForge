@@ -18,6 +18,20 @@ pub enum AppError {
     Other(String),
 }
 
+impl AppError {
+    /// Canonical i18n key the frontend uses to translate this error.
+    /// Mirror of the JSON keys under `error.*` in `src/locales/*/translation.json`.
+    pub fn key(&self) -> &'static str {
+        match self {
+            AppError::InvalidUrl(_) => "error.invalidUrl",
+            AppError::Sidecar(_)    => "error.sidecar",
+            AppError::Io(_)         => "error.io",
+            AppError::Json(_)       => "error.json",
+            AppError::Other(_)      => "error.other",
+        }
+    }
+}
+
 impl Serialize for AppError {
     fn serialize<S: Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
         s.serialize_str(&self.to_string())

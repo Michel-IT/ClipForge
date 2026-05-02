@@ -9,7 +9,7 @@ export interface Settings {
   subs_langs: string;
   bitrate: Bitrate;
   video_quality: VideoQuality;
-  disclaimer_accepted: boolean;
+  language: string;
 }
 
 export const DEFAULTS: Settings = {
@@ -20,7 +20,7 @@ export const DEFAULTS: Settings = {
   subs_langs: "it,en",
   bitrate: "192",
   video_quality: "Auto",
-  disclaimer_accepted: false,
+  language: "",
 };
 
 const store = new LazyStore("settings.json");

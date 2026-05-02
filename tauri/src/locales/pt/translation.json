@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.717556+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Descarregador universal de média"
+  },
+  "titlebar": {
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "restore": "Restaurar",
+    "close": "Fechar"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Acerca"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Aviso Legal",
+      "loading": "A carregar aviso legal…",
+      "loadError": "Falha ao carregar aviso: {{error}}",
+      "languageLabel": "Idioma:",
+      "scrollHint": "Desliza até ao fim primeiro",
+      "agree": "Aceito",
+      "disagree": "Não aceito (fechar app)"
+    }
+  },
+  "url": {
+    "placeholder": "Cola um URL de vídeo (YouTube, Reddit, TikTok, ...)",
+    "detect": "Detetar",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Vídeo",
+    "audio": "Áudio",
+    "subs": "Legendas"
+  },
+  "outputDir": {
+    "label": "Destino:",
+    "browse": "Procurar…",
+    "placeholder": "(predefinição: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Legendas → Texto"
+  },
+  "video": {
+    "quality": "Qualidade:",
+    "qualityAuto": "Auto (melhor)",
+    "playlist": "Descarregar lista inteira",
+    "start": "Descarregar MP4",
+    "cancel": "Cancelar"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Descarregar lista inteira",
+    "start": "Extrair MP3",
+    "cancel": "Cancelar"
+  },
+  "subs": {
+    "languages": "Idiomas (separados por vírgula):",
+    "playlist": "Descarregar lista inteira",
+    "start": "Extrair legendas → Texto",
+    "cancel": "Cancelar"
+  },
+  "settings": {
+    "title": "Definições",
+    "language": "Idioma:",
+    "cookieBrowser": {
+      "label": "Cookies do navegador:",
+      "none": "Nenhum",
+      "warning": "Fecha o <strong>{{browser}}</strong> antes de descarregar — o Windows bloqueia o ficheiro de cookies. A app tenta de novo sem cookies se o bloqueio impedir a leitura."
+    }
+  },
+  "progress": {
+    "ready": "Pronto",
+    "eta": "ETA {{eta}}",
+    "done": "Concluído → {{path}}",
+    "error": "Erro: {{message}}"
+  },
+  "phase": {
+    "downloading": "a descarregar…",
+    "merging": "a juntar…",
+    "extractingAudio": "a extrair áudio…",
+    "embeddingThumbnail": "a incorporar capa…",
+    "cookieRetry": "cookies do navegador bloqueados — a tentar sem"
+  },
+  "error": {
+    "invalidUrl": "URL inválido",
+    "sidecar": "Falha no sidecar",
+    "io": "Erro de E/S",
+    "json": "Erro de análise",
+    "other": "Erro"
+  },
+  "about": {
+    "title": "Acerca do ClipForge",
+    "version": "Versão {{version}}",
+    "license": "Licenciado sob AGPL-3.0",
+    "author": "por {{author}}",
+    "builtWith": "Construído com",
+    "dependencies": {
+      "ytdlp": "yt-dlp — motor de extração (Unlicense)",
+      "ffmpeg": "FFmpeg — processador de média (LGPL/GPL)",
+      "tauri": "Tauri — runtime desktop (MIT/Apache-2.0)",
+      "react": "React — biblioteca UI (MIT)"
+    },
+    "ffmpegNote": "Este binário inclui FFmpeg sob LGPL/GPL. O código-fonte da build incluída está disponível no projeto FFmpeg.",
+    "close": "Fechar"
+  }
+}

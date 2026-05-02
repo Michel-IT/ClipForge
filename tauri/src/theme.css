@@ -1,0 +1,64 @@
+/* Single source of truth for colors, spacing, radii, fonts.
+ * Every component must use var(--*) — no hex literals in App.css.
+ * Light theme via prefers-color-scheme.
+ */
+:root {
+  /* surfaces */
+  --bg:           #1e2128;
+  --bg-elevated:  #252830;
+  --surface:      #2a2e36;
+  --surface-hover:#343943;
+  --border:       #3a3f4b;
+
+  /* text */
+  --text:         #e8eaed;
+  --text-muted:   #9a9da3;
+  --text-faint:   #6a6f7a;
+
+  /* brand */
+  --accent:       #ff4500;
+  --accent-text:  #ffffff;
+  --accent-hover: #ff5a1f;
+
+  /* feedback */
+  --danger:       #e23b3b;
+  --success:      #2ea043;
+
+  /* spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* radii */
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+
+  /* chrome */
+  --titlebar-h: 36px;
+  --footer-h:   28px;
+
+  /* typography */
+  --font-ui:   system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Consolas, monospace;
+  --font-size: 13px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:           #f4f5f7;
+    --bg-elevated:  #ffffff;
+    --surface:      #f0f1f4;
+    --surface-hover:#e6e8ec;
+    --border:       #d0d3da;
+    --text:         #1e2128;
+    --text-muted:   #6a6f7a;
+    --text-faint:   #9a9da3;
+  }
+}
+
+[dir="rtl"] .titlebar-right { flex-direction: row-reverse; }
+[dir="rtl"] .app-footer     { flex-direction: row-reverse; }
