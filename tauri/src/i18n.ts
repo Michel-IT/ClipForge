@@ -1,14 +1,16 @@
-import i18n from "i18next";
+import i18n, { InitOptions } from "i18next";
 import { initReactI18next } from "react-i18next";
 import { locale as osLocale } from "@tauri-apps/plugin-os";
 
 // Eager static import: 46 lingue x ~52 chiavi short ≈ 150KB totali, accettabile per
 // desktop bundle. import.meta.glob fa la discovery automatica al build time.
 const modules = import.meta.glob("./locales/*/translation.json", { eager: true });
-const resources: Record<string, { translation: unknown }> = {};
+// `Resource` from i18next requires translation values to be string|object,
+// not `unknown`, so we type as Record<string, any> here.
+const resources: Record<string, { translation: Record<string, any> }> = {};
 for (const [path, mod] of Object.entries(modules)) {
   const lang = path.match(/locales\/([^/]+)\//)![1];
-  resources[lang] = { translation: (mod as { default: unknown }).default };
+  resources[lang] = { translation: (mod as { default: Record<string, any> }).default };
 }
 
 export const SUPPORTED_LANGS = Object.keys(resources).sort();
@@ -49,11 +51,15 @@ export function applyDirAndLang(lang: string) {
   document.documentElement.lang = lang;
 }
 
-i18n.use(initReactI18next).init({
+// Explicit InitOptions annotation: TypeScript otherwise picks the wrong init()
+// overload (Callback) and rejects `resources` as an unknown property.
+const i18nOptions: InitOptions = {
   resources,
   fallbackLng: "en",
   interpolation: { escapeValue: false },
   react: { useSuspense: false }, // re-render synchronously on changeLanguage
-});
+};
+
+i18n.use(initReactI18next).init(i18nOptions);
 
 export default i18n;

@@ -54,3 +54,4 @@ Desktop.ini
 *.local
 secrets.*
 credentials.*
+tauri/node_modules/
