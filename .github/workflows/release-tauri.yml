@@ -1,0 +1,75 @@
+name: Release Tauri
+
+on:
+  push:
+    tags: ['tauri-v*.*.*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: windows-latest, target: x86_64-pc-windows-msvc,    sidecar_script: 'pwsh ./scripts/fetch-sidecars.ps1', experimental: false }
+          - { os: ubuntu-22.04,   target: x86_64-unknown-linux-gnu,  sidecar_script: 'bash ./scripts/fetch-sidecars.sh',  experimental: false }
+          - { os: macos-14,       target: aarch64-apple-darwin,      sidecar_script: 'bash ./scripts/fetch-sidecars.sh',  experimental: false }
+          - { os: macos-13,       target: x86_64-apple-darwin,       sidecar_script: 'bash ./scripts/fetch-sidecars.sh',  experimental: true }
+
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+
+    defaults:
+      run:
+        working-directory: tauri
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install Linux deps
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libssl-dev \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: 'tauri/src-tauri -> target'
+
+      - name: Install JS deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Fetch sidecars
+        shell: bash
+        run: ${{ matrix.sidecar_script }} --target ${{ matrix.target }}
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: tauri
+          tagName: ${{ github.ref_name }}
+          releaseName: 'ClipForge Tauri ${{ github.ref_name }}'
+          releaseDraft: true
+          prerelease: false
+          args: --target ${{ matrix.target }}

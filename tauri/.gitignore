@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-ssr/
+.DS_Store
+*.local
+
+src-tauri/target/
+src-tauri/binaries/yt-dlp*
+src-tauri/binaries/ffmpeg*
+
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log
