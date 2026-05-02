@@ -41,8 +41,5 @@
     "category": "Utility",
     "shortDescription": "Download videos, audio and subtitles for personal archival",
     "longDescription": "ClipForge is a desktop GUI wrapper around yt-dlp, intended for personal archival of content you have rights to. See DISCLAIMER.md."
-  },
-  "plugins": {
-    "store": {}
   }
 }

@@ -7,6 +7,42 @@ use crate::error::AppError;
 use crate::platforms::{detect, PlatformInfo};
 use crate::sidecar;
 
+// yt-dlp needs to know where ffmpeg lives to merge streams, embed thumbnails,
+// extract audio, etc. Tauri copies the externalBin sidecars next to the running
+// binary (and drops the target-triple suffix), so we resolve from current_exe().
+fn ffmpeg_path() -> Option<String> {
+    let exe = std::env::current_exe().ok()?;
+    let dir = exe.parent()?;
+    let name = if cfg!(windows) { "ffmpeg.exe" } else { "ffmpeg" };
+    let path = dir.join(name);
+    path.exists().then(|| path.to_string_lossy().into_owned())
+}
+
+// Reject anything that doesn't parse as an http(s) URL before we hand it to
+// yt-dlp — surfaces a clean error instead of a cryptic "yt-dlp exited with N".
+fn validate_url(url: &str) -> Result<(), AppError> {
+    let parsed = url::Url::parse(url).map_err(|_| AppError::InvalidUrl(url.to_string()))?;
+    match parsed.scheme() {
+        "http" | "https" => Ok(()),
+        other => Err(AppError::InvalidUrl(format!("unsupported scheme `{other}`"))),
+    }
+}
+
+// If the user hasn't picked an output dir yet, fall back to ~/Downloads/ClipForge
+// (mirror of the Python default at clipforge.py). Creates the dir if missing.
+fn resolve_out_dir(app: &AppHandle, out_dir: String) -> Result<String, AppError> {
+    use tauri::path::BaseDirectory;
+    if !out_dir.trim().is_empty() {
+        return Ok(out_dir);
+    }
+    let downloads = app
+        .path()
+        .resolve("ClipForge", BaseDirectory::Download)
+        .map_err(|e| AppError::Other(format!("could not resolve Downloads dir: {e}")))?;
+    std::fs::create_dir_all(&downloads)?;
+    Ok(downloads.to_string_lossy().into_owned())
+}
+
 #[derive(Debug, Clone, Serialize)]
 pub struct VideoInfo {
     pub title: String,
@@ -36,6 +72,7 @@ pub async fn fetch_info(
     url: String,
     cookies_browser: Option<String>,
 ) -> Result<VideoInfo, AppError> {
+    validate_url(&url)?;
     let mut args: Vec<String> = vec![
         "--dump-single-json".into(),
         "--no-download".into(),
@@ -81,6 +118,7 @@ pub async fn download_video(
     cookies_browser: Option<String>,
     playlist: bool,
 ) -> Result<DownloadStarted, AppError> {
+    validate_url(&url)?;
     let format = match quality.as_str() {
         "Auto" | "Auto (best)" => "bv*+ba/b".to_string(),
         q => {
@@ -88,6 +126,7 @@ pub async fn download_video(
             format!("bv*[height<={h}]+ba/b[height<={h}]/b")
         }
     };
+    let out_dir = resolve_out_dir(&app, out_dir)?;
 
     let mut args: Vec<String> = vec![
         "-f".into(), format,
@@ -100,6 +139,10 @@ pub async fn download_video(
         "--progress-template".into(),
         "PROGRESS:%(progress._percent_str)s|%(progress._speed_str)s|%(progress._eta_str)s".into(),
     ];
+    if let Some(p) = ffmpeg_path() {
+        args.push("--ffmpeg-location".into());
+        args.push(p);
+    }
     if !playlist {
         args.push("--no-playlist".into());
     }
@@ -122,6 +165,8 @@ pub async fn download_audio(
     cookies_browser: Option<String>,
     playlist: bool,
 ) -> Result<DownloadStarted, AppError> {
+    validate_url(&url)?;
+    let out_dir = resolve_out_dir(&app, out_dir)?;
     let mut args: Vec<String> = vec![
         "-f".into(), "bestaudio/best".into(),
         "--extract-audio".into(),
@@ -135,6 +180,10 @@ pub async fn download_audio(
         "--progress-template".into(),
         "PROGRESS:%(progress._percent_str)s|%(progress._speed_str)s|%(progress._eta_str)s".into(),
     ];
+    if let Some(p) = ffmpeg_path() {
+        args.push("--ffmpeg-location".into());
+        args.push(p);
+    }
     if !playlist {
         args.push("--no-playlist".into());
     }
@@ -159,6 +208,8 @@ pub async fn download_subs(
     cookies_browser: Option<String>,
     playlist: bool,
 ) -> Result<DownloadStarted, AppError> {
+    validate_url(&url)?;
+    let out_dir = resolve_out_dir(&app, out_dir)?;
     let mut args: Vec<String> = vec![
         "--skip-download".into(),
         "--write-subs".into(),
@@ -196,8 +247,38 @@ pub async fn cancel_download(job_id: String) -> Result<(), AppError> {
 //
 // Skeleton: emits start + end events even when the line parser is a no-op,
 // so the channel is verifiable end-to-end before progress logic lands.
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn accepts_https_url() {
+        assert!(validate_url("https://www.youtube.com/watch?v=abc").is_ok());
+    }
+
+    #[test]
+    fn accepts_http_url() {
+        assert!(validate_url("http://example.com/video").is_ok());
+    }
+
+    #[test]
+    fn rejects_garbage() {
+        assert!(matches!(
+            validate_url("asdf").unwrap_err(),
+            AppError::InvalidUrl(_)
+        ));
+    }
+
+    #[test]
+    fn rejects_unsupported_scheme() {
+        assert!(matches!(
+            validate_url("ftp://example.com/foo").unwrap_err(),
+            AppError::InvalidUrl(_)
+        ));
+    }
+}
+
 async fn spawn_download(app: &AppHandle, args: Vec<String>) -> Result<DownloadStarted, AppError> {
-    use futures::StreamExt;
     use tauri_plugin_shell::process::CommandEvent;
 
     let job_id = Uuid::new_v4().to_string();
@@ -215,7 +296,7 @@ async fn spawn_download(app: &AppHandle, args: Vec<String>) -> Result<DownloadSt
     let job_for_task = job_id.clone();
     tauri::async_runtime::spawn(async move {
         let mut last_output: Option<String> = None;
-        while let Some(event) = rx.next().await {
+        while let Some(event) = rx.recv().await {
             match event {
                 CommandEvent::Stdout(bytes) => {
                     let line = String::from_utf8_lossy(&bytes).to_string();
