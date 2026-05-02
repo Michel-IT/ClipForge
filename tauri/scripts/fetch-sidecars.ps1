@@ -84,11 +84,10 @@ try {
         }
 
         { $_ -eq "aarch64-apple-darwin" -or $_ -eq "x86_64-apple-darwin" } {
-            $ytUrl = if ($Target -eq "aarch64-apple-darwin") {
-                "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos"
-            } else {
-                "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos_legacy"
-            }
+            # `yt-dlp_macos` is universal2 — works on both arm64 and Intel.
+            # Upstream retired `yt-dlp_macos_legacy` (now 404), so we use the
+            # universal binary for both macOS targets.
+            $ytUrl = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos"
             $ytDst = Join-Path $binDir "yt-dlp-$Target"
             Save-File $ytUrl $ytDst
             if ($IsMacOS -or $IsLinux) { & chmod +x $ytDst }

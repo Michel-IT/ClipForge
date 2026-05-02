@@ -72,11 +72,10 @@ case "$TARGET" in
     ;;
 
   aarch64-apple-darwin|x86_64-apple-darwin)
-    if [[ "$TARGET" == "aarch64-apple-darwin" ]]; then
-      YT_URL="https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos"
-    else
-      YT_URL="https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos_legacy"
-    fi
+    # `yt-dlp_macos` is a universal2 binary that runs on both arm64 and Intel.
+    # The historical `yt-dlp_macos_legacy` (for macOS 10.13/14) has been retired
+    # by upstream and now 404s, so we use the universal binary for both targets.
+    YT_URL="https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos"
     dl "$YT_URL" "$BIN_DIR/yt-dlp-$TARGET"
     chmod +x "$BIN_DIR/yt-dlp-$TARGET"
 
