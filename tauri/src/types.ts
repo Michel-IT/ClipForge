@@ -22,8 +22,10 @@ export interface ProgressEvent {
   percent: number;
   speed: string;
   eta: string;
-  phase: string;       // legacy EN, fallback
-  phase_key?: string;  // canonical i18n key, preferred
+  phase: string;        // legacy EN, fallback
+  phase_key?: string;   // canonical i18n key, preferred
+  phase_step?: number;  // 1-based step index
+  phase_total?: number; // total step count for the current job
 }
 
 export interface CompleteEvent {

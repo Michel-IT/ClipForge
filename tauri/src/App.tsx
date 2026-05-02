@@ -23,7 +23,7 @@ type Tab = "video" | "audio" | "subs";
 
 type StatusKind =
   | { kind: "ready" }
-  | { kind: "phase"; key: string; legacy: string }
+  | { kind: "phase"; key: string; legacy: string; step?: number; total?: number }
   | { kind: "done"; path: string }
   | { kind: "error"; message: string };
 
@@ -77,6 +77,8 @@ function App() {
           kind: "phase",
           key: e.phase_key ?? "phase.downloading",
           legacy: e.phase ?? "downloading",
+          step: e.phase_step,
+          total: e.phase_total,
         });
       }),
       onDownloadComplete((e) => {
@@ -131,7 +133,12 @@ function App() {
   const statusText = (() => {
     switch (status.kind) {
       case "ready":  return t("progress.ready");
-      case "phase":  return t(status.key, { defaultValue: status.legacy });
+      case "phase": {
+        const label = t(status.key, { defaultValue: status.legacy });
+        return status.step && status.total
+          ? `[${status.step}/${status.total}] ${label}`
+          : label;
+      }
       case "done":   return t("progress.done", { path: status.path });
       case "error":  return t("progress.error", { message: status.message });
     }
@@ -223,7 +230,17 @@ function App() {
               />
             )}
 
-            <ProgressBar percent={percent} speed={speed} eta={eta} status={statusText} />
+            <ProgressBar
+              percent={percent}
+              speed={speed}
+              eta={eta}
+              status={statusText}
+              state={
+                status.kind === "done"  ? "done"  :
+                status.kind === "error" ? "error" :
+                status.kind === "phase" ? "running" : "ready"
+              }
+            />
             <LogPanel lines={logLines} />
           </div>
         )}

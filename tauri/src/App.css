@@ -290,8 +290,10 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   transition: width 200ms ease;
   min-width: 0;
 }
-.progress-track:not(:has(.progress-fill[style*="0%"]))::before { display: none; }
-/* idle shimmer when fill is 0 */
+/* idle shimmer ONLY in ready state (no active job) */
+.progress-running .progress-track::before,
+.progress-done .progress-track::before,
+.progress-error .progress-track::before { display: none; }
 .progress-track::before {
   content: "";
   position: absolute;
@@ -311,6 +313,12 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   font-size: 11px;
   color: var(--text-muted);
 }
+.progress-status { font-weight: 500; }
+.progress-running .progress-status { color: var(--text); }
+.progress-done .progress-fill   { background: var(--success); }
+.progress-done .progress-status { color: var(--success); font-weight: 700; font-size: 12px; }
+.progress-error .progress-fill   { background: var(--danger); }
+.progress-error .progress-status { color: var(--danger); font-weight: 700; }
 
 /* ===== Disclaimer modal ===== */
 .modal-overlay {

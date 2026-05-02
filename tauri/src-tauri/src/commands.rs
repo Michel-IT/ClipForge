@@ -140,8 +140,9 @@ pub async fn download_video(
     let mut args: Vec<String> = vec![
         "-f".into(), format,
         "--merge-output-format".into(), "mp4".into(),
-        "--write-thumbnail".into(),
+        // Embed thumbnail into the MP4 atom; don't litter the dir with a side file.
         "--embed-thumbnail".into(),
+        "--convert-thumbnails".into(), "jpg".into(),
         "--add-metadata".into(),
         "-o".into(), format!("{out_dir}/%(title)s.%(ext)s"),
         "--newline".into(),
@@ -176,14 +177,19 @@ pub async fn download_audio(
 ) -> Result<DownloadStarted, AppError> {
     validate_url(&url)?;
     let out_dir = resolve_out_dir(&app, out_dir)?;
+    // No --write-thumbnail: we don't want to litter the output dir with the
+    // .webp/.jpg cover next to the .mp3. --embed-thumbnail still downloads
+    // the cover internally, embeds it, and cleans up.
+    // --convert-thumbnails jpg: forces conversion to JPG before embed; PNG
+    // sometimes fails silently in ID3 readers, JPG is universally compatible.
     let mut args: Vec<String> = vec![
         "-f".into(), "bestaudio/best".into(),
         "--extract-audio".into(),
         "--audio-format".into(), "mp3".into(),
         "--audio-quality".into(), bitrate,
         "--add-metadata".into(),
-        "--write-thumbnail".into(),
         "--embed-thumbnail".into(),
+        "--convert-thumbnails".into(), "jpg".into(),
         "-o".into(), format!("{out_dir}/%(title)s.%(ext)s"),
         "--newline".into(),
         "--progress-template".into(),
@@ -343,15 +349,17 @@ async fn spawn_download(
     let job_for_task = job_id.clone();
     let app_for_retry = app.app_handle().clone();
     tauri::async_runtime::spawn(async move {
-        // (legacy_text, canonical_i18n_key) — frontend prefers the key,
-        // legacy text is kept for backward-compat / debug logs.
-        const PHASE_DOWNLOADING:  (&str, &str) = ("downloading",         "phase.downloading");
-        const PHASE_MERGING:      (&str, &str) = ("merging",             "phase.merging");
-        const PHASE_EXTRACT:      (&str, &str) = ("extracting audio",    "phase.extractingAudio");
-        const PHASE_EMBED:        (&str, &str) = ("embedding thumbnail", "phase.embeddingThumbnail");
+        // (legacy_text, canonical_i18n_key, step_index) — frontend prefers
+        // the key; legacy text is kept for backward-compat / debug logs.
+        // step_index is 1-based; total steps is sent alongside via a const.
+        const PHASE_DOWNLOADING:  (&str, &str, u32) = ("downloading",         "phase.downloading",        1);
+        const PHASE_MERGING:      (&str, &str, u32) = ("merging",             "phase.merging",            2);
+        const PHASE_EXTRACT:      (&str, &str, u32) = ("extracting audio",    "phase.extractingAudio",    2);
+        const PHASE_EMBED:        (&str, &str, u32) = ("embedding thumbnail", "phase.embeddingThumbnail", 3);
+        const TOTAL_STEPS: u32 = 3; // download → merge/extract → embed
 
         let mut last_output: Option<String> = None;
-        let mut phase: (&str, &str) = PHASE_DOWNLOADING;
+        let mut phase: (&str, &str, u32) = PHASE_DOWNLOADING;
         let mut stderr_buf = String::new();
         while let Some(event) = rx.recv().await {
             match event {
@@ -361,12 +369,14 @@ async fn spawn_download(
                         let _ = app_handle.emit(
                             "download-progress",
                             serde_json::json!({
-                                "job_id":    job_for_task,
-                                "percent":   p.percent,
-                                "speed":     p.speed,
-                                "eta":       p.eta,
-                                "phase":     phase.0,
-                                "phase_key": phase.1,
+                                "job_id":     job_for_task,
+                                "percent":    p.percent,
+                                "speed":      p.speed,
+                                "eta":        p.eta,
+                                "phase":      phase.0,
+                                "phase_key":  phase.1,
+                                "phase_step": phase.2,
+                                "phase_total": TOTAL_STEPS,
                             }),
                         );
                     } else {
@@ -389,6 +399,7 @@ async fn spawn_download(
                     //   [Merger]        Merging formats into "<final>.mp4"
                     //   [ExtractAudio]  Destination: <final>.mp3
                     //   [EmbedThumbnail] ... (no path; same file as previous step)
+                    let prev_step = phase.2;
                     if let Some(path) = line.strip_prefix("[download] Destination: ") {
                         last_output = Some(path.trim().to_string());
                     } else if let Some(rest) = line.strip_prefix("[Merger] Merging formats into \"") {
@@ -401,6 +412,25 @@ async fn spawn_download(
                         phase = PHASE_EXTRACT;
                     } else if line.starts_with("[EmbedThumbnail]") {
                         phase = PHASE_EMBED;
+                    }
+                    // Synthesize an immediate progress event when the phase
+                    // bumps so the UI updates the step label even if no
+                    // PROGRESS line follows for a while (ffmpeg phases are
+                    // silent on stdout).
+                    if phase.2 != prev_step {
+                        let _ = app_handle.emit(
+                            "download-progress",
+                            serde_json::json!({
+                                "job_id":      job_for_task,
+                                "percent":     100.0,  // download itself is done at this point
+                                "speed":       "",
+                                "eta":         "",
+                                "phase":       phase.0,
+                                "phase_key":   phase.1,
+                                "phase_step":  phase.2,
+                                "phase_total": TOTAL_STEPS,
+                            }),
+                        );
                     }
                 }
                 CommandEvent::Stderr(bytes) => {
@@ -457,12 +487,14 @@ async fn spawn_download(
                             let _ = app_handle.emit(
                                 "download-progress",
                                 serde_json::json!({
-                                    "job_id":    job_for_task,
-                                    "percent":   0.0,
-                                    "speed":     "",
-                                    "eta":       "",
-                                    "phase":     "browser cookies locked — retrying without",
-                                    "phase_key": "phase.cookieRetry",
+                                    "job_id":      job_for_task,
+                                    "percent":     0.0,
+                                    "speed":       "",
+                                    "eta":         "",
+                                    "phase":       "browser cookies locked — retrying without",
+                                    "phase_key":   "phase.cookieRetry",
+                                    "phase_step":  1,
+                                    "phase_total": TOTAL_STEPS,
                                 }),
                             );
                             sidecar::drop_job(&job_for_task);
