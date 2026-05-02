@@ -63,6 +63,16 @@ jobs:
         shell: bash
         run: ${{ matrix.sidecar_script }} --target ${{ matrix.target }}
 
+      # Strip the "tauri-" prefix from the tag so the release title shows
+      # "ClipForge Tauri v0.1.0" instead of "ClipForge Tauri tauri-v0.1.0".
+      - name: Compute clean release name
+        if: startsWith(github.ref, 'refs/tags/')
+        id: relname
+        shell: bash
+        run: |
+          REFNAME="${{ github.ref_name }}"
+          echo "title=ClipForge Tauri ${REFNAME#tauri-}" >> "$GITHUB_OUTPUT"
+
       # Tag push → publish to a draft GitHub Release.
       - name: Build + publish (tag)
         if: startsWith(github.ref, 'refs/tags/')
@@ -72,7 +82,7 @@ jobs:
         with:
           projectPath: tauri
           tagName: ${{ github.ref_name }}
-          releaseName: 'ClipForge Tauri ${{ github.ref_name }}'
+          releaseName: ${{ steps.relname.outputs.title }}
           releaseDraft: true
           prerelease: false
           args: --target ${{ matrix.target }}
