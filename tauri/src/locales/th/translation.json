@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.886697+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "ตัวดาวน์โหลดสื่อแบบสากล"
+  },
+  "titlebar": {
+    "minimize": "ย่อ",
+    "maximize": "ขยาย",
+    "restore": "คืนค่า",
+    "close": "ปิด"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "เกี่ยวกับ"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "ข้อสงวนทางกฎหมาย",
+      "loading": "กำลังโหลดข้อสงวน…",
+      "loadError": "โหลดล้มเหลว: {{error}}",
+      "languageLabel": "ภาษา:",
+      "scrollHint": "เลื่อนลงสุดก่อน",
+      "agree": "ฉันยอมรับ",
+      "disagree": "ฉันไม่ยอมรับ (ปิดแอป)"
+    }
+  },
+  "url": {
+    "placeholder": "วาง URL วิดีโอ (YouTube, Reddit, TikTok, ...)",
+    "detect": "ตรวจหา",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "วิดีโอ",
+    "audio": "เสียง",
+    "subs": "คำบรรยาย"
+  },
+  "outputDir": {
+    "label": "ปลายทาง:",
+    "browse": "เรียกดู…",
+    "placeholder": "(ค่าเริ่มต้น: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "คำบรรยาย → ข้อความ"
+  },
+  "video": {
+    "quality": "คุณภาพ:",
+    "qualityAuto": "อัตโนมัติ (ดีที่สุด)",
+    "playlist": "ดาวน์โหลดทั้งเพลย์ลิสต์",
+    "start": "ดาวน์โหลด MP4",
+    "cancel": "ยกเลิก"
+  },
+  "audio": {
+    "bitrate": "บิตเรต:",
+    "kbps": "{{value}} kbps",
+    "playlist": "ดาวน์โหลดทั้งเพลย์ลิสต์",
+    "start": "แยก MP3",
+    "cancel": "ยกเลิก"
+  },
+  "subs": {
+    "languages": "ภาษา (คั่นด้วยจุลภาค):",
+    "playlist": "ดาวน์โหลดทั้งเพลย์ลิสต์",
+    "start": "แยกคำบรรยาย → ข้อความ",
+    "cancel": "ยกเลิก"
+  },
+  "settings": {
+    "title": "ตั้งค่า",
+    "language": "ภาษา:",
+    "cookieBrowser": {
+      "label": "คุกกี้จากเบราว์เซอร์:",
+      "none": "ไม่มี",
+      "warning": "ปิด <strong>{{browser}}</strong> ก่อนดาวน์โหลด — Windows ล็อกไฟล์คุกกี้ แอปจะลองใหม่โดยไม่มีคุกกี้หากการล็อกขัดขวางการอ่าน"
+    }
+  },
+  "progress": {
+    "ready": "พร้อม",
+    "eta": "ETA {{eta}}",
+    "done": "เสร็จ → {{path}}",
+    "error": "ข้อผิดพลาด: {{message}}"
+  },
+  "phase": {
+    "downloading": "กำลังดาวน์โหลด…",
+    "merging": "กำลังรวม…",
+    "extractingAudio": "กำลังแยกเสียง…",
+    "embeddingThumbnail": "กำลังฝังภาพปก…",
+    "cookieRetry": "คุกกี้เบราว์เซอร์ถูกล็อก — กำลังลองใหม่โดยไม่มี"
+  },
+  "error": {
+    "invalidUrl": "URL ไม่ถูกต้อง",
+    "sidecar": "Sidecar ล้มเหลว",
+    "io": "ข้อผิดพลาด I/O",
+    "json": "ข้อผิดพลาดการแปล",
+    "other": "ข้อผิดพลาด"
+  },
+  "about": {
+    "title": "เกี่ยวกับ ClipForge",
+    "version": "เวอร์ชัน {{version}}",
+    "license": "ภายใต้สัญญาอนุญาต AGPL-3.0",
+    "author": "โดย {{author}}",
+    "builtWith": "สร้างด้วย",
+    "dependencies": {
+      "ytdlp": "yt-dlp — เครื่องยนต์การสกัด (Unlicense)",
+      "ffmpeg": "FFmpeg — ตัวประมวลผลสื่อ (LGPL/GPL)",
+      "tauri": "Tauri — เดสก์ท็อป runtime (MIT/Apache-2.0)",
+      "react": "React — ไลบรารี UI (MIT)"
+    },
+    "ffmpegNote": "ไบนารีนี้รวม FFmpeg ภายใต้ LGPL/GPL ซอร์สโค้ดสำหรับบิลด์ที่รวมสามารถหาได้จากโครงการ FFmpeg",
+    "close": "ปิด"
+  }
+}

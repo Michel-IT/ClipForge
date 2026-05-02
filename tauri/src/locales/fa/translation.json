@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.897732+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "دانلودر چندرسانه‌ای جهانی"
+  },
+  "titlebar": {
+    "minimize": "کوچک‌سازی",
+    "maximize": "بزرگ‌سازی",
+    "restore": "بازیابی",
+    "close": "بستن"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "درباره"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "سلب مسئولیت قانونی",
+      "loading": "در حال بارگذاری سلب مسئولیت…",
+      "loadError": "بارگذاری ناموفق: {{error}}",
+      "languageLabel": "زبان:",
+      "scrollHint": "ابتدا تا انتها اسکرول کنید",
+      "agree": "موافقم",
+      "disagree": "موافق نیستم (بستن برنامه)"
+    }
+  },
+  "url": {
+    "placeholder": "یک URL ویدیو بچسبانید (YouTube, Reddit, TikTok, ...)",
+    "detect": "تشخیص",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "ویدیو",
+    "audio": "صدا",
+    "subs": "زیرن."
+  },
+  "outputDir": {
+    "label": "مقصد:",
+    "browse": "مرور…",
+    "placeholder": "(پیش‌فرض: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "زیرنویس ← متن"
+  },
+  "video": {
+    "quality": "کیفیت:",
+    "qualityAuto": "خودکار (بهترین)",
+    "playlist": "دانلود کل پلی‌لیست",
+    "start": "دانلود MP4",
+    "cancel": "لغو"
+  },
+  "audio": {
+    "bitrate": "بیت‌ریت:",
+    "kbps": "{{value}} kbps",
+    "playlist": "دانلود کل پلی‌لیست",
+    "start": "استخراج MP3",
+    "cancel": "لغو"
+  },
+  "subs": {
+    "languages": "زبان‌ها (با کاما جدا شده):",
+    "playlist": "دانلود کل پلی‌لیست",
+    "start": "استخراج زیرنویس ← متن",
+    "cancel": "لغو"
+  },
+  "settings": {
+    "title": "تنظیمات",
+    "language": "زبان:",
+    "cookieBrowser": {
+      "label": "کوکی‌های مرورگر:",
+      "none": "هیچ‌کدام",
+      "warning": "قبل از دانلود <strong>{{browser}}</strong> را ببندید — ویندوز فایل کوکی را قفل می‌کند. اگر قفل خواندن را مسدود کند، برنامه بدون کوکی دوباره تلاش می‌کند."
+    }
+  },
+  "progress": {
+    "ready": "آماده",
+    "eta": "ETA {{eta}}",
+    "done": "انجام شد ← {{path}}",
+    "error": "خطا: {{message}}"
+  },
+  "phase": {
+    "downloading": "در حال دانلود…",
+    "merging": "در حال ادغام…",
+    "extractingAudio": "در حال استخراج صدا…",
+    "embeddingThumbnail": "در حال جاسازی جلد…",
+    "cookieRetry": "کوکی‌های مرورگر قفل — تلاش مجدد بدون آن‌ها"
+  },
+  "error": {
+    "invalidUrl": "URL نامعتبر",
+    "sidecar": "Sidecar شکست خورد",
+    "io": "خطای I/O",
+    "json": "خطای تجزیه",
+    "other": "خطا"
+  },
+  "about": {
+    "title": "درباره ClipForge",
+    "version": "نسخه {{version}}",
+    "license": "تحت مجوز AGPL-3.0",
+    "author": "توسط {{author}}",
+    "builtWith": "ساخته شده با",
+    "dependencies": {
+      "ytdlp": "yt-dlp — موتور استخراج (Unlicense)",
+      "ffmpeg": "FFmpeg — پردازنده رسانه (LGPL/GPL)",
+      "tauri": "Tauri — رانتایم دسکتاپ (MIT/Apache-2.0)",
+      "react": "React — کتابخانه UI (MIT)"
+    },
+    "ffmpegNote": "این باینری شامل FFmpeg تحت LGPL/GPL است. کد منبع برای ساخت همراه از پروژه FFmpeg در دسترس است.",
+    "close": "بستن"
+  }
+}

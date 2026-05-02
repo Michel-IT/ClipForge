@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.814943+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Universaali medialatauri"
+  },
+  "titlebar": {
+    "minimize": "Pienennä",
+    "maximize": "Suurenna",
+    "restore": "Palauta",
+    "close": "Sulje"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Tietoja"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Oikeudellinen vastuuvapauslauseke",
+      "loading": "Ladataan vastuuvapauslauseketta…",
+      "loadError": "Lataus epäonnistui: {{error}}",
+      "languageLabel": "Kieli:",
+      "scrollHint": "Vieritä ensin loppuun",
+      "agree": "Hyväksyn",
+      "disagree": "En hyväksy (sulje sovellus)"
+    }
+  },
+  "url": {
+    "placeholder": "Liitä videon URL (YouTube, Reddit, TikTok, ...)",
+    "detect": "Tunnista",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Ääni",
+    "subs": "Tekst."
+  },
+  "outputDir": {
+    "label": "Kohde:",
+    "browse": "Selaa…",
+    "placeholder": "(oletus: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Tekstitykset → Teksti"
+  },
+  "video": {
+    "quality": "Laatu:",
+    "qualityAuto": "Auto (paras)",
+    "playlist": "Lataa koko soittolista",
+    "start": "Lataa MP4",
+    "cancel": "Peruuta"
+  },
+  "audio": {
+    "bitrate": "Bittinopeus:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Lataa koko soittolista",
+    "start": "Pura MP3",
+    "cancel": "Peruuta"
+  },
+  "subs": {
+    "languages": "Kielet (pilkulla erotettu):",
+    "playlist": "Lataa koko soittolista",
+    "start": "Pura tekstitykset → Teksti",
+    "cancel": "Peruuta"
+  },
+  "settings": {
+    "title": "Asetukset",
+    "language": "Kieli:",
+    "cookieBrowser": {
+      "label": "Selaimen evästeet:",
+      "none": "Ei mitään",
+      "warning": "Sulje <strong>{{browser}}</strong> ennen latausta — Windows lukitsee evästetiedoston. Sovellus yrittää uudelleen ilman evästeitä, jos lukko estää lukemisen."
+    }
+  },
+  "progress": {
+    "ready": "Valmiina",
+    "eta": "ETA {{eta}}",
+    "done": "Valmis → {{path}}",
+    "error": "Virhe: {{message}}"
+  },
+  "phase": {
+    "downloading": "ladataan…",
+    "merging": "yhdistetään…",
+    "extractingAudio": "puretaan ääntä…",
+    "embeddingThumbnail": "upotetaan kantta…",
+    "cookieRetry": "selaimen evästeet lukittu — yritetään uudelleen ilman"
+  },
+  "error": {
+    "invalidUrl": "Virheellinen URL",
+    "sidecar": "Sidecar epäonnistui",
+    "io": "I/O-virhe",
+    "json": "Jäsennysvirhe",
+    "other": "Virhe"
+  },
+  "about": {
+    "title": "Tietoja ClipForgesta",
+    "version": "Versio {{version}}",
+    "license": "Lisensoitu AGPL-3.0:lla",
+    "author": "tekijä {{author}}",
+    "builtWith": "Rakennettu käyttäen",
+    "dependencies": {
+      "ytdlp": "yt-dlp — purkumoottori (Unlicense)",
+      "ffmpeg": "FFmpeg — mediaprosessori (LGPL/GPL)",
+      "tauri": "Tauri — työpöytäajoympäristö (MIT/Apache-2.0)",
+      "react": "React — UI-kirjasto (MIT)"
+    },
+    "ffmpegNote": "Tämä binääri sisältää FFmpegin LGPL/GPL-lisenssillä. Mukana toimitetun käännöksen lähdekoodi on saatavilla FFmpeg-projektista.",
+    "close": "Sulje"
+  }
+}

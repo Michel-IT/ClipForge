@@ -1,0 +1,120 @@
+{
+  "_meta": { "autoTranslated": false, "generated": null, "source": "human" },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Downloader media universale"
+  },
+  "titlebar": {
+    "minimize": "Riduci a icona",
+    "maximize": "Ingrandisci",
+    "restore": "Ripristina",
+    "close": "Chiudi"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Informazioni"
+  },
+  "about": {
+    "title": "Informazioni su ClipForge",
+    "version": "Versione {{version}}",
+    "license": "Licenza AGPL-3.0",
+    "author": "di {{author}}",
+    "builtWith": "Costruito con",
+    "dependencies": {
+      "ytdlp": "yt-dlp — motore di estrazione (Unlicense)",
+      "ffmpeg": "FFmpeg — processore media (LGPL/GPL)",
+      "tauri": "Tauri — runtime desktop (MIT/Apache-2.0)",
+      "react": "React — libreria UI (MIT)"
+    },
+    "ffmpegNote": "Questo binario include FFmpeg sotto licenza LGPL/GPL. Il codice sorgente della build inclusa è disponibile dal progetto FFmpeg.",
+    "close": "Chiudi"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Disclaimer Legale",
+      "loading": "Caricamento disclaimer legale…",
+      "loadError": "Caricamento disclaimer fallito: {{error}}",
+      "languageLabel": "Lingua:",
+      "scrollHint": "Scorri prima fino in fondo",
+      "agree": "Accetto",
+      "disagree": "Non accetto (chiudi l'app)"
+    }
+  },
+  "section": {
+    "source": "Sorgente",
+    "destination": "Destinazione",
+    "options": "Opzioni"
+  },
+  "url": {
+    "placeholder": "Incolla un URL video (YouTube, Reddit, TikTok, ...)",
+    "detect": "Rileva",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Audio",
+    "subs": "Sottotitoli"
+  },
+  "outputDir": {
+    "label": "Cartella di destinazione:",
+    "browse": "Sfoglia…",
+    "placeholder": "(predefinito: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Sottotitoli → Testo"
+  },
+  "video": {
+    "quality": "Qualità:",
+    "qualityAuto": "Auto (massima)",
+    "playlist": "Scarica intera playlist",
+    "start": "Scarica MP4",
+    "cancel": "Annulla"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Scarica intera playlist",
+    "start": "Estrai MP3",
+    "cancel": "Annulla"
+  },
+  "subs": {
+    "languages": "Lingue (separate da virgola):",
+    "playlist": "Scarica intera playlist",
+    "start": "Estrai Sottotitoli → Testo",
+    "cancel": "Annulla"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": "Lingua:",
+    "cookieBrowser": {
+      "label": "Cookie dal browser:",
+      "none": "Nessuno",
+      "warning": "Chiudi <strong>{{browser}}</strong> prima di scaricare — Windows blocca il file dei cookie. L'app riproverà senza cookie se il blocco impedisce la lettura."
+    }
+  },
+  "progress": {
+    "ready": "Pronto",
+    "eta": "ETA {{eta}}",
+    "done": "Fatto → {{path}}",
+    "error": "Errore: {{message}}"
+  },
+  "log": {
+    "empty": "L'output del download apparirà qui."
+  },
+  "phase": {
+    "downloading": "scaricamento…",
+    "merging": "unione tracce…",
+    "extractingAudio": "estrazione audio…",
+    "embeddingThumbnail": "incorporamento copertina…",
+    "cookieRetry": "cookie del browser bloccati — riprovo senza"
+  },
+  "error": {
+    "invalidUrl": "URL non valido",
+    "sidecar": "Sidecar fallito",
+    "io": "Errore I/O",
+    "json": "Errore di parsing",
+    "other": "Errore"
+  }
+}

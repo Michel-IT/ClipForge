@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.885329+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Trình tải xuống đa phương tiện toàn cầu"
+  },
+  "titlebar": {
+    "minimize": "Thu nhỏ",
+    "maximize": "Phóng to",
+    "restore": "Khôi phục",
+    "close": "Đóng"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Giới thiệu"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Tuyên bố pháp lý",
+      "loading": "Đang tải tuyên bố pháp lý…",
+      "loadError": "Tải thất bại: {{error}}",
+      "languageLabel": "Ngôn ngữ:",
+      "scrollHint": "Cuộn xuống cuối trước",
+      "agree": "Tôi đồng ý",
+      "disagree": "Tôi không đồng ý (đóng ứng dụng)"
+    }
+  },
+  "url": {
+    "placeholder": "Dán URL video (YouTube, Reddit, TikTok, ...)",
+    "detect": "Phát hiện",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Âm thanh",
+    "subs": "Phụ đề"
+  },
+  "outputDir": {
+    "label": "Đích:",
+    "browse": "Duyệt…",
+    "placeholder": "(mặc định: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Phụ đề → Văn bản"
+  },
+  "video": {
+    "quality": "Chất lượng:",
+    "qualityAuto": "Tự động (tốt nhất)",
+    "playlist": "Tải toàn bộ danh sách",
+    "start": "Tải MP4",
+    "cancel": "Hủy"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Tải toàn bộ danh sách",
+    "start": "Trích xuất MP3",
+    "cancel": "Hủy"
+  },
+  "subs": {
+    "languages": "Ngôn ngữ (cách nhau bằng dấu phẩy):",
+    "playlist": "Tải toàn bộ danh sách",
+    "start": "Trích xuất phụ đề → Văn bản",
+    "cancel": "Hủy"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "language": "Ngôn ngữ:",
+    "cookieBrowser": {
+      "label": "Cookies từ trình duyệt:",
+      "none": "Không",
+      "warning": "Đóng <strong>{{browser}}</strong> trước khi tải — Windows khóa tệp cookies. Ứng dụng sẽ thử lại không cookies nếu khóa chặn đọc."
+    }
+  },
+  "progress": {
+    "ready": "Sẵn sàng",
+    "eta": "ETA {{eta}}",
+    "done": "Xong → {{path}}",
+    "error": "Lỗi: {{message}}"
+  },
+  "phase": {
+    "downloading": "đang tải…",
+    "merging": "đang gộp…",
+    "extractingAudio": "đang trích xuất âm thanh…",
+    "embeddingThumbnail": "đang nhúng ảnh bìa…",
+    "cookieRetry": "cookies trình duyệt bị khóa — thử lại không có"
+  },
+  "error": {
+    "invalidUrl": "URL không hợp lệ",
+    "sidecar": "Sidecar thất bại",
+    "io": "Lỗi I/O",
+    "json": "Lỗi phân tích",
+    "other": "Lỗi"
+  },
+  "about": {
+    "title": "Giới thiệu về ClipForge",
+    "version": "Phiên bản {{version}}",
+    "license": "Cấp phép AGPL-3.0",
+    "author": "bởi {{author}}",
+    "builtWith": "Xây dựng với",
+    "dependencies": {
+      "ytdlp": "yt-dlp — công cụ trích xuất (Unlicense)",
+      "ffmpeg": "FFmpeg — bộ xử lý media (LGPL/GPL)",
+      "tauri": "Tauri — runtime desktop (MIT/Apache-2.0)",
+      "react": "React — thư viện UI (MIT)"
+    },
+    "ffmpegNote": "Tệp nhị phân này gói FFmpeg theo LGPL/GPL. Mã nguồn của bản dựng đi kèm có sẵn từ dự án FFmpeg.",
+    "close": "Đóng"
+  }
+}

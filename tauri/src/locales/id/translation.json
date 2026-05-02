@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.882478+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Pengunduh media universal"
+  },
+  "titlebar": {
+    "minimize": "Perkecil",
+    "maximize": "Perbesar",
+    "restore": "Pulihkan",
+    "close": "Tutup"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Tentang"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Penafian Hukum",
+      "loading": "Memuat penafian…",
+      "loadError": "Gagal memuat: {{error}}",
+      "languageLabel": "Bahasa:",
+      "scrollHint": "Gulir ke bawah dulu",
+      "agree": "Saya setuju",
+      "disagree": "Saya tidak setuju (tutup app)"
+    }
+  },
+  "url": {
+    "placeholder": "Tempel URL video (YouTube, Reddit, TikTok, ...)",
+    "detect": "Deteksi",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Audio",
+    "subs": "Sub"
+  },
+  "outputDir": {
+    "label": "Tujuan:",
+    "browse": "Telusuri…",
+    "placeholder": "(default: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Subtitle → Teks"
+  },
+  "video": {
+    "quality": "Kualitas:",
+    "qualityAuto": "Auto (terbaik)",
+    "playlist": "Unduh seluruh playlist",
+    "start": "Unduh MP4",
+    "cancel": "Batal"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Unduh seluruh playlist",
+    "start": "Ekstrak MP3",
+    "cancel": "Batal"
+  },
+  "subs": {
+    "languages": "Bahasa (dipisah koma):",
+    "playlist": "Unduh seluruh playlist",
+    "start": "Ekstrak subtitle → Teks",
+    "cancel": "Batal"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "language": "Bahasa:",
+    "cookieBrowser": {
+      "label": "Cookies dari browser:",
+      "none": "Tidak ada",
+      "warning": "Tutup <strong>{{browser}}</strong> sebelum mengunduh — Windows mengunci file cookies. Aplikasi akan mencoba lagi tanpa cookies jika kunci memblokir pembacaan."
+    }
+  },
+  "progress": {
+    "ready": "Siap",
+    "eta": "ETA {{eta}}",
+    "done": "Selesai → {{path}}",
+    "error": "Error: {{message}}"
+  },
+  "phase": {
+    "downloading": "mengunduh…",
+    "merging": "menggabungkan…",
+    "extractingAudio": "mengekstrak audio…",
+    "embeddingThumbnail": "menyematkan sampul…",
+    "cookieRetry": "cookies browser terkunci — mencoba ulang tanpa"
+  },
+  "error": {
+    "invalidUrl": "URL tidak valid",
+    "sidecar": "Sidecar gagal",
+    "io": "Error I/O",
+    "json": "Error parsing",
+    "other": "Error"
+  },
+  "about": {
+    "title": "Tentang ClipForge",
+    "version": "Versi {{version}}",
+    "license": "Berlisensi AGPL-3.0",
+    "author": "oleh {{author}}",
+    "builtWith": "Dibuat dengan",
+    "dependencies": {
+      "ytdlp": "yt-dlp — mesin ekstraksi (Unlicense)",
+      "ffmpeg": "FFmpeg — prosesor media (LGPL/GPL)",
+      "tauri": "Tauri — runtime desktop (MIT/Apache-2.0)",
+      "react": "React — pustaka UI (MIT)"
+    },
+    "ffmpegNote": "Biner ini menyertakan FFmpeg di bawah LGPL/GPL. Kode sumber untuk build yang disertakan tersedia dari proyek FFmpeg.",
+    "close": "Tutup"
+  }
+}

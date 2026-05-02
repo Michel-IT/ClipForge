@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.881077+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "범용 미디어 다운로더"
+  },
+  "titlebar": {
+    "minimize": "최소화",
+    "maximize": "최대화",
+    "restore": "복원",
+    "close": "닫기"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "정보"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "법적 고지",
+      "loading": "법적 고지 로드 중…",
+      "loadError": "로드 실패: {{error}}",
+      "languageLabel": "언어:",
+      "scrollHint": "먼저 끝까지 스크롤하세요",
+      "agree": "동의함",
+      "disagree": "동의하지 않음 (앱 닫기)"
+    }
+  },
+  "url": {
+    "placeholder": "동영상 URL을 붙여넣으세요 (YouTube, Reddit, TikTok, ...)",
+    "detect": "감지",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "동영상",
+    "audio": "오디오",
+    "subs": "자막"
+  },
+  "outputDir": {
+    "label": "출력:",
+    "browse": "찾아보기…",
+    "placeholder": "(기본값: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "자막 → 텍스트"
+  },
+  "video": {
+    "quality": "품질:",
+    "qualityAuto": "자동 (최고)",
+    "playlist": "전체 재생목록 다운로드",
+    "start": "MP4 다운로드",
+    "cancel": "취소"
+  },
+  "audio": {
+    "bitrate": "비트레이트:",
+    "kbps": "{{value}} kbps",
+    "playlist": "전체 재생목록 다운로드",
+    "start": "MP3 추출",
+    "cancel": "취소"
+  },
+  "subs": {
+    "languages": "언어 (쉼표로 구분):",
+    "playlist": "전체 재생목록 다운로드",
+    "start": "자막 추출 → 텍스트",
+    "cancel": "취소"
+  },
+  "settings": {
+    "title": "설정",
+    "language": "언어:",
+    "cookieBrowser": {
+      "label": "브라우저 쿠키:",
+      "none": "없음",
+      "warning": "다운로드 전에 <strong>{{browser}}</strong>을(를) 닫으세요 — Windows가 쿠키 파일을 잠급니다. 잠금이 읽기를 차단하면 앱은 쿠키 없이 재시도합니다."
+    }
+  },
+  "progress": {
+    "ready": "준비됨",
+    "eta": "ETA {{eta}}",
+    "done": "완료 → {{path}}",
+    "error": "오류: {{message}}"
+  },
+  "phase": {
+    "downloading": "다운로드 중…",
+    "merging": "병합 중…",
+    "extractingAudio": "오디오 추출 중…",
+    "embeddingThumbnail": "썸네일 임베딩 중…",
+    "cookieRetry": "브라우저 쿠키 잠김 — 쿠키 없이 재시도"
+  },
+  "error": {
+    "invalidUrl": "잘못된 URL",
+    "sidecar": "Sidecar 실패",
+    "io": "I/O 오류",
+    "json": "파싱 오류",
+    "other": "오류"
+  },
+  "about": {
+    "title": "ClipForge 정보",
+    "version": "버전 {{version}}",
+    "license": "AGPL-3.0 라이선스",
+    "author": "제작자: {{author}}",
+    "builtWith": "사용 기술",
+    "dependencies": {
+      "ytdlp": "yt-dlp — 추출 엔진 (Unlicense)",
+      "ffmpeg": "FFmpeg — 미디어 프로세서 (LGPL/GPL)",
+      "tauri": "Tauri — 데스크톱 런타임 (MIT/Apache-2.0)",
+      "react": "React — UI 라이브러리 (MIT)"
+    },
+    "ffmpegNote": "이 바이너리는 LGPL/GPL 하에 FFmpeg를 포함합니다. 포함된 빌드의 소스 코드는 FFmpeg 프로젝트에서 사용할 수 있습니다.",
+    "close": "닫기"
+  }
+}

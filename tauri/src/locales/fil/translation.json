@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.888060+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Pangkalahatang media downloader"
+  },
+  "titlebar": {
+    "minimize": "I-minimize",
+    "maximize": "I-maximize",
+    "restore": "Ibalik",
+    "close": "Isara"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Tungkol sa"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Legal na Disclaimer",
+      "loading": "Ikinakarga ang disclaimer…",
+      "loadError": "Nabigo ang pag-load: {{error}}",
+      "languageLabel": "Wika:",
+      "scrollHint": "Mag-scroll muna sa ibaba",
+      "agree": "Sumasang-ayon ako",
+      "disagree": "Hindi ako sumasang-ayon (isara ang app)"
+    }
+  },
+  "url": {
+    "placeholder": "I-paste ang URL ng video (YouTube, Reddit, TikTok, ...)",
+    "detect": "Tuklasin",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Audio",
+    "subs": "Sub"
+  },
+  "outputDir": {
+    "label": "Patutunguhan:",
+    "browse": "Mag-browse…",
+    "placeholder": "(default: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Mga subtitle → Teksto"
+  },
+  "video": {
+    "quality": "Kalidad:",
+    "qualityAuto": "Auto (pinakamabuti)",
+    "playlist": "I-download ang buong playlist",
+    "start": "I-download MP4",
+    "cancel": "Kanselahin"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "I-download ang buong playlist",
+    "start": "Kunin MP3",
+    "cancel": "Kanselahin"
+  },
+  "subs": {
+    "languages": "Mga wika (pinaghihiwalay ng kuwit):",
+    "playlist": "I-download ang buong playlist",
+    "start": "Kunin mga subtitle → Teksto",
+    "cancel": "Kanselahin"
+  },
+  "settings": {
+    "title": "Mga Setting",
+    "language": "Wika:",
+    "cookieBrowser": {
+      "label": "Cookies mula sa browser:",
+      "none": "Wala",
+      "warning": "Isara ang <strong>{{browser}}</strong> bago mag-download — nila-lock ng Windows ang cookie file. Susubukan muli ng app nang walang cookies kung pinipigilan ng lock ang pagbabasa."
+    }
+  },
+  "progress": {
+    "ready": "Handa na",
+    "eta": "ETA {{eta}}",
+    "done": "Tapos → {{path}}",
+    "error": "Error: {{message}}"
+  },
+  "phase": {
+    "downloading": "dinodonload…",
+    "merging": "pinagsasama…",
+    "extractingAudio": "kinukuha ang audio…",
+    "embeddingThumbnail": "ini-embed ang cover…",
+    "cookieRetry": "naka-lock ang cookies ng browser — sumusubok muli nang wala"
+  },
+  "error": {
+    "invalidUrl": "Hindi balidong URL",
+    "sidecar": "Nabigo ang sidecar",
+    "io": "I/O error",
+    "json": "Parsing error",
+    "other": "Error"
+  },
+  "about": {
+    "title": "Tungkol sa ClipForge",
+    "version": "Bersyon {{version}}",
+    "license": "Lisensyado sa ilalim ng AGPL-3.0",
+    "author": "ni {{author}}",
+    "builtWith": "Itinayo gamit ang",
+    "dependencies": {
+      "ytdlp": "yt-dlp — extraction engine (Unlicense)",
+      "ffmpeg": "FFmpeg — media processor (LGPL/GPL)",
+      "tauri": "Tauri — desktop runtime (MIT/Apache-2.0)",
+      "react": "React — UI library (MIT)"
+    },
+    "ffmpegNote": "Kasama sa binary na ito ang FFmpeg sa ilalim ng LGPL/GPL. Ang source code para sa kasamang build ay magagamit mula sa proyekto ng FFmpeg.",
+    "close": "Isara"
+  }
+}

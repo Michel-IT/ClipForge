@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.862519+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Univerzális médialetöltő"
+  },
+  "titlebar": {
+    "minimize": "Kis méret",
+    "maximize": "Teljes méret",
+    "restore": "Visszaállít",
+    "close": "Bezárás"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Névjegy"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Jogi nyilatkozat",
+      "loading": "Nyilatkozat betöltése…",
+      "loadError": "A betöltés nem sikerült: {{error}}",
+      "languageLabel": "Nyelv:",
+      "scrollHint": "Először görgessen le a végére",
+      "agree": "Elfogadom",
+      "disagree": "Nem fogadom el (bezárás)"
+    }
+  },
+  "url": {
+    "placeholder": "Illesszen be egy videó URL-t (YouTube, Reddit, TikTok, ...)",
+    "detect": "Felismer",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Videó",
+    "audio": "Hang",
+    "subs": "Felir."
+  },
+  "outputDir": {
+    "label": "Célmappa:",
+    "browse": "Tallózás…",
+    "placeholder": "(alapértelmezett: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Feliratok → Szöveg"
+  },
+  "video": {
+    "quality": "Minőség:",
+    "qualityAuto": "Auto (legjobb)",
+    "playlist": "Teljes lejátszási lista letöltése",
+    "start": "MP4 letöltése",
+    "cancel": "Mégse"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Teljes lejátszási lista letöltése",
+    "start": "MP3 kinyerése",
+    "cancel": "Mégse"
+  },
+  "subs": {
+    "languages": "Nyelvek (vesszővel elválasztva):",
+    "playlist": "Teljes lejátszási lista letöltése",
+    "start": "Feliratok kinyerése → Szöveg",
+    "cancel": "Mégse"
+  },
+  "settings": {
+    "title": "Beállítások",
+    "language": "Nyelv:",
+    "cookieBrowser": {
+      "label": "Cookie-k a böngészőből:",
+      "none": "Nincs",
+      "warning": "Zárja be a <strong>{{browser}}</strong>-t letöltés előtt — a Windows zárolja a cookie fájlt. Az alkalmazás cookie-k nélkül újrapróbálkozik, ha a zár blokkolja az olvasást."
+    }
+  },
+  "progress": {
+    "ready": "Kész",
+    "eta": "ETA {{eta}}",
+    "done": "Kész → {{path}}",
+    "error": "Hiba: {{message}}"
+  },
+  "phase": {
+    "downloading": "letöltés…",
+    "merging": "egyesítés…",
+    "extractingAudio": "hang kinyerése…",
+    "embeddingThumbnail": "borító beágyazása…",
+    "cookieRetry": "böngésző cookie-k zárolva — újrapróbálkozás nélkülük"
+  },
+  "error": {
+    "invalidUrl": "Érvénytelen URL",
+    "sidecar": "Sidecar sikertelen",
+    "io": "I/O hiba",
+    "json": "Elemzési hiba",
+    "other": "Hiba"
+  },
+  "about": {
+    "title": "A ClipForge névjegye",
+    "version": "Verzió {{version}}",
+    "license": "AGPL-3.0 licenc alatt",
+    "author": "készítette: {{author}}",
+    "builtWith": "Felhasznált technológiák",
+    "dependencies": {
+      "ytdlp": "yt-dlp — kinyerő motor (Unlicense)",
+      "ffmpeg": "FFmpeg — médiafeldolgozó (LGPL/GPL)",
+      "tauri": "Tauri — asztali futtatókörnyezet (MIT/Apache-2.0)",
+      "react": "React — UI könyvtár (MIT)"
+    },
+    "ffmpegNote": "Ez a binárfájl FFmpeg-et tartalmaz LGPL/GPL alatt. A mellékelt build forráskódja elérhető az FFmpeg projektből.",
+    "close": "Bezárás"
+  }
+}

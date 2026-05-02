@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.861171+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Univerzálny sťahovač médií"
+  },
+  "titlebar": {
+    "minimize": "Minimalizovať",
+    "maximize": "Maximalizovať",
+    "restore": "Obnoviť",
+    "close": "Zavrieť"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "O aplikácii"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Právne upozornenie",
+      "loading": "Načítava sa upozornenie…",
+      "loadError": "Nepodarilo sa načítať: {{error}}",
+      "languageLabel": "Jazyk:",
+      "scrollHint": "Najprv posuňte na koniec",
+      "agree": "Súhlasím",
+      "disagree": "Nesúhlasím (zavrieť)"
+    }
+  },
+  "url": {
+    "placeholder": "Vložte URL videa (YouTube, Reddit, TikTok, ...)",
+    "detect": "Detegovať",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Audio",
+    "subs": "Tit."
+  },
+  "outputDir": {
+    "label": "Cieľ:",
+    "browse": "Prehľadávať…",
+    "placeholder": "(predvolené: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Titulky → Text"
+  },
+  "video": {
+    "quality": "Kvalita:",
+    "qualityAuto": "Auto (najlepšia)",
+    "playlist": "Stiahnuť celý zoznam",
+    "start": "Stiahnuť MP4",
+    "cancel": "Zrušiť"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Stiahnuť celý zoznam",
+    "start": "Extrahovať MP3",
+    "cancel": "Zrušiť"
+  },
+  "subs": {
+    "languages": "Jazyky (oddelené čiarkou):",
+    "playlist": "Stiahnuť celý zoznam",
+    "start": "Extrahovať titulky → Text",
+    "cancel": "Zrušiť"
+  },
+  "settings": {
+    "title": "Nastavenia",
+    "language": "Jazyk:",
+    "cookieBrowser": {
+      "label": "Cookies z prehliadača:",
+      "none": "Žiadne",
+      "warning": "Pred sťahovaním zatvorte <strong>{{browser}}</strong> — Windows zamyká súbor cookies. Aplikácia skúsi znova bez cookies, ak zámok bráni čítaniu."
+    }
+  },
+  "progress": {
+    "ready": "Pripravené",
+    "eta": "ETA {{eta}}",
+    "done": "Hotovo → {{path}}",
+    "error": "Chyba: {{message}}"
+  },
+  "phase": {
+    "downloading": "sťahovanie…",
+    "merging": "zlučovanie…",
+    "extractingAudio": "extrahovanie audia…",
+    "embeddingThumbnail": "vkladanie obalu…",
+    "cookieRetry": "cookies prehliadača zamknuté — skúšam znova bez"
+  },
+  "error": {
+    "invalidUrl": "Neplatná URL",
+    "sidecar": "Sidecar zlyhal",
+    "io": "Chyba I/O",
+    "json": "Chyba parsovania",
+    "other": "Chyba"
+  },
+  "about": {
+    "title": "O ClipForge",
+    "version": "Verzia {{version}}",
+    "license": "Licencia AGPL-3.0",
+    "author": "autor: {{author}}",
+    "builtWith": "Zostavené s",
+    "dependencies": {
+      "ytdlp": "yt-dlp — extrakčný engine (Unlicense)",
+      "ffmpeg": "FFmpeg — mediálny procesor (LGPL/GPL)",
+      "tauri": "Tauri — desktopový runtime (MIT/Apache-2.0)",
+      "react": "React — UI knižnica (MIT)"
+    },
+    "ffmpegNote": "Táto binárka obsahuje FFmpeg pod LGPL/GPL. Zdrojový kód priloženého buildu je dostupný v projekte FFmpeg.",
+    "close": "Zavrieť"
+  }
+}

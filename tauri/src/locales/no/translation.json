@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.759968+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Universell medienedlaster"
+  },
+  "titlebar": {
+    "minimize": "Minimer",
+    "maximize": "Maksimer",
+    "restore": "Gjenopprett",
+    "close": "Lukk"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Om"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Juridisk ansvarsfraskrivelse",
+      "loading": "Laster ansvarsfraskrivelse…",
+      "loadError": "Kunne ikke laste: {{error}}",
+      "languageLabel": "Språk:",
+      "scrollHint": "Bla helt ned først",
+      "agree": "Jeg godtar",
+      "disagree": "Jeg godtar ikke (lukk app)"
+    }
+  },
+  "url": {
+    "placeholder": "Lim inn en video-URL (YouTube, Reddit, TikTok, ...)",
+    "detect": "Oppdag",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Lyd",
+    "subs": "Undt."
+  },
+  "outputDir": {
+    "label": "Mål:",
+    "browse": "Bla gjennom…",
+    "placeholder": "(standard: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Undertekster → Tekst"
+  },
+  "video": {
+    "quality": "Kvalitet:",
+    "qualityAuto": "Auto (beste)",
+    "playlist": "Last ned hele spillelisten",
+    "start": "Last ned MP4",
+    "cancel": "Avbryt"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Last ned hele spillelisten",
+    "start": "Trekk ut MP3",
+    "cancel": "Avbryt"
+  },
+  "subs": {
+    "languages": "Språk (kommaseparert):",
+    "playlist": "Last ned hele spillelisten",
+    "start": "Trekk ut undertekster → Tekst",
+    "cancel": "Avbryt"
+  },
+  "settings": {
+    "title": "Innstillinger",
+    "language": "Språk:",
+    "cookieBrowser": {
+      "label": "Cookies fra nettleser:",
+      "none": "Ingen",
+      "warning": "Lukk <strong>{{browser}}</strong> før nedlasting — Windows låser cookie-databasen. Appen prøver igjen uten cookies hvis låsen blokkerer lesing."
+    }
+  },
+  "progress": {
+    "ready": "Klar",
+    "eta": "ETA {{eta}}",
+    "done": "Ferdig → {{path}}",
+    "error": "Feil: {{message}}"
+  },
+  "phase": {
+    "downloading": "laster ned…",
+    "merging": "slår sammen…",
+    "extractingAudio": "trekker ut lyd…",
+    "embeddingThumbnail": "bygger inn cover…",
+    "cookieRetry": "nettlesercookies låst — prøver igjen uten"
+  },
+  "error": {
+    "invalidUrl": "Ugyldig URL",
+    "sidecar": "Sidecar feilet",
+    "io": "I/O-feil",
+    "json": "Parse-feil",
+    "other": "Feil"
+  },
+  "about": {
+    "title": "Om ClipForge",
+    "version": "Versjon {{version}}",
+    "license": "Lisensiert under AGPL-3.0",
+    "author": "av {{author}}",
+    "builtWith": "Bygd med",
+    "dependencies": {
+      "ytdlp": "yt-dlp — ekstraksjonsmotor (Unlicense)",
+      "ffmpeg": "FFmpeg — medieprosessor (LGPL/GPL)",
+      "tauri": "Tauri — skrivebordsruntime (MIT/Apache-2.0)",
+      "react": "React — UI-bibliotek (MIT)"
+    },
+    "ffmpegNote": "Denne binæren inkluderer FFmpeg under LGPL/GPL. Kildekode for den medfølgende byggen er tilgjengelig fra FFmpeg-prosjektet.",
+    "close": "Lukk"
+  }
+}

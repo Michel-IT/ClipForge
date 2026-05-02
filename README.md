@@ -24,6 +24,25 @@ The full legal terms — including the limitation of liability and the list of p
 
 ---
 
+## Two builds available
+
+ClipForge ships two parallel builds. Both wrap `yt-dlp` and have the same core feature set; pick the one whose tradeoffs you prefer.
+
+| | **Stable (Python)** | **Preview (Tauri)** |
+|---|---|---|
+| **Status** | Production, daily-driver | Beta, feature-complete but less battle-tested |
+| **UI** | Python + CustomTkinter | React + TypeScript + Rust (Tauri v2) |
+| **Bundle** | Single `.exe` ~56 MB (PyInstaller) | Native installer ~10 MB + WebView2 (system) |
+| **Languages** | English only | 46 languages auto-detected from OS |
+| **Window chrome** | Native OS chrome | Custom borderless titlebar |
+| **Distribution tag** | `vX.Y.Z` → [Releases](https://github.com/Michel-IT/ClipForge/releases) | `tauri-vX.Y.Z` → same Releases page |
+| **CI workflow** | [`.github/workflows/release.yml`](.github/workflows/release.yml) | [`.github/workflows/release-tauri.yml`](.github/workflows/release-tauri.yml) |
+| **Source folder** | repo root (`clipforge.py`) | [`tauri/`](tauri/) |
+
+Most users want the **stable** build. The Tauri preview is for early adopters who want a smaller native installer and multilingua UI; report rough edges in [issues](https://github.com/Michel-IT/ClipForge/issues).
+
+---
+
 ## Features
 
 - **Auto-detects the source platform** from the pasted URL and shows a colored badge with the platform name.
@@ -76,7 +95,7 @@ For the full list see the [yt-dlp supported sites page](https://github.com/yt-dl
 
 ## Installation
 
-### Option A — Download a release (end users)
+### Option A — Download the stable Python build (end users)
 
 | Platform | Direct download | Notes |
 |---|---|---|
@@ -102,6 +121,23 @@ The Finder "right-click → Open" trick only works for `.app` bundles — for ra
 That's it — no installer, no Python, no `ffmpeg` to set up. On first launch, accept the legal disclaimer.
 
 > Each release is built automatically by GitHub Actions on Windows, Linux, macOS Apple Silicon (`macos-latest`) and macOS Intel (`macos-13`) the moment a `vX.Y.Z` tag is pushed. The bundled `yt-dlp` is upgraded to the latest version at build time, so every release tracks the current YouTube / TikTok / Instagram / etc. extractors.
+
+### Option A-bis — Download the Tauri preview build
+
+The Tauri preview is shipped under a separate tag pattern (`tauri-vX.Y.Z`) and produces native installers per platform.
+
+| Platform | Direct download | Notes |
+|---|---|---|
+| Windows (MSI installer) | [⬇️ ClipForge_x64_en-US.msi](https://github.com/Michel-IT/ClipForge/releases) | Look for the `tauri-v*` release, attach `_x64_en-US.msi`. Requires WebView2 (preinstalled on Windows 10/11). |
+| Windows (NSIS installer) | [⬇️ ClipForge_x64-setup.exe](https://github.com/Michel-IT/ClipForge/releases) | Smaller installer, same `.exe` runtime. |
+| Linux (Debian/Ubuntu) | [⬇️ ClipForge_amd64.deb](https://github.com/Michel-IT/ClipForge/releases) | `sudo apt install ./ClipForge_*.deb` |
+| Linux (AppImage) | [⬇️ ClipForge_amd64.AppImage](https://github.com/Michel-IT/ClipForge/releases) | `chmod +x ClipForge_*.AppImage && ./ClipForge_*.AppImage` |
+| macOS — Apple Silicon | [⬇️ ClipForge_aarch64.dmg](https://github.com/Michel-IT/ClipForge/releases) | Open + drag to Applications. Unsigned, see notes below. |
+| macOS — Intel | [⬇️ ClipForge_x64.dmg](https://github.com/Michel-IT/ClipForge/releases) | Built best-effort (the `macos-13` runner pool is saturated). |
+
+The Tauri build adds: 46-language UI auto-detected from OS locale, custom borderless titlebar, About modal with full license attribution (yt-dlp / FFmpeg / Tauri / React), live download log panel. Trade-off: less battle-tested than the Python build, requires WebView2 on Windows.
+
+> See [`tauri/README.md`](tauri/README.md) for build-from-source instructions for the Tauri preview.
 
 ### Option B — Build from source
 

@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.725964+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Descărcător universal de media"
+  },
+  "titlebar": {
+    "minimize": "Minimizează",
+    "maximize": "Maximizează",
+    "restore": "Restaurează",
+    "close": "Închide"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Despre"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Avertisment legal",
+      "loading": "Se încarcă avertismentul legal…",
+      "loadError": "Eșec la încărcare: {{error}}",
+      "languageLabel": "Limbă:",
+      "scrollHint": "Derulează până la final mai întâi",
+      "agree": "Accept",
+      "disagree": "Nu accept (închide aplicația)"
+    }
+  },
+  "url": {
+    "placeholder": "Lipește un URL video (YouTube, Reddit, TikTok, ...)",
+    "detect": "Detectează",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Audio",
+    "subs": "Subt."
+  },
+  "outputDir": {
+    "label": "Destinație:",
+    "browse": "Răsfoiește…",
+    "placeholder": "(implicit: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Subtitrări → Text"
+  },
+  "video": {
+    "quality": "Calitate:",
+    "qualityAuto": "Auto (cea mai bună)",
+    "playlist": "Descarcă întreaga listă",
+    "start": "Descarcă MP4",
+    "cancel": "Anulează"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Descarcă întreaga listă",
+    "start": "Extrage MP3",
+    "cancel": "Anulează"
+  },
+  "subs": {
+    "languages": "Limbi (separate prin virgulă):",
+    "playlist": "Descarcă întreaga listă",
+    "start": "Extrage subtitrări → Text",
+    "cancel": "Anulează"
+  },
+  "settings": {
+    "title": "Setări",
+    "language": "Limbă:",
+    "cookieBrowser": {
+      "label": "Cookies din browser:",
+      "none": "Niciunul",
+      "warning": "Închide <strong>{{browser}}</strong> înainte de descărcare — Windows blochează fișierul de cookies. Aplicația va reîncerca fără cookies dacă blocarea împiedică citirea."
+    }
+  },
+  "progress": {
+    "ready": "Gata",
+    "eta": "ETA {{eta}}",
+    "done": "Terminat → {{path}}",
+    "error": "Eroare: {{message}}"
+  },
+  "phase": {
+    "downloading": "descărcare…",
+    "merging": "combinare…",
+    "extractingAudio": "extragere audio…",
+    "embeddingThumbnail": "încorporare miniatură…",
+    "cookieRetry": "cookies browser blocate — reîncercare fără"
+  },
+  "error": {
+    "invalidUrl": "URL invalid",
+    "sidecar": "Eșec sidecar",
+    "io": "Eroare I/E",
+    "json": "Eroare parsare",
+    "other": "Eroare"
+  },
+  "about": {
+    "title": "Despre ClipForge",
+    "version": "Versiunea {{version}}",
+    "license": "Licență AGPL-3.0",
+    "author": "de {{author}}",
+    "builtWith": "Construit cu",
+    "dependencies": {
+      "ytdlp": "yt-dlp — motor de extracție (Unlicense)",
+      "ffmpeg": "FFmpeg — procesor media (LGPL/GPL)",
+      "tauri": "Tauri — runtime desktop (MIT/Apache-2.0)",
+      "react": "React — bibliotecă UI (MIT)"
+    },
+    "ffmpegNote": "Acest binar include FFmpeg sub LGPL/GPL. Codul sursă pentru build-ul inclus este disponibil de la proiectul FFmpeg.",
+    "close": "Închide"
+  }
+}

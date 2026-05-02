@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.894189+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "সর্বজনীন মিডিয়া ডাউনলোডার"
+  },
+  "titlebar": {
+    "minimize": "ছোট করুন",
+    "maximize": "বড় করুন",
+    "restore": "পুনরুদ্ধার",
+    "close": "বন্ধ করুন"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "সম্পর্কে"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "আইনি দাবিত্যাগ",
+      "loading": "দাবিত্যাগ লোড হচ্ছে…",
+      "loadError": "লোড ব্যর্থ: {{error}}",
+      "languageLabel": "ভাষা:",
+      "scrollHint": "প্রথমে শেষ পর্যন্ত স্ক্রল করুন",
+      "agree": "আমি সম্মত",
+      "disagree": "আমি সম্মত নই (অ্যাপ বন্ধ করুন)"
+    }
+  },
+  "url": {
+    "placeholder": "একটি ভিডিও URL পেস্ট করুন (YouTube, Reddit, TikTok, ...)",
+    "detect": "সনাক্ত",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "ভিডিও",
+    "audio": "অডিও",
+    "subs": "সাব."
+  },
+  "outputDir": {
+    "label": "গন্তব্য:",
+    "browse": "ব্রাউজ…",
+    "placeholder": "(ডিফল্ট: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "সাবটাইটেল → পাঠ্য"
+  },
+  "video": {
+    "quality": "গুণমান:",
+    "qualityAuto": "অটো (সেরা)",
+    "playlist": "পুরো প্লেলিস্ট ডাউনলোড",
+    "start": "MP4 ডাউনলোড",
+    "cancel": "বাতিল"
+  },
+  "audio": {
+    "bitrate": "বিটরেট:",
+    "kbps": "{{value}} kbps",
+    "playlist": "পুরো প্লেলিস্ট ডাউনলোড",
+    "start": "MP3 বের করুন",
+    "cancel": "বাতিল"
+  },
+  "subs": {
+    "languages": "ভাষা (কমা দ্বারা পৃথক):",
+    "playlist": "পুরো প্লেলিস্ট ডাউনলোড",
+    "start": "সাবটাইটেল বের করুন → পাঠ্য",
+    "cancel": "বাতিল"
+  },
+  "settings": {
+    "title": "সেটিংস",
+    "language": "ভাষা:",
+    "cookieBrowser": {
+      "label": "ব্রাউজার থেকে কুকিজ:",
+      "none": "কোনটি নয়",
+      "warning": "ডাউনলোডের আগে <strong>{{browser}}</strong> বন্ধ করুন — Windows কুকি ফাইল লক করে। লক পড়া ব্লক করলে অ্যাপ কুকি ছাড়া পুনরায় চেষ্টা করবে।"
+    }
+  },
+  "progress": {
+    "ready": "প্রস্তুত",
+    "eta": "ETA {{eta}}",
+    "done": "সম্পন্ন → {{path}}",
+    "error": "ত্রুটি: {{message}}"
+  },
+  "phase": {
+    "downloading": "ডাউনলোড হচ্ছে…",
+    "merging": "একত্রিত হচ্ছে…",
+    "extractingAudio": "অডিও বের করা হচ্ছে…",
+    "embeddingThumbnail": "কভার এম্বেড করা হচ্ছে…",
+    "cookieRetry": "ব্রাউজার কুকি লক — ছাড়া পুনরায় চেষ্টা"
+  },
+  "error": {
+    "invalidUrl": "অবৈধ URL",
+    "sidecar": "Sidecar ব্যর্থ",
+    "io": "I/O ত্রুটি",
+    "json": "পার্সিং ত্রুটি",
+    "other": "ত্রুটি"
+  },
+  "about": {
+    "title": "ClipForge সম্পর্কে",
+    "version": "সংস্করণ {{version}}",
+    "license": "AGPL-3.0 এর অধীনে লাইসেন্সপ্রাপ্ত",
+    "author": "দ্বারা {{author}}",
+    "builtWith": "দিয়ে নির্মিত",
+    "dependencies": {
+      "ytdlp": "yt-dlp — এক্সট্রাকশন ইঞ্জিন (Unlicense)",
+      "ffmpeg": "FFmpeg — মিডিয়া প্রসেসর (LGPL/GPL)",
+      "tauri": "Tauri — ডেস্কটপ রানটাইম (MIT/Apache-2.0)",
+      "react": "React — UI লাইব্রেরি (MIT)"
+    },
+    "ffmpegNote": "এই বাইনারিতে LGPL/GPL এর অধীনে FFmpeg বান্ডেল করা আছে। বান্ডেল করা বিল্ডের সোর্স কোড FFmpeg প্রকল্প থেকে উপলব্ধ।",
+    "close": "বন্ধ করুন"
+  }
+}

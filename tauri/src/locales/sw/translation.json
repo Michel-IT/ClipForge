@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.899507+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "Kipakuzi cha media cha ulimwengu"
+  },
+  "titlebar": {
+    "minimize": "Punguza",
+    "maximize": "Panua",
+    "restore": "Rejesha",
+    "close": "Funga"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "Kuhusu"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "Kanusho la Kisheria",
+      "loading": "Inapakia kanusho…",
+      "loadError": "Imeshindwa kupakia: {{error}}",
+      "languageLabel": "Lugha:",
+      "scrollHint": "Sogeza chini kabisa kwanza",
+      "agree": "Nakubali",
+      "disagree": "Sikubali (funga programu)"
+    }
+  },
+  "url": {
+    "placeholder": "Bandika URL ya video (YouTube, Reddit, TikTok, ...)",
+    "detect": "Tambua",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "Video",
+    "audio": "Sauti",
+    "subs": "Manen."
+  },
+  "outputDir": {
+    "label": "Mahali:",
+    "browse": "Vinjari…",
+    "placeholder": "(chaguo-msingi: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "Manukuu → Maandishi"
+  },
+  "video": {
+    "quality": "Ubora:",
+    "qualityAuto": "Auto (bora)",
+    "playlist": "Pakua orodha nzima",
+    "start": "Pakua MP4",
+    "cancel": "Ghairi"
+  },
+  "audio": {
+    "bitrate": "Bitrate:",
+    "kbps": "{{value}} kbps",
+    "playlist": "Pakua orodha nzima",
+    "start": "Toa MP3",
+    "cancel": "Ghairi"
+  },
+  "subs": {
+    "languages": "Lugha (zilizotenganishwa kwa koma):",
+    "playlist": "Pakua orodha nzima",
+    "start": "Toa manukuu → Maandishi",
+    "cancel": "Ghairi"
+  },
+  "settings": {
+    "title": "Mipangilio",
+    "language": "Lugha:",
+    "cookieBrowser": {
+      "label": "Vidakuzi kutoka kwa kivinjari:",
+      "none": "Hakuna",
+      "warning": "Funga <strong>{{browser}}</strong> kabla ya kupakua — Windows hufunga faili ya vidakuzi. Programu itajaribu tena bila vidakuzi ikiwa kufunga kunazuia kusoma."
+    }
+  },
+  "progress": {
+    "ready": "Tayari",
+    "eta": "ETA {{eta}}",
+    "done": "Imekamilika → {{path}}",
+    "error": "Hitilafu: {{message}}"
+  },
+  "phase": {
+    "downloading": "inapakua…",
+    "merging": "inaunganisha…",
+    "extractingAudio": "inatoa sauti…",
+    "embeddingThumbnail": "inapachika jalada…",
+    "cookieRetry": "vidakuzi vya kivinjari vimefungwa — kujaribu tena bila"
+  },
+  "error": {
+    "invalidUrl": "URL batili",
+    "sidecar": "Sidecar imeshindwa",
+    "io": "Hitilafu ya I/O",
+    "json": "Hitilafu ya kuchanganua",
+    "other": "Hitilafu"
+  },
+  "about": {
+    "title": "Kuhusu ClipForge",
+    "version": "Toleo {{version}}",
+    "license": "Ina leseni chini ya AGPL-3.0",
+    "author": "na {{author}}",
+    "builtWith": "Imejengwa na",
+    "dependencies": {
+      "ytdlp": "yt-dlp — injini ya uchimbaji (Unlicense)",
+      "ffmpeg": "FFmpeg — kichakataji cha vyombo vya habari (LGPL/GPL)",
+      "tauri": "Tauri — runtime ya eneo-kazi (MIT/Apache-2.0)",
+      "react": "React — maktaba ya UI (MIT)"
+    },
+    "ffmpegNote": "Faili hii ya binari inajumuisha FFmpeg chini ya LGPL/GPL. Msimbo wa chanzo kwa muundo uliojumuishwa unapatikana kutoka kwa mradi wa FFmpeg.",
+    "close": "Funga"
+  }
+}

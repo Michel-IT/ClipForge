@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "autoTranslated": false,
+    "source": "claude-direct",
+    "generated": "2026-05-02T14:43:25.879604+00:00",
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+  },
+  "app": {
+    "title": "ClipForge",
+    "tagline": "ユニバーサルメディアダウンローダー"
+  },
+  "titlebar": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "元に戻す",
+    "close": "閉じる"
+  },
+  "footer": {
+    "poweredBy": "Powered by yt-dlp",
+    "about": "情報"
+  },
+  "modal": {
+    "disclaimer": {
+      "title": "法的免責事項",
+      "loading": "免責事項を読み込んでいます…",
+      "loadError": "読み込み失敗: {{error}}",
+      "languageLabel": "言語：",
+      "scrollHint": "まず一番下までスクロールしてください",
+      "agree": "同意する",
+      "disagree": "同意しない（アプリを閉じる）"
+    }
+  },
+  "url": {
+    "placeholder": "動画URLを貼り付け (YouTube, Reddit, TikTok, ...)",
+    "detect": "検出",
+    "detecting": "…"
+  },
+  "capabilities": {
+    "video": "動画",
+    "audio": "音声",
+    "subs": "字幕"
+  },
+  "outputDir": {
+    "label": "出力先：",
+    "browse": "参照…",
+    "placeholder": "(既定: ~/Downloads/ClipForge)"
+  },
+  "tabs": {
+    "video": "Video MP4",
+    "audio": "Audio MP3",
+    "subs": "字幕 → テキスト"
+  },
+  "video": {
+    "quality": "画質：",
+    "qualityAuto": "自動（最高）",
+    "playlist": "プレイリスト全体をダウンロード",
+    "start": "MP4をダウンロード",
+    "cancel": "キャンセル"
+  },
+  "audio": {
+    "bitrate": "ビットレート：",
+    "kbps": "{{value}} kbps",
+    "playlist": "プレイリスト全体をダウンロード",
+    "start": "MP3を抽出",
+    "cancel": "キャンセル"
+  },
+  "subs": {
+    "languages": "言語（カンマ区切り）：",
+    "playlist": "プレイリスト全体をダウンロード",
+    "start": "字幕を抽出 → テキスト",
+    "cancel": "キャンセル"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語：",
+    "cookieBrowser": {
+      "label": "ブラウザのCookie：",
+      "none": "なし",
+      "warning": "ダウンロード前に <strong>{{browser}}</strong> を閉じてください — Windowsはcookieファイルをロックします。ロックが読み取りを妨げる場合、アプリはcookieなしで再試行します。"
+    }
+  },
+  "progress": {
+    "ready": "準備完了",
+    "eta": "ETA {{eta}}",
+    "done": "完了 → {{path}}",
+    "error": "エラー: {{message}}"
+  },
+  "phase": {
+    "downloading": "ダウンロード中…",
+    "merging": "結合中…",
+    "extractingAudio": "音声抽出中…",
+    "embeddingThumbnail": "カバー埋め込み中…",
+    "cookieRetry": "ブラウザcookieがロック — cookieなしで再試行"
+  },
+  "error": {
+    "invalidUrl": "無効なURL",
+    "sidecar": "Sidecar失敗",
+    "io": "I/Oエラー",
+    "json": "解析エラー",
+    "other": "エラー"
+  },
+  "about": {
+    "title": "ClipForgeについて",
+    "version": "バージョン {{version}}",
+    "license": "AGPL-3.0ライセンス",
+    "author": "作者：{{author}}",
+    "builtWith": "使用技術",
+    "dependencies": {
+      "ytdlp": "yt-dlp — 抽出エンジン (Unlicense)",
+      "ffmpeg": "FFmpeg — メディアプロセッサ (LGPL/GPL)",
+      "tauri": "Tauri — デスクトップランタイム (MIT/Apache-2.0)",
+      "react": "React — UIライブラリ (MIT)"
+    },
+    "ffmpegNote": "このバイナリはLGPL/GPLの下でFFmpegを同梱しています。同梱ビルドのソースコードはFFmpegプロジェクトから入手可能です。",
+    "close": "閉じる"
+  }
+}
