@@ -1,6 +1,6 @@
 [package]
 name = "clipforge"
-version = "0.1.0"
+version = "0.1.1"
 description = "ClipForge — Tauri skeleton"
 authors = ["Michel-IT"]
 license = "AGPL-3.0"
