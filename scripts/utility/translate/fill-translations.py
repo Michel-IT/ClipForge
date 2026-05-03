@@ -7,7 +7,7 @@ import json
 import os
 from datetime import datetime, timezone
 
-OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "src", "locales")
+OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "..", "tauri", "src", "locales")
 
 # Common scaffolding shared across languages — fields where translation isn't
 # meaningful (brand names, version placeholders, etc.) stay constant.

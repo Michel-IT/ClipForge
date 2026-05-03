@@ -3,8 +3,8 @@
 // using DeepL Free API + OpenAI fallback for languages DeepL doesn't cover.
 //
 // Usage:
-//   DEEPL_API_KEY=…  OPENAI_API_KEY=…  node scripts/translate-locales.mjs
-//   DEEPL_API_KEY=…  OPENAI_API_KEY=…  node scripts/translate-locales.mjs --only=de,fr,es
+//   DEEPL_API_KEY=…  OPENAI_API_KEY=…  node scripts/utility/translate/translate-locales.mjs
+//   DEEPL_API_KEY=…  OPENAI_API_KEY=…  node scripts/utility/translate/translate-locales.mjs --only=de,fr,es
 //
 // Skip behaviour:
 //   - en, it (master + native) are always skipped.
@@ -20,7 +20,8 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(__dirname, "..");
+// scripts/utility/translate/ → ../../../tauri/src/locales/
+const ROOT = resolve(__dirname, "..", "..", "..", "tauri");
 const SRC  = join(ROOT, "src", "locales", "en", "translation.json");
 const OUT  = join(ROOT, "src", "locales");
 
