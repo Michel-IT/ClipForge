@@ -95,20 +95,38 @@ For the full list see the [yt-dlp supported sites page](https://github.com/yt-dl
 
 ## Installation
 
-### Option A — Download the stable Python build (end users)
+### Option A — Download the Tauri build (recommended)
+
+Native installers per platform with full UI polish: 46-language auto-detected interface, About modal with license attribution, live download console. Current release: **`tauri-v0.1.1`**.
 
 | Platform | Direct download | Notes |
 |---|---|---|
-| Windows | [⬇️ ClipForge-windows.exe](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-windows.exe) | Single `.exe`, ~56 MB. Just double-click. |
+| Windows (MSI installer) | [⬇️ ClipForge-0.1.1-windows-x64.msi](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-windows-x64.msi) | Standard MSI installer, ~57 MB. Requires WebView2 (preinstalled on Windows 10/11). |
+| Windows (NSIS installer) | [⬇️ ClipForge-0.1.1-windows-x64-setup.exe](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-windows-x64-setup.exe) | Smaller NSIS installer, ~46 MB, same runtime. |
+| Linux (Debian/Ubuntu) | [⬇️ ClipForge-0.1.1-linux-amd64.deb](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-linux-amd64.deb) | `sudo apt install ./ClipForge-*.deb` |
+| Linux (Fedora/RHEL) | [⬇️ ClipForge-0.1.1-linux-x86_64.rpm](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-linux-x86_64.rpm) | `sudo dnf install ./ClipForge-*.rpm` |
+| Linux (AppImage) | [⬇️ ClipForge-0.1.1-linux-amd64.AppImage](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-linux-amd64.AppImage) | `chmod +x ClipForge-*.AppImage && ./ClipForge-*.AppImage` |
+| macOS — Apple Silicon (M1/M2/M3/M4) | [⬇️ ClipForge-0.1.1-macos-arm64.dmg](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-macos-arm64.dmg) | Open + drag to Applications. Unsigned, right-click → Open the first time. |
+| macOS — Intel (x86_64) | [⬇️ ClipForge-0.1.1-macos-intel.dmg](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-macos-intel.dmg) | Built manually on an Intel Mac (`macos-13` GitHub runner pool is permanently saturated). |
+
+[Browse all Tauri releases](https://github.com/Michel-IT/ClipForge/releases?q=tag%3Atauri).
+
+**Which macOS build do I need?** Open Terminal and run `uname -m` — `arm64` → Apple Silicon DMG, `x86_64` → Intel DMG.
+
+> See [`tauri/README.md`](tauri/README.md) for build-from-source instructions for the Tauri build.
+
+### Option B — Download the Python single-file build
+
+The original single-file build that started the project. No installer, no Python runtime needed, ~56 MB. Always tracks the **latest** GitHub release.
+
+| Platform | Direct download | Notes |
+|---|---|---|
+| Windows | [⬇️ ClipForge-windows.exe](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-windows.exe) | Single `.exe`, just double-click. |
 | Linux | [⬇️ ClipForge-linux](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-linux) | `chmod +x ClipForge-linux && ./ClipForge-linux` |
 | macOS — Apple Silicon (M1/M2/M3/M4) | [⬇️ ClipForge-macos-arm64](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-macos-arm64) | See macOS notes below. |
 | macOS — Intel (x86_64) | [⬇️ ClipForge-macos-intel](https://github.com/Michel-IT/ClipForge/releases/latest/download/ClipForge-macos-intel) | See macOS notes below. |
 
-All direct links always point to the **latest release**. Browse all versions on the [Releases page](https://github.com/Michel-IT/ClipForge/releases).
-
-**Which macOS build do I need?** Open Terminal and run `uname -m` — `arm64` → use Apple Silicon, `x86_64` → use Intel. Picking the wrong one fails with `bad CPU type in executable`.
-
-**macOS first launch (both builds).** The binary is unsigned, so Gatekeeper blocks it. Open Terminal in the download folder and run:
+**macOS first launch (both Python builds).** The binary is unsigned and not bundled in a `.app`, so Gatekeeper blocks it. Open Terminal in the download folder and run:
 
 ```bash
 chmod +x ClipForge-macos-arm64        # or ClipForge-macos-intel
@@ -118,33 +136,9 @@ xattr -d com.apple.quarantine ClipForge-macos-arm64
 
 The Finder "right-click → Open" trick only works for `.app` bundles — for raw executables like this, the Terminal commands above are the supported path.
 
-That's it — no installer, no Python, no `ffmpeg` to set up. On first launch, accept the legal disclaimer.
+> Each Python release is built automatically by GitHub Actions on Windows, Linux, macOS Apple Silicon (`macos-latest`) and macOS Intel (`macos-13`) the moment a `vX.Y.Z` tag is pushed. The bundled `yt-dlp` is upgraded to the latest version at build time, so every release tracks the current YouTube / TikTok / Instagram / etc. extractors.
 
-> Each release is built automatically by GitHub Actions on Windows, Linux, macOS Apple Silicon (`macos-latest`) and macOS Intel (`macos-13`) the moment a `vX.Y.Z` tag is pushed. The bundled `yt-dlp` is upgraded to the latest version at build time, so every release tracks the current YouTube / TikTok / Instagram / etc. extractors.
-
-### Option A-bis — Download the Tauri preview build
-
-The Tauri preview is shipped under a separate tag pattern (`tauri-vX.Y.Z`) and produces native installers per platform.
-
-**[⬇️ Download the latest Tauri release](https://github.com/Michel-IT/ClipForge/releases?q=tag%3Atauri&expanded=true)** — pick the asset matching your platform from the release page.
-
-| Platform | File suffix | Notes |
-|---|---|---|
-| Windows (MSI installer) | `-windows-x64.msi` | Standard MSI installer, ~57 MB. Requires WebView2 (preinstalled on Windows 10/11). |
-| Windows (NSIS installer) | `-windows-x64-setup.exe` | Smaller NSIS installer, ~46 MB, same runtime. |
-| Linux (Debian/Ubuntu) | `-linux-amd64.deb` | `sudo apt install ./ClipForge-*.deb` |
-| Linux (Fedora/RHEL) | `-linux-x86_64.rpm` | `sudo dnf install ./ClipForge-*.rpm` |
-| Linux (AppImage) | `-linux-amd64.AppImage` | `chmod +x ClipForge-*.AppImage && ./ClipForge-*.AppImage` |
-| macOS — Apple Silicon | `-macos-arm64.dmg` | Open + drag to Applications. Unsigned, see notes above. |
-| macOS — Intel | `-macos-intel.dmg` | Built manually on an Intel Mac (`macos-13` GitHub runner pool is permanently saturated). |
-
-Filenames follow the pattern `ClipForge-<version>-<platform-suffix>` (e.g. `ClipForge-0.1.1-windows-x64.msi`).
-
-The Tauri build adds: 46-language UI auto-detected from OS locale, custom borderless titlebar, About modal with full license attribution (yt-dlp / FFmpeg / Tauri / React), live download log panel. Trade-off: less battle-tested than the Python build, requires WebView2 on Windows.
-
-> See [`tauri/README.md`](tauri/README.md) for build-from-source instructions for the Tauri preview.
-
-### Option B — Build from source
+### Option C — Build from source
 
 Requirements:
 - Python 3.10 or newer
