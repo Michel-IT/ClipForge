@@ -48,7 +48,26 @@ pub struct VideoInfo {
     pub title: String,
     pub uploader: Option<String>,
     pub duration: Option<f64>,
+    pub duration_formatted: Option<String>,
     pub thumbnail: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct FfmpegStatus {
+    pub available: bool,
+    pub path: String,
+}
+
+fn format_duration(secs: f64) -> String {
+    let total = secs as u64;
+    let h = total / 3600;
+    let m = (total % 3600) / 60;
+    let s = total % 60;
+    if h > 0 {
+        format!("{}:{:02}:{:02}", h, m, s)
+    } else {
+        format!("{}:{:02}", m, s)
+    }
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -86,7 +105,19 @@ pub async fn fetch_info(
         "--dump-single-json".into(),
         "--no-download".into(),
         "--no-warnings".into(),
+        // Don't enumerate the whole playlist when the URL contains &list= —
+        // we only want metadata for the single video the user pasted.
+        "--no-playlist".into(),
+        // YouTube needs a JS runtime (Deno) to decipher signatures with the
+        // default web client. Without it, --dump-single-json hangs. Force a
+        // no-JS-needed client. tv_simply is the most reliable currently;
+        // android_vr is the fallback we already use successfully for downloads.
+        "--extractor-args".into(),
+        "youtube:player_client=tv_simply,android_vr".into(),
+        "--socket-timeout".into(),
+        "10".into(),
     ];
+    let used_cookies = cookies_browser.as_ref().is_some_and(|s| !s.is_empty());
     if let Some(b) = cookies_browser.as_ref().filter(|s| !s.is_empty()) {
         args.push("--cookies-from-browser".into());
         args.push(b.clone());
@@ -97,24 +128,63 @@ pub async fn fetch_info(
         .shell()
         .sidecar("yt-dlp")
         .map_err(|e| AppError::Sidecar(e.to_string()))?
-        .args(args)
+        .args(args.clone())
         .output()
         .await
         .map_err(|e| AppError::Sidecar(e.to_string()))?;
 
-    if !output.status.success() {
-        return Err(AppError::Sidecar(
-            String::from_utf8_lossy(&output.stderr).to_string(),
-        ));
-    }
+    let success = output.status.success();
+    let stderr_text = String::from_utf8_lossy(&output.stderr).to_string();
 
-    // TODO: parse output.stdout as JSON into VideoInfo
-    Ok(VideoInfo {
-        title: "(skeleton) parsing not implemented".into(),
-        uploader: None,
-        duration: None,
-        thumbnail: None,
-    })
+    // If the cookie DB is locked (browser open), retry once without cookies —
+    // mirror of the spawn_download fallback. fetch_info is metadata-only so
+    // cookies usually aren't required anyway.
+    let final_output = if !success && used_cookies && looks_like_browser_lock(&stderr_text) {
+        let retry_args = strip_cookies_flag(&args);
+        let r = app
+            .shell()
+            .sidecar("yt-dlp")
+            .map_err(|e| AppError::Sidecar(e.to_string()))?
+            .args(retry_args)
+            .output()
+            .await
+            .map_err(|e| AppError::Sidecar(e.to_string()))?;
+        if !r.status.success() {
+            return Err(AppError::Sidecar(String::from_utf8_lossy(&r.stderr).to_string()));
+        }
+        r
+    } else if !success {
+        return Err(AppError::Sidecar(stderr_text));
+    } else {
+        output
+    };
+
+    let json: serde_json::Value = serde_json::from_slice(&final_output.stdout)?;
+    let title = json["title"].as_str().unwrap_or("").to_string();
+    let uploader = json["uploader"]
+        .as_str()
+        .or_else(|| json["channel"].as_str())
+        .map(String::from);
+    let duration = json["duration"].as_f64();
+    let duration_formatted = duration.map(format_duration);
+    let thumbnail = json["thumbnail"].as_str().map(String::from);
+    Ok(VideoInfo { title, uploader, duration, duration_formatted, thumbnail })
+}
+
+#[tauri::command]
+pub async fn ffmpeg_status() -> Result<FfmpegStatus, AppError> {
+    match ffmpeg_path() {
+        Some(p) => Ok(FfmpegStatus { available: true, path: p }),
+        None => Ok(FfmpegStatus { available: false, path: String::new() }),
+    }
+}
+
+#[tauri::command]
+pub async fn open_dir(app: AppHandle, path: String) -> Result<(), AppError> {
+    app.shell()
+        .open(path, None)
+        .map_err(|e| AppError::Sidecar(e.to_string()))?;
+    Ok(())
 }
 
 // Mirrors _run_video (clipforge.py:1040-1076).
@@ -162,7 +232,7 @@ pub async fn download_video(
     }
     args.push(url);
 
-    spawn_download(&app, args, None).await
+    spawn_download(&app, args, out_dir, None).await
 }
 
 // Mirrors _run_audio (clipforge.py:987-1020).
@@ -208,7 +278,7 @@ pub async fn download_audio(
     }
     args.push(url);
 
-    spawn_download(&app, args, None).await
+    spawn_download(&app, args, out_dir, None).await
 }
 
 // Mirrors _run_subs (clipforge.py:920-967).
@@ -246,7 +316,7 @@ pub async fn download_subs(
     args.push(url);
 
     let subs_dir = std::path::PathBuf::from(&out_dir);
-    spawn_download(&app, args, Some(subs_dir)).await
+    spawn_download(&app, args, out_dir, Some(subs_dir)).await
 }
 
 #[tauri::command]
@@ -294,11 +364,59 @@ mod tests {
     }
 }
 
+// Filter for noisy yt-dlp lines that the user doesn't need to see in the log
+// panel. Two categories:
+// 1. Recoverable cookie / JS-runtime warnings (already surfaced via the
+//    "phase.cookieRetry" status when relevant).
+// 2. yt-dlp internals that we already ran during the `Video info` button
+//    (extractor warmup, format list, thumbnail discovery) — repeating them
+//    on every download just clutters the panel.
+//
+// We KEEP: actual download/post-processing events ([download] Destination,
+// [ExtractAudio], [Merger], [Metadata], [EmbedThumbnail]) and real errors.
+fn is_log_noise(line: &str) -> bool {
+    let l = line.to_lowercase();
+    // 1. Cookie / JS runtime noise
+    if l.starts_with("extracting cookies from")
+        || l.contains("could not copy") && l.contains("cookie")
+        || l.contains("failed to decrypt with dpapi")
+        || l.contains("no supported javascript runtime")
+        || l.contains("youtube extraction without a js runtime has been deprecated")
+        || l.starts_with("warning:") && l.contains("javascript runtime")
+    {
+        return true;
+    }
+    // 2. Extractor-warmup noise — same info we already pulled in fetch_info.
+    if l.starts_with("[youtube:tab]")
+        || l.starts_with("[youtube]") && (
+            l.contains("extracting url")
+            || l.contains("downloading webpage")
+            || l.contains("downloading ") && l.contains("api json")
+            || l.contains("downloading m3u8")
+            || l.contains("downloading mpd")
+        )
+        || l.starts_with("[info]") && (
+            l.contains("downloading 1 format")
+            || l.contains("downloading video thumbnail")
+            || l.contains("writing video thumbnail")
+        )
+    {
+        return true;
+    }
+    false
+}
+
 // Detects the stderr pattern emitted when yt-dlp can't read the browser cookie
 // DB because the browser holds a Windows file lock. Mirrors the heuristic in
 // _run_with_cookie_fallback (clipforge.py:834-850).
 fn looks_like_browser_lock(stderr_text: &str) -> bool {
     let s = stderr_text.to_lowercase();
+    // DPAPI failure: Windows cookie store encrypted with a key the process
+    // can't read (often happens with Edge under certain Windows policies).
+    if s.contains("dpapi") || s.contains("failed to decrypt") {
+        return true;
+    }
+    // Generic file-lock pattern: browser is open and holding the cookie DB.
     (s.contains("could not copy") || s.contains("locked") || s.contains("permission denied"))
         && (s.contains("browser")
             || s.contains("chrome")
@@ -326,15 +444,48 @@ fn strip_cookies_flag(args: &[String]) -> Vec<String> {
     out
 }
 
+// Snapshot of files in a directory at job start — used by the cancel-cleanup
+// path to delete only files this job created (partial downloads / intermediate
+// thumbnails / leftover .webm).
+fn snapshot_dir(dir: &std::path::Path) -> std::collections::HashSet<std::path::PathBuf> {
+    let mut set = std::collections::HashSet::new();
+    if let Ok(rd) = std::fs::read_dir(dir) {
+        for entry in rd.flatten() {
+            set.insert(entry.path());
+        }
+    }
+    set
+}
+
+fn cleanup_partial(dir: &std::path::Path,
+                   baseline: &std::collections::HashSet<std::path::PathBuf>) -> usize {
+    let mut deleted = 0;
+    if let Ok(rd) = std::fs::read_dir(dir) {
+        for entry in rd.flatten() {
+            let path = entry.path();
+            if !baseline.contains(&path) {
+                // New file created during this job. Delete (incomplete by definition).
+                if std::fs::remove_file(&path).is_ok() {
+                    deleted += 1;
+                }
+            }
+        }
+    }
+    deleted
+}
+
 async fn spawn_download(
     app: &AppHandle,
     args: Vec<String>,
+    out_dir: String,
     subs_post_dir: Option<std::path::PathBuf>,
 ) -> Result<DownloadStarted, AppError> {
     use tauri_plugin_shell::process::CommandEvent;
 
     let job_id = Uuid::new_v4().to_string();
     let args_for_retry = args.clone();
+    let baseline = snapshot_dir(std::path::Path::new(&out_dir));
+    let out_dir_for_task = std::path::PathBuf::from(&out_dir);
     let (mut rx, child) = app
         .shell()
         .sidecar("yt-dlp")
@@ -380,9 +531,9 @@ async fn spawn_download(
                             }),
                         );
                     } else {
-                        // Non-PROGRESS lines: send to the log panel (raw yt-dlp output).
+                        // Non-PROGRESS lines: send to the log panel.
                         let trimmed = line.trim_end();
-                        if !trimmed.is_empty() {
+                        if !trimmed.is_empty() && !is_log_noise(trimmed) {
                             let _ = app_handle.emit(
                                 "download-log",
                                 serde_json::json!({
@@ -438,16 +589,15 @@ async fn spawn_download(
                     stderr_buf.push_str(&chunk);
                     for line in chunk.lines() {
                         let trimmed = line.trim_end();
-                        if !trimmed.is_empty() {
-                            let _ = app_handle.emit(
-                                "download-log",
-                                serde_json::json!({
-                                    "job_id": job_for_task,
-                                    "stream": "stderr",
-                                    "line":   trimmed,
-                                }),
-                            );
-                        }
+                        if trimmed.is_empty() || is_log_noise(trimmed) { continue; }
+                        let _ = app_handle.emit(
+                            "download-log",
+                            serde_json::json!({
+                                "job_id": job_for_task,
+                                "stream": "stderr",
+                                "line":   trimmed,
+                            }),
+                        );
                     }
                 }
                 CommandEvent::Terminated(payload) => {
@@ -474,6 +624,21 @@ async fn spawn_download(
                                 "output_path": last_output.clone().unwrap_or_default(),
                             }),
                         );
+                    } else if sidecar::was_canceled(&job_for_task) {
+                        // User pressed Cancel — wait briefly for yt-dlp to
+                        // release file handles, then delete partial / intermediate
+                        // files that this job created.
+                        tokio::time::sleep(std::time::Duration::from_millis(400)).await;
+                        let removed = cleanup_partial(&out_dir_for_task, &baseline);
+                        let _ = app_handle.emit(
+                            "download-canceled",
+                            serde_json::json!({
+                                "job_id":        job_for_task,
+                                "files_removed": removed,
+                            }),
+                        );
+                        sidecar::drop_job(&job_for_task);
+                        break;
                     } else {
                         // If yt-dlp tripped on a locked browser cookie DB AND we
                         // were actually using --cookies-from-browser, retry once

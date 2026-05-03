@@ -3,7 +3,9 @@
     "autoTranslated": false,
     "source": "claude-direct",
     "generated": "2026-05-02T14:43:25.892720+00:00",
-    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR.",
+    "lastAligned": "2026-05-03T06:20:11.518109+00:00",
+    "pendingTranslationKeys": 35
   },
   "app": {
     "title": "ClipForge",
@@ -28,6 +30,20 @@
       "scrollHint": "पहले अंत तक स्क्रॉल करें",
       "agree": "मैं सहमत हूँ",
       "disagree": "मैं सहमत नहीं हूँ (ऐप बंद करें)"
+    },
+    "download": {
+      "titleVideo": "Downloading video",
+      "titleAudio": "Extracting MP3",
+      "titleSubs": "Extracting subtitles",
+      "canceledTitle": "Canceled",
+      "canceledMsg_zero": "Canceled. No partial files to remove.",
+      "canceledMsg_one": "Canceled. Removed {{count}} partial file.",
+      "canceledMsg_other": "Canceled. Removed {{count}} partial files.",
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "openFolder": "Open folder",
+      "close": "Close",
+      "cancel": "Cancel"
     }
   },
   "url": {
@@ -43,7 +59,8 @@
   "outputDir": {
     "label": "गंतव्य:",
     "browse": "ब्राउज़…",
-    "placeholder": "(डिफ़ॉल्ट: ~/Downloads/ClipForge)"
+    "placeholder": "(डिफ़ॉल्ट: ~/Downloads/ClipForge)",
+    "open": "Open"
   },
   "tabs": {
     "video": "Video MP4",
@@ -77,7 +94,17 @@
       "label": "ब्राउज़र से कुकीज़:",
       "none": "कोई नहीं",
       "warning": "डाउनलोड से पहले <strong>{{browser}}</strong> बंद करें — Windows कुकी फ़ाइल को लॉक करता है। यदि लॉक पढ़ने को रोकता है तो ऐप बिना कुकीज़ के पुनः प्रयास करेगा।"
-    }
+    },
+    "theme": "Theme:",
+    "themeOption": {
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System"
+    },
+    "playlist": "Download whole playlist (when URL contains &list=)",
+    "autoPaste": "Auto-paste URL from clipboard at startup",
+    "legal": "Legal:",
+    "viewDisclaimer": "View legal disclaimer"
   },
   "progress": {
     "ready": "तैयार",
@@ -113,5 +140,31 @@
     },
     "ffmpegNote": "यह बाइनरी LGPL/GPL के तहत FFmpeg को बंडल करती है। बंडल किए गए बिल्ड का स्रोत कोड FFmpeg प्रोजेक्ट से उपलब्ध है।",
     "close": "बंद करें"
+  },
+  "section": {
+    "source": "Source",
+    "destination": "Destination",
+    "options": "Options"
+  },
+  "paste": {
+    "button": "Paste"
+  },
+  "videoInfo": {
+    "button": "Video info",
+    "loading": "…"
+  },
+  "status": {
+    "ready": "Ready",
+    "downloading": "Downloading…",
+    "done": "Done",
+    "error": "Error",
+    "canceled": "Canceled"
+  },
+  "ffmpeg": {
+    "bundled": "ffmpeg: bundled",
+    "missing": "ffmpeg: missing"
+  },
+  "log": {
+    "empty": "Download output will appear here."
   }
 }

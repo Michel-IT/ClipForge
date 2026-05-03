@@ -38,6 +38,20 @@
       "scrollHint": "Scroll to the bottom first",
       "agree": "I agree",
       "disagree": "I do not agree (close app)"
+    },
+    "download": {
+      "titleVideo": "Downloading video",
+      "titleAudio": "Extracting MP3",
+      "titleSubs":  "Extracting subtitles",
+      "canceledTitle": "Canceled",
+      "canceledMsg_zero":  "Canceled. No partial files to remove.",
+      "canceledMsg_one":   "Canceled. Removed {{count}} partial file.",
+      "canceledMsg_other": "Canceled. Removed {{count}} partial files.",
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "openFolder":  "Open folder",
+      "close":       "Close",
+      "cancel":      "Cancel"
     }
   },
   "section": {
@@ -50,6 +64,19 @@
     "detect": "Detect",
     "detecting": "…"
   },
+  "paste": { "button": "Paste" },
+  "videoInfo": { "button": "Video info", "loading": "…" },
+  "status": {
+    "ready": "Ready",
+    "downloading": "Downloading…",
+    "done": "Done",
+    "error": "Error",
+    "canceled": "Canceled"
+  },
+  "ffmpeg": {
+    "bundled": "ffmpeg: bundled",
+    "missing": "ffmpeg: missing"
+  },
   "capabilities": {
     "video": "Video",
     "audio": "Audio",
@@ -58,6 +85,7 @@
   "outputDir": {
     "label": "Output:",
     "browse": "Browse…",
+    "open": "Open",
     "placeholder": "(default: ~/Downloads/ClipForge)"
   },
   "tabs": {
@@ -88,6 +116,12 @@
   "settings": {
     "title": "Settings",
     "language": "Language:",
+    "theme": "Theme:",
+    "themeOption": { "dark": "Dark", "light": "Light", "system": "System" },
+    "playlist": "Download whole playlist (when URL contains &list=)",
+    "autoPaste": "Auto-paste URL from clipboard at startup",
+    "legal": "Legal:",
+    "viewDisclaimer": "View legal disclaimer",
     "cookieBrowser": {
       "label": "Cookies from browser:",
       "none": "None",

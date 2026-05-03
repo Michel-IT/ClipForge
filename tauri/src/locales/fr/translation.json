@@ -3,7 +3,9 @@
     "autoTranslated": false,
     "source": "claude-direct",
     "generated": "2026-05-02T14:43:25.713858+00:00",
-    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR.",
+    "lastAligned": "2026-05-03T06:20:11.509508+00:00",
+    "pendingTranslationKeys": 35
   },
   "app": {
     "title": "ClipForge",
@@ -28,6 +30,20 @@
       "scrollHint": "Faites défiler jusqu'en bas d'abord",
       "agree": "J'accepte",
       "disagree": "Je refuse (fermer l'app)"
+    },
+    "download": {
+      "titleVideo": "Downloading video",
+      "titleAudio": "Extracting MP3",
+      "titleSubs": "Extracting subtitles",
+      "canceledTitle": "Canceled",
+      "canceledMsg_zero": "Canceled. No partial files to remove.",
+      "canceledMsg_one": "Canceled. Removed {{count}} partial file.",
+      "canceledMsg_other": "Canceled. Removed {{count}} partial files.",
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "openFolder": "Open folder",
+      "close": "Close",
+      "cancel": "Cancel"
     }
   },
   "url": {
@@ -43,7 +59,8 @@
   "outputDir": {
     "label": "Sortie :",
     "browse": "Parcourir…",
-    "placeholder": "(par défaut : ~/Downloads/ClipForge)"
+    "placeholder": "(par défaut : ~/Downloads/ClipForge)",
+    "open": "Open"
   },
   "tabs": {
     "video": "Video MP4",
@@ -77,7 +94,17 @@
       "label": "Cookies du navigateur :",
       "none": "Aucun",
       "warning": "Fermez <strong>{{browser}}</strong> avant de télécharger — Windows verrouille la base de cookies. L'app réessaiera sans cookies si le verrou bloque la lecture."
-    }
+    },
+    "theme": "Theme:",
+    "themeOption": {
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System"
+    },
+    "playlist": "Download whole playlist (when URL contains &list=)",
+    "autoPaste": "Auto-paste URL from clipboard at startup",
+    "legal": "Legal:",
+    "viewDisclaimer": "View legal disclaimer"
   },
   "progress": {
     "ready": "Prêt",
@@ -113,5 +140,31 @@
     },
     "ffmpegNote": "Ce binaire intègre FFmpeg sous LGPL/GPL. Le code source de la build incluse est disponible auprès du projet FFmpeg.",
     "close": "Fermer"
+  },
+  "section": {
+    "source": "Source",
+    "destination": "Destination",
+    "options": "Options"
+  },
+  "paste": {
+    "button": "Paste"
+  },
+  "videoInfo": {
+    "button": "Video info",
+    "loading": "…"
+  },
+  "status": {
+    "ready": "Ready",
+    "downloading": "Downloading…",
+    "done": "Done",
+    "error": "Error",
+    "canceled": "Canceled"
+  },
+  "ffmpeg": {
+    "bundled": "ffmpeg: bundled",
+    "missing": "ffmpeg: missing"
+  },
+  "log": {
+    "empty": "Download output will appear here."
   }
 }

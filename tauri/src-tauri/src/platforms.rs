@@ -9,20 +9,31 @@ pub struct Platform {
     pub audio: bool,
     pub subs: bool,
     pub color: &'static str,
+    pub notes: &'static str,  // human-readable hint shown under capability pills
 }
 
-// Mirrors PLATFORMS in clipforge.py:44-55. Keep in sync.
+// Mirrors PLATFORMS in clipforge.py:44-55. Keep in sync (incl. notes).
 pub const PLATFORMS: &[Platform] = &[
-    Platform { name: "YouTube",     hosts: &["youtube.com", "youtu.be"],   video: true,  audio: true,  subs: true,  color: "#ff0033" },
-    Platform { name: "TikTok",      hosts: &["tiktok.com"],                video: true,  audio: true,  subs: false, color: "#ff0050" },
-    Platform { name: "Instagram",   hosts: &["instagram.com"],             video: true,  audio: true,  subs: false, color: "#c13584" },
-    Platform { name: "Facebook",    hosts: &["facebook.com", "fb.watch"],  video: true,  audio: true,  subs: false, color: "#1877f2" },
-    Platform { name: "X/Twitter",   hosts: &["twitter.com", "x.com"],      video: true,  audio: true,  subs: false, color: "#1d9bf0" },
-    Platform { name: "Vimeo",       hosts: &["vimeo.com"],                 video: true,  audio: true,  subs: true,  color: "#1ab7ea" },
-    Platform { name: "Twitch",      hosts: &["twitch.tv"],                 video: true,  audio: true,  subs: false, color: "#9146ff" },
-    Platform { name: "Reddit",      hosts: &["reddit.com", "redd.it"],     video: true,  audio: true,  subs: false, color: "#ff4500" },
-    Platform { name: "Dailymotion", hosts: &["dailymotion.com", "dai.ly"], video: true,  audio: true,  subs: true,  color: "#00a4ff" },
-    Platform { name: "SoundCloud",  hosts: &["soundcloud.com"],            video: false, audio: true,  subs: false, color: "#ff7700" },
+    Platform { name: "YouTube",     hosts: &["youtube.com", "youtu.be"],   video: true,  audio: true,  subs: true,  color: "#ff0033",
+               notes: "Video, audio, automatic and manual subtitles." },
+    Platform { name: "TikTok",      hosts: &["tiktok.com"],                video: true,  audio: true,  subs: false, color: "#ff0050",
+               notes: "Video (no watermark by default) and audio." },
+    Platform { name: "Instagram",   hosts: &["instagram.com"],             video: true,  audio: true,  subs: false, color: "#c13584",
+               notes: "Public Reels and posts. For stories / private content: use cookies." },
+    Platform { name: "Facebook",    hosts: &["facebook.com", "fb.watch"],  video: true,  audio: true,  subs: false, color: "#1877f2",
+               notes: "Public videos. For private / age-gated content: use cookies." },
+    Platform { name: "X/Twitter",   hosts: &["twitter.com", "x.com"],      video: true,  audio: true,  subs: false, color: "#1d9bf0",
+               notes: "Public videos. For protected accounts: use cookies." },
+    Platform { name: "Vimeo",       hosts: &["vimeo.com"],                 video: true,  audio: true,  subs: true,  color: "#1ab7ea",
+               notes: "Video, audio and subtitles (when available)." },
+    Platform { name: "Twitch",      hosts: &["twitch.tv"],                 video: true,  audio: true,  subs: false, color: "#9146ff",
+               notes: "VOD and clips. Live streams not supported." },
+    Platform { name: "Reddit",      hosts: &["reddit.com", "redd.it"],     video: true,  audio: true,  subs: false, color: "#ff4500",
+               notes: "Public post videos." },
+    Platform { name: "Dailymotion", hosts: &["dailymotion.com", "dai.ly"], video: true,  audio: true,  subs: true,  color: "#00a4ff",
+               notes: "Video, audio and subtitles (when present)." },
+    Platform { name: "SoundCloud",  hosts: &["soundcloud.com"],            video: false, audio: true,  subs: false, color: "#ff7700",
+               notes: "Audio only (MP3)." },
 ];
 
 const GENERIC: Platform = Platform {
@@ -32,6 +43,7 @@ const GENERIC: Platform = Platform {
     audio: true,
     subs: false,
     color: "#5a6378",
+    notes: "Unknown platform — trying yt-dlp generic dispatcher (~1800 sites supported).",
 };
 
 #[derive(Debug, Clone, Serialize)]
@@ -41,6 +53,7 @@ pub struct PlatformInfo {
     pub audio: bool,
     pub subs: bool,
     pub color: String,
+    pub notes: String,
 }
 
 impl From<&Platform> for PlatformInfo {
@@ -51,6 +64,7 @@ impl From<&Platform> for PlatformInfo {
             audio: p.audio,
             subs: p.subs,
             color: p.color.to_string(),
+            notes: p.notes.to_string(),
         }
     }
 }

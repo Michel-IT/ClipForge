@@ -34,59 +34,33 @@ main {
  * leftover space below the form. */
 main > .app { flex: 1 1 auto; min-height: 0; }
 
-/* ===== Custom Titlebar (chrome replacement) ===== */
-.titlebar {
+/* ===== App header (under system titlebar) ===== */
+.app-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  height: var(--titlebar-h);
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-6);
   background: var(--bg-elevated);
   border-bottom: 1px solid var(--border);
-  user-select: none;
   flex-shrink: 0;
 }
-.titlebar-left {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 0 var(--space-3);
-  flex: 1;
-  min-width: 0;
-  height: 100%;
+.app-header h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
 }
-.titlebar-logo {
-  width: 18px;
-  height: 18px;
-  -webkit-user-drag: none;
-}
-.titlebar-title {
+
+.status-indicator {
   font-size: 12px;
   font-weight: 600;
-  opacity: 0.85;
+  padding: 4px 10px;
+  border-radius: 10px;
 }
-.titlebar-right {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  height: 100%;
-}
-.titlebar-right .lang-picker {
-  align-self: center;
-  margin-right: var(--space-2);
-}
-.tb-btn {
-  background: transparent;
-  border: none;
-  width: 46px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  color: var(--text-muted);
-  cursor: pointer;
-}
-.tb-btn:hover { background: var(--surface-hover); color: var(--text); }
-.tb-close:hover { background: var(--danger); color: white; }
+.status-ready   { color: var(--text-muted); }
+.status-running { color: var(--accent); background: rgba(255, 69, 0, 0.08); }
+.status-done    { color: var(--success); background: rgba(46, 160, 67, 0.10); }
+.status-error   { color: var(--danger);  background: rgba(226, 59, 59, 0.10); }
+.status-canceled { color: var(--text-muted); background: rgba(154, 157, 163, 0.12); }
 
 /* ===== Footer ===== */
 .app-footer {
@@ -146,11 +120,28 @@ main > .app { flex: 1 1 auto; min-height: 0; }
   letter-spacing: 0.06em;
   color: var(--text-muted);
 }
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.card-head .card-title { flex-shrink: 0; }
+.card-head .capability-block { margin-left: auto; }
 
 /* ===== Common form controls ===== */
 .url-bar {
   display: flex;
   gap: var(--space-2);
+  align-items: center;
+}
+.url-platform {
+  flex-shrink: 0;
+  min-width: 78px;
+  text-align: center;
+  padding: 6px 12px;
+  font-size: 12px;
 }
 .url-bar input,
 .output-dir-picker input,
@@ -178,7 +169,45 @@ button {
 button:hover:not(:disabled) { background: var(--surface-hover); }
 button:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* ===== Capability pills ===== */
+/* ===== Video info strip (attached under URL input, left-aligned with input) ===== */
+.video-info-strip {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--text);
+  /* Offset to align with the URL input — past the YouTube badge (78px) + gap (8px) */
+  padding: 0 0 0 calc(78px + var(--space-2));
+  margin-top: calc(var(--space-2) * -1);  /* attach right under the URL row */
+}
+.video-info-strip.loading,
+.video-info-strip.error {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.video-info-strip.error { color: var(--danger); }
+.vi-title { font-weight: 600; }
+.vi-meta  { color: var(--text-muted); }
+.vi-sep   { margin: 0 var(--space-2); color: var(--text-faint); }
+
+/* ===== Capability pills + notes (notes left, pills right) ===== */
+.capability-block {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.capability-notes {
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  text-align: right;
+}
+.pill-mark { font-weight: 700; margin-right: 4px; }
 .capability-pills {
   display: flex;
   gap: var(--space-2);
@@ -465,7 +494,140 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   line-height: 1.5;
 }
 
-/* ===== Settings panel ===== */
+/* ===== Download modal ===== */
+.download-overlay { padding-top: 0; }
+.download-modal {
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  transition: width 200ms ease, max-width 200ms ease;
+}
+.download-modal.compact   { width: 460px; max-width: 92vw; }
+.download-modal.expanded  { width: 800px; max-width: 96vw; max-height: 80vh; }
+.dm-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.dm-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.dm-icon {
+  font-size: 20px;
+  font-weight: 700;
+}
+.dm-icon-done     { color: var(--success); }
+.dm-icon-error    { color: var(--danger); }
+.dm-icon-canceled { color: var(--text-muted); }
+.dm-canceled-msg {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.dm-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.dm-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.dm-cancel {
+  background: transparent;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+.dm-cancel:hover:not(:disabled) {
+  background: var(--danger);
+  color: white;
+}
+.dm-open {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.dm-open:hover:not(:disabled) { background: var(--accent-hover); }
+.dm-path {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  word-break: break-all;
+  background: var(--bg);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+}
+.dm-error-msg {
+  margin: 0;
+  color: var(--danger);
+  font-size: 13px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.download-modal .log-panel {
+  min-height: 180px;
+  max-height: 360px;
+  flex: 0 1 auto;
+}
+
+/* ===== Settings tab ===== */
+.settings-tab {
+  gap: var(--space-3);
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.settings-row > label {
+  min-width: 130px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.ffmpeg-status {
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: auto;
+}
+.ffmpeg-status.ok      { color: var(--success); }
+.ffmpeg-status.missing { color: var(--danger); }
+
+/* ===== Light theme override (manual via data-theme="light") ===== */
+[data-theme="light"] {
+  --bg:           #f4f5f7;
+  --bg-elevated:  #ffffff;
+  --surface:      #f0f1f4;
+  --surface-hover:#e6e8ec;
+  --border:       #d0d3da;
+  --text:         #1e2128;
+  --text-muted:   #6a6f7a;
+  --text-faint:   #9a9da3;
+}
+[data-theme="dark"] {
+  --bg:           #1e2128;
+  --bg-elevated:  #252830;
+  --surface:      #2a2e36;
+  --surface-hover:#343943;
+  --border:       #3a3f4b;
+  --text:         #e8eaed;
+  --text-muted:   #9a9da3;
+  --text-faint:   #6a6f7a;
+}
+
+/* ===== Settings panel (legacy, no longer used) ===== */
 .settings-panel {
   background: var(--bg-elevated);
   border: 1px solid var(--border);

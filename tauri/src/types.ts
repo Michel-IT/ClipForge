@@ -4,13 +4,20 @@ export interface PlatformInfo {
   audio: boolean;
   subs: boolean;
   color: string;
+  notes: string;
 }
 
 export interface VideoInfo {
   title: string;
   uploader?: string;
   duration?: number;
+  duration_formatted?: string;
   thumbnail?: string;
+}
+
+export interface FfmpegStatus {
+  available: boolean;
+  path: string;
 }
 
 export interface DownloadStarted {
@@ -37,6 +44,11 @@ export interface ErrorEvent {
   job_id: string;
   message: string;
   error_key?: string;  // canonical i18n key when known
+}
+
+export interface CanceledEvent {
+  job_id: string;
+  files_removed: number;
 }
 
 export interface LogEvent {

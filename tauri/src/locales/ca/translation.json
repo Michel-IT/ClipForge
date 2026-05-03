@@ -3,7 +3,9 @@
     "autoTranslated": false,
     "source": "claude-direct",
     "generated": "2026-05-02T14:43:25.720481+00:00",
-    "note": "Initial translation by Claude. Native-speaker review welcome via PR."
+    "note": "Initial translation by Claude. Native-speaker review welcome via PR.",
+    "lastAligned": "2026-05-03T06:20:11.478677+00:00",
+    "pendingTranslationKeys": 35
   },
   "app": {
     "title": "ClipForge",
@@ -28,6 +30,20 @@
       "scrollHint": "Desplaça't fins al final primer",
       "agree": "Accepto",
       "disagree": "No accepto (tanca l'app)"
+    },
+    "download": {
+      "titleVideo": "Downloading video",
+      "titleAudio": "Extracting MP3",
+      "titleSubs": "Extracting subtitles",
+      "canceledTitle": "Canceled",
+      "canceledMsg_zero": "Canceled. No partial files to remove.",
+      "canceledMsg_one": "Canceled. Removed {{count}} partial file.",
+      "canceledMsg_other": "Canceled. Removed {{count}} partial files.",
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "openFolder": "Open folder",
+      "close": "Close",
+      "cancel": "Cancel"
     }
   },
   "url": {
@@ -43,7 +59,8 @@
   "outputDir": {
     "label": "Destí:",
     "browse": "Examina…",
-    "placeholder": "(per defecte: ~/Downloads/ClipForge)"
+    "placeholder": "(per defecte: ~/Downloads/ClipForge)",
+    "open": "Open"
   },
   "tabs": {
     "video": "Video MP4",
@@ -77,7 +94,17 @@
       "label": "Cookies del navegador:",
       "none": "Cap",
       "warning": "Tanca <strong>{{browser}}</strong> abans de descarregar — Windows bloqueja el fitxer de cookies. L'app reintentarà sense cookies si el bloqueig impedeix la lectura."
-    }
+    },
+    "theme": "Theme:",
+    "themeOption": {
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System"
+    },
+    "playlist": "Download whole playlist (when URL contains &list=)",
+    "autoPaste": "Auto-paste URL from clipboard at startup",
+    "legal": "Legal:",
+    "viewDisclaimer": "View legal disclaimer"
   },
   "progress": {
     "ready": "A punt",
@@ -113,5 +140,31 @@
     },
     "ffmpegNote": "Aquest binari inclou FFmpeg sota LGPL/GPL. El codi font de la build inclosa està disponible al projecte FFmpeg.",
     "close": "Tanca"
+  },
+  "section": {
+    "source": "Source",
+    "destination": "Destination",
+    "options": "Options"
+  },
+  "paste": {
+    "button": "Paste"
+  },
+  "videoInfo": {
+    "button": "Video info",
+    "loading": "…"
+  },
+  "status": {
+    "ready": "Ready",
+    "downloading": "Downloading…",
+    "done": "Done",
+    "error": "Error",
+    "canceled": "Canceled"
+  },
+  "ffmpeg": {
+    "bundled": "ffmpeg: bundled",
+    "missing": "ffmpeg: missing"
+  },
+  "log": {
+    "empty": "Download output will appear here."
   }
 }

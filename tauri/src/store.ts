@@ -5,22 +5,24 @@ export interface Settings {
   out_dir: string;
   cookie_browser: string;
   playlist: boolean;
-  theme: Theme;
+  theme: Theme;          // applied via documentElement.dataset.theme
   subs_langs: string;
   bitrate: Bitrate;
   video_quality: VideoQuality;
   language: string;
+  auto_paste: boolean;   // read clipboard at startup if URL recognised
 }
 
 export const DEFAULTS: Settings = {
   out_dir: "",
-  cookie_browser: "",
+  cookie_browser: "", // opt-in only — Chrome v20 DPAPI fails to decrypt outside Chrome process, so first attempt always retried-without-cookies. Users who need auth (private/age-gated) can pick a browser in Settings.
   playlist: false,
   theme: "system",
   subs_langs: "it,en",
   bitrate: "192",
   video_quality: "Auto",
   language: "",
+  auto_paste: true,
 };
 
 const store = new LazyStore("settings.json");

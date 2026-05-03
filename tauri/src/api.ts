@@ -7,7 +7,9 @@ import {
   ProgressEvent,
   CompleteEvent,
   ErrorEvent,
+  CanceledEvent,
   LogEvent,
+  FfmpegStatus,
 } from "./types";
 
 export const detectPlatform = (url: string) =>
@@ -45,6 +47,9 @@ export const downloadSubs = (args: {
 export const cancelDownload = (jobId: string) =>
   invoke<void>("cancel_download", { jobId });
 
+export const ffmpegStatus = () => invoke<FfmpegStatus>("ffmpeg_status");
+export const openDir = (path: string) => invoke<void>("open_dir", { path });
+
 export const onDownloadProgress = (cb: (e: ProgressEvent) => void): Promise<UnlistenFn> =>
   listen<ProgressEvent>("download-progress", (evt) => cb(evt.payload));
 
@@ -53,6 +58,9 @@ export const onDownloadComplete = (cb: (e: CompleteEvent) => void): Promise<Unli
 
 export const onDownloadError = (cb: (e: ErrorEvent) => void): Promise<UnlistenFn> =>
   listen<ErrorEvent>("download-error", (evt) => cb(evt.payload));
+
+export const onDownloadCanceled = (cb: (e: CanceledEvent) => void): Promise<UnlistenFn> =>
+  listen<CanceledEvent>("download-canceled", (evt) => cb(evt.payload));
 
 export const onDownloadLog = (cb: (e: LogEvent) => void): Promise<UnlistenFn> =>
   listen<LogEvent>("download-log", (evt) => cb(evt.payload));

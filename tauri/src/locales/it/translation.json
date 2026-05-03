@@ -38,7 +38,34 @@
       "scrollHint": "Scorri prima fino in fondo",
       "agree": "Accetto",
       "disagree": "Non accetto (chiudi l'app)"
+    },
+    "download": {
+      "titleVideo": "Scaricamento video",
+      "titleAudio": "Estrazione MP3",
+      "titleSubs":  "Estrazione sottotitoli",
+      "canceledTitle": "Annullato",
+      "canceledMsg_zero":  "Annullato. Nessun file parziale da rimuovere.",
+      "canceledMsg_one":   "Annullato. Rimosso {{count}} file parziale.",
+      "canceledMsg_other": "Annullato. Rimossi {{count}} file parziali.",
+      "showDetails": "Mostra dettagli",
+      "hideDetails": "Nascondi dettagli",
+      "openFolder":  "Apri cartella",
+      "close":       "Chiudi",
+      "cancel":      "Annulla"
     }
+  },
+  "paste": { "button": "Incolla" },
+  "videoInfo": { "button": "Info video", "loading": "…" },
+  "status": {
+    "ready": "Pronto",
+    "downloading": "Scaricamento…",
+    "done": "Fatto",
+    "error": "Errore",
+    "canceled": "Annullato"
+  },
+  "ffmpeg": {
+    "bundled": "ffmpeg: incluso",
+    "missing": "ffmpeg: mancante"
   },
   "section": {
     "source": "Sorgente",
@@ -58,6 +85,7 @@
   "outputDir": {
     "label": "Cartella di destinazione:",
     "browse": "Sfoglia…",
+    "open": "Apri",
     "placeholder": "(predefinito: ~/Downloads/ClipForge)"
   },
   "tabs": {
@@ -88,6 +116,12 @@
   "settings": {
     "title": "Impostazioni",
     "language": "Lingua:",
+    "theme": "Tema:",
+    "themeOption": { "dark": "Scuro", "light": "Chiaro", "system": "Sistema" },
+    "playlist": "Scarica intera playlist (quando l'URL contiene &list=)",
+    "autoPaste": "Incolla automaticamente l'URL dalla clipboard all'avvio",
+    "legal": "Legale:",
+    "viewDisclaimer": "Vedi disclaimer legale",
     "cookieBrowser": {
       "label": "Cookie dal browser:",
       "none": "Nessuno",
