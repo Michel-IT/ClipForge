@@ -109,7 +109,7 @@ Native installers per platform with full UI polish: 46-language auto-detected in
 | macOS — Apple Silicon (M1/M2/M3/M4) | [⬇️ ClipForge-0.1.1-macos-arm64.dmg](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-macos-arm64.dmg) | Open + drag to Applications. Unsigned, right-click → Open the first time. |
 | macOS — Intel (x86_64) | [⬇️ ClipForge-0.1.1-macos-intel.dmg](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-macos-intel.dmg) | Built manually on an Intel Mac (`macos-13` GitHub runner pool is permanently saturated). |
 
-[Browse all Tauri releases](https://github.com/Michel-IT/ClipForge/releases?q=tag%3Atauri).
+[Browse all Tauri releases](https://github.com/Michel-IT/ClipForge/releases?q=tauri&expanded=true).
 
 **Which macOS build do I need?** Open Terminal and run `uname -m` — `arm64` → Apple Silicon DMG, `x86_64` → Intel DMG.
 
