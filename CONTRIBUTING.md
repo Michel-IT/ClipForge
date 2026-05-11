@@ -2,72 +2,54 @@
 
 Thanks for considering a contribution! This document explains how to set up your environment, what we expect from a pull request, and the Contributor License Agreement that every non-trivial contribution must be made under.
 
-ClipForge ships **two parallel builds** (see [README — Two builds available](README.md#two-builds-available)):
+ClipForge is a **Tauri-based desktop application** (Rust backend + React/TypeScript frontend). The application code lives under [`tauri/`](tauri/) — see [`tauri/README.md`](tauri/README.md) for the build flow. For UI translations, see [`tauri/src/locales/README.md`](tauri/src/locales/README.md).
 
-- **Stable Python build** at the repo root — see _Development setup_ below for the Python flow.
-- **Preview Tauri build** under [`tauri/`](tauri/) — see [`tauri/README.md`](tauri/README.md) for the Rust + React + pnpm flow. For Tauri-specific translations, see [`tauri/src/locales/README.md`](tauri/src/locales/README.md).
+The original Python single-file build was retired in May 2026 and lives under [`legacy/`](legacy/README.md) for historical reference. No new Python releases are produced.
 
 ### Release tag conventions
 
-The two builds are released independently from the same `main` branch via different tag patterns. The CI workflows are scoped so they never trigger each other.
+Releases follow the `tauri-vX.Y.Z` tag pattern. CI workflow: [`.github/workflows/release-tauri.yml`](.github/workflows/release-tauri.yml). Outputs per release: `.msi`/`-setup.exe` (Windows), `.deb`/`.rpm`/`.AppImage` (Linux), `.dmg`/`.app.tar.gz` (macOS arm64), `.dmg` (macOS Intel — built manually on an Intel Mac, since the `macos-13` GitHub Actions runner pool is permanently saturated).
 
-| Build | Tag pattern | CI workflow | Output |
-|---|---|---|---|
-| Python (stable) | `vX.Y.Z` (e.g. `v1.0.0`) | [`.github/workflows/release.yml`](.github/workflows/release.yml) | `ClipForge-windows.exe`, `ClipForge-linux`, `ClipForge-macos-arm64` |
-| Tauri (preview) | `tauri-vX.Y.Z` (e.g. `tauri-v0.1.0`) | [`.github/workflows/release-tauri.yml`](.github/workflows/release-tauri.yml) | `.msi`/`.exe` (Win), `.deb`/`.AppImage` (Linux), `.dmg` (macOS arm64 + Intel best-effort) |
-
-To cut a release: `git tag <pattern> && git push --tags`. Both workflows publish to a draft GitHub Release that you promote manually.
+To cut a release: `git tag tauri-vX.Y.Z && git push origin tauri-vX.Y.Z`. The workflow publishes to a draft GitHub Release that you finalize manually (asset rename + Intel DMG upload + publish non-latest).
 
 ---
 
 ## Development setup
 
-Requirements: Python 3.10+, Git. Tested on Windows; the cross-platform build/run scripts also cover Linux and macOS.
-
-**Windows**
-
-```bat
-git clone https://github.com/Michel-IT/ClipForge.git
-cd ClipForge
-scripts\run-windows.bat
-```
-
-**Linux / macOS**
+Requirements: Rust toolchain (`rustup`), Node 20+, [`pnpm`](https://pnpm.io/) 9, Git. Platform-specific sidecar binaries (`yt-dlp`, `ffmpeg`) are fetched by the project scripts.
 
 ```bash
 git clone https://github.com/Michel-IT/ClipForge.git
-cd ClipForge
-chmod +x scripts/run-unix.sh
-scripts/run-unix.sh
+cd ClipForge/tauri
+pnpm install --frozen-lockfile
+# Fetch sidecars for your host (Windows / Linux / macOS):
+pwsh ./scripts/fetch-sidecars.ps1            # Windows (PowerShell)
+bash ./scripts/fetch-sidecars.sh             # Linux / macOS
+pnpm tauri dev                               # run from source
+pnpm tauri build                             # build a release artifact
 ```
 
-To produce the bundled binary:
-
-```bash
-scripts\build-windows.bat   # Windows  → dist\windows\ClipForge.exe
-scripts/build-linux.sh      # Linux    → dist/linux/ClipForge
-scripts/build-macos.sh      # macOS    → dist/macos/ClipForge-macos-{arm64,intel}
-```
-
-The build scripts auto-upgrade `yt-dlp` and the other Python dependencies on every run, so each fresh build tracks the latest extractor changes.
+Full prerequisites + per-OS troubleshooting in [`tauri/README.md`](tauri/README.md).
 
 ## Coding style
 
-ClipForge is a small single-file GUI app. We optimize for **readability and minimum surface area**, not abstractions:
+ClipForge optimizes for **readability and minimum surface area**, not abstractions:
 
-- Match the existing patterns in [clipforge.py](clipforge.py) — same naming, same threading model (one daemon thread per long-running operation, all UI updates funneled through `self.after(0, ...)`).
-- No new dependencies unless absolutely necessary. If you add one, justify it in the PR description and pin the version in `requirements.txt`.
+- Match existing patterns in [`tauri/src/`](tauri/src/) (React) and [`tauri/src-tauri/src/`](tauri/src-tauri/src/) (Rust).
+- No new dependencies unless absolutely necessary. If you add one, justify it in the PR description and pin the version in `package.json` / `Cargo.toml`.
 - Don't over-engineer. Three similar lines is fine; a premature abstraction is not.
 - Don't add scaffolding for "future use". If we need it later, we'll add it later.
 - No comments that just restate the code. A short comment is welcome when it explains a non-obvious *why* (a workaround, a hidden constraint).
-- All new user-facing strings must be in **English**.
+- All new user-facing strings must be in **English** in the master locale [`tauri/src/locales/en/translation.json`](tauri/src/locales/en/translation.json). After adding new keys, run `python scripts/utility/translate/align-locales.py` to structurally sync the 44 placeholder locales.
 
 ## Pull request checklist
 
 Before opening a PR, please confirm:
 
-- [ ] You ran the build script for your platform (`scripts\build-windows.bat`, `scripts/build-linux.sh`, or `scripts/build-macos.sh`) and the resulting binary launches, accepts the disclaimer, and runs at least one happy-path download.
-- [ ] You ran `python -c "import ast; ast.parse(open('clipforge.py').read())"` and got `OK`.
+- [ ] You ran `pnpm tauri build` and the resulting binary launches, accepts the disclaimer, and runs at least one happy-path download.
+- [ ] You ran `pnpm tsc --noEmit` and got no TypeScript errors.
+- [ ] You ran `cargo check` inside `tauri/src-tauri/` and got no Rust errors.
+- [ ] If you added new locale keys, you ran `python scripts/utility/translate/align-locales.py`.
 - [ ] You did not add a new third-party dependency without discussing it in an issue first.
 - [ ] You did not introduce wording (in code, UI, or documentation) that could be read as encouragement to bypass DRM, scrape commercial content, or violate any platform's Terms of Service.
 - [ ] You signed the Contributor License Agreement below by adding a comment to your PR — see next section.
@@ -77,12 +59,12 @@ Before opening a PR, please confirm:
 Open an issue with:
 
 - ClipForge version (or commit SHA)
-- Windows version
-- The URL or kind of URL that triggered the bug (do **not** paste private/age-gated URLs)
-- The full content of the in-app log panel
+- OS + architecture (Windows / Linux / macOS arm64 or Intel)
+- The URL or kind of URL that triggered the bug (do **not** paste private URLs)
+- The full content of the in-app download modal log panel
 - Steps to reproduce
 
-Do not open issues that are essentially "this site no longer works" — those are upstream `yt-dlp` issues. Update `yt-dlp` first (`pip install -U yt-dlp` in your venv, or wait for a new ClipForge release that bumps the pinned version).
+Do not open issues that are essentially "this site no longer works" — those are upstream `yt-dlp` issues. Wait for a new ClipForge release: each `tauri-vX.Y.Z` build re-fetches the latest `yt-dlp` sidecar via the project's `fetch-sidecars` script, so a new release ships with the current extractors.
 
 ---
 

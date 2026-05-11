@@ -83,7 +83,7 @@ The Software is distributed in two build variants (Python single-file build and 
 | [yt-dlp](https://github.com/yt-dlp/yt-dlp) | Unlicense (public domain dedication) | Performs all extraction and download operations. Bundled as a sidecar binary. |
 | `ffmpeg` binary | LGPL / GPL (depending on build configuration) | The bundled binary may include components covered by the GNU (Lesser) General Public License. The ClipForge distribution is therefore distributed under AGPL-3.0, which is compatible with these licenses. |
 
-**Python single-file build only:**
+**Python single-file build (retired in May 2026 — source preserved under [`legacy/`](legacy/) for historical reference; no new releases are produced):**
 
 | Component | License | Notes |
 |---|---|---|
