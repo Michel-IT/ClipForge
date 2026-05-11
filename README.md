@@ -97,17 +97,17 @@ For the full list see the [yt-dlp supported sites page](https://github.com/yt-dl
 
 ### Option A — Download the Tauri build (recommended)
 
-Native installers per platform with full UI polish: 46-language auto-detected interface, About modal with license attribution, live download console. Current release: **`tauri-v0.1.1`**.
+Native installers per platform with full UI polish: 46-language auto-detected interface, About modal with license attribution, live download console. Current release: **`tauri-v0.1.2`**.
 
 | Platform | Direct download | Notes |
 |---|---|---|
-| Windows (MSI installer) | [⬇️ ClipForge-0.1.1-windows-x64.msi](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-windows-x64.msi) | Standard MSI installer, ~57 MB. Requires WebView2 (preinstalled on Windows 10/11). |
-| Windows (NSIS installer) | [⬇️ ClipForge-0.1.1-windows-x64-setup.exe](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-windows-x64-setup.exe) | Smaller NSIS installer, ~46 MB, same runtime. |
-| Linux (Debian/Ubuntu) | [⬇️ ClipForge-0.1.1-linux-amd64.deb](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-linux-amd64.deb) | `sudo apt install ./ClipForge-*.deb` |
-| Linux (Fedora/RHEL) | [⬇️ ClipForge-0.1.1-linux-x86_64.rpm](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-linux-x86_64.rpm) | `sudo dnf install ./ClipForge-*.rpm` |
-| Linux (AppImage) | [⬇️ ClipForge-0.1.1-linux-amd64.AppImage](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-linux-amd64.AppImage) | `chmod +x ClipForge-*.AppImage && ./ClipForge-*.AppImage` |
-| macOS — Apple Silicon (M1/M2/M3/M4) | [⬇️ ClipForge-0.1.1-macos-arm64.dmg](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-macos-arm64.dmg) | Open + drag to Applications. Unsigned, right-click → Open the first time. |
-| macOS — Intel (x86_64) | [⬇️ ClipForge-0.1.1-macos-intel.dmg](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.1/ClipForge-0.1.1-macos-intel.dmg) | Built manually on an Intel Mac (`macos-13` GitHub runner pool is permanently saturated). |
+| Windows (MSI installer) | [⬇️ ClipForge-0.1.2-windows-x64.msi](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.2/ClipForge-0.1.2-windows-x64.msi) | Standard MSI installer, ~57 MB. Requires WebView2 (preinstalled on Windows 10/11). |
+| Windows (NSIS installer) | [⬇️ ClipForge-0.1.2-windows-x64-setup.exe](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.2/ClipForge-0.1.2-windows-x64-setup.exe) | Smaller NSIS installer, ~46 MB, same runtime. |
+| Linux (Debian/Ubuntu) | [⬇️ ClipForge-0.1.2-linux-amd64.deb](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.2/ClipForge-0.1.2-linux-amd64.deb) | `sudo apt install ./ClipForge-*.deb` |
+| Linux (Fedora/RHEL) | [⬇️ ClipForge-0.1.2-linux-x86_64.rpm](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.2/ClipForge-0.1.2-linux-x86_64.rpm) | `sudo dnf install ./ClipForge-*.rpm` |
+| Linux (AppImage) | [⬇️ ClipForge-0.1.2-linux-amd64.AppImage](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.2/ClipForge-0.1.2-linux-amd64.AppImage) | `chmod +x ClipForge-*.AppImage && ./ClipForge-*.AppImage` |
+| macOS — Apple Silicon (M1/M2/M3/M4) | [⬇️ ClipForge-0.1.2-macos-arm64.dmg](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.2/ClipForge-0.1.2-macos-arm64.dmg) | Open + drag to Applications. Unsigned, right-click → Open the first time. |
+| macOS — Intel (x86_64) | [⬇️ ClipForge-0.1.2-macos-intel.dmg](https://github.com/Michel-IT/ClipForge/releases/download/tauri-v0.1.2/ClipForge-0.1.2-macos-intel.dmg) | Built manually on an Intel Mac (`macos-13` GitHub runner pool is permanently saturated). |
 
 [Browse all Tauri releases](https://github.com/Michel-IT/ClipForge/releases?q=tauri&expanded=true).
 
