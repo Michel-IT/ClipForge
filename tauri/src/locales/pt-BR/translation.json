@@ -4,8 +4,8 @@
     "source": "claude-direct",
     "generated": "2026-05-02T14:43:25.718873+00:00",
     "note": "Initial translation by Claude. Native-speaker review welcome via PR.",
-    "lastAligned": "2026-05-03T06:20:11.561461+00:00",
-    "pendingTranslationKeys": 35
+    "lastAligned": "2026-05-11T19:20:22.946968+00:00",
+    "pendingTranslationKeys": 44
   },
   "app": {
     "title": "ClipForge",
@@ -166,5 +166,18 @@
   },
   "log": {
     "empty": "Download output will appear here."
+  },
+  "playlist": {
+    "modal": {
+      "title": "Select items from playlist",
+      "loading": "Fetching playlist…",
+      "error": "Failed to load playlist: {{message}}",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "support": "ClipForge is free. Support its development:",
+      "confirm_one": "Download {{count}} selected",
+      "confirm_other": "Download {{count}} selected",
+      "cancel": "Cancel"
+    }
   }
 }

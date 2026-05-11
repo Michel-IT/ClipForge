@@ -15,6 +15,19 @@ export interface VideoInfo {
   thumbnail?: string;
 }
 
+export interface PlaylistItem {
+  index: number;                 // 1-based, what --playlist-items expects
+  id: string;
+  title: string;
+  duration?: number;
+  duration_formatted?: string;
+}
+
+export type PlaylistSelectionResult =
+  | { kind: "single" }                 // URL isn't actually a playlist — fall through
+  | { kind: "items"; value: string }   // user selected; value is `--playlist-items` syntax
+  | { kind: "cancel" };                // user cancelled the modal
+
 export interface FfmpegStatus {
   available: boolean;
   path: string;

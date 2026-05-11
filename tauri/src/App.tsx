@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n, { applyDirAndLang, detectInitialLang } from "./i18n";
 import { Footer } from "./components/Footer";
@@ -12,10 +12,11 @@ import { SubsTab } from "./components/SubsTab";
 import { SettingsTab } from "./components/SettingsTab";
 import { DisclaimerModal } from "./components/DisclaimerModal";
 import { DownloadModal, ModalStatus } from "./components/DownloadModal";
+import { PlaylistSelectionModal } from "./components/PlaylistSelectionModal";
 import { StatusIndicator, StatusKind } from "./components/StatusIndicator";
-import { detectPlatform, onDownloadCanceled, onDownloadComplete, onDownloadError, onDownloadLog, onDownloadProgress } from "./api";
+import { detectPlatform, fetchPlaylistInfo, onDownloadCanceled, onDownloadComplete, onDownloadError, onDownloadLog, onDownloadProgress } from "./api";
 import { DEFAULTS, loadSettings, saveSettings, Settings } from "./store";
-import { LogEvent, PlatformInfo, ProgressEvent, Theme, VideoInfo } from "./types";
+import { LogEvent, PlatformInfo, PlaylistItem, PlaylistSelectionResult, ProgressEvent, Theme, VideoInfo } from "./types";
 
 type Tab = "video" | "audio" | "subs" | "settings";
 const LOG_BUFFER_MAX = 1000;
@@ -49,6 +50,54 @@ function App() {
   const [status, setStatus] = useState<StatusKind>({ kind: "ready" });
   const [logLines, setLogLines] = useState<LogEvent[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+
+  // Playlist preflight modal — opens when a tab's start() runs against a playlist
+  // URL. Items list is fetched lazily; resolver is set so the modal's confirm/cancel
+  // buttons can complete the awaiting tab promise without prop drilling.
+  const [playlistModalOpen, setPlaylistModalOpen] = useState(false);
+  const [playlistItems, setPlaylistItems] = useState<PlaylistItem[]>([]);
+  const [playlistLoading, setPlaylistLoading] = useState(false);
+  const [playlistError, setPlaylistError] = useState<string | null>(null);
+  const playlistResolverRef = useRef<((r: PlaylistSelectionResult) => void) | null>(null);
+
+  const requestPlaylistSelection = async (
+    targetUrl: string
+  ): Promise<PlaylistSelectionResult> => {
+    setPlaylistModalOpen(true);
+    setPlaylistLoading(true);
+    setPlaylistItems([]);
+    setPlaylistError(null);
+    try {
+      const list = await fetchPlaylistInfo(targetUrl, settings.cookie_browser || undefined);
+      setPlaylistLoading(false);
+      if (list.length <= 1) {
+        // Single video or empty — fall through to normal download flow.
+        setPlaylistModalOpen(false);
+        return { kind: "single" };
+      }
+      setPlaylistItems(list);
+    } catch (e: any) {
+      setPlaylistError(e?.message ?? String(e));
+      setPlaylistLoading(false);
+    }
+    return new Promise((resolve) => {
+      playlistResolverRef.current = resolve;
+    });
+  };
+
+  const handlePlaylistConfirm = (itemsArg: string) => {
+    setPlaylistModalOpen(false);
+    const resolver = playlistResolverRef.current;
+    playlistResolverRef.current = null;
+    resolver?.({ kind: "items", value: itemsArg });
+  };
+
+  const handlePlaylistCancel = () => {
+    setPlaylistModalOpen(false);
+    const resolver = playlistResolverRef.current;
+    playlistResolverRef.current = null;
+    resolver?.({ kind: "cancel" });
+  };
 
   // Bootstrap: load settings, init i18n + theme + auto-paste, then unblock UI.
   useEffect(() => {
@@ -233,6 +282,7 @@ function App() {
               onQualityChange={(q) => patch({ video_quality: q })}
               onPlaylistChange={(v) => patch({ playlist: v })}
               onJobStarted={handleJobStarted("video")}
+              onRequestPlaylistSelection={requestPlaylistSelection}
               disabled={tabDisabled("video")}
             />
           )}
@@ -244,6 +294,7 @@ function App() {
               onBitrateChange={(b) => patch({ bitrate: b })}
               onPlaylistChange={(v) => patch({ playlist: v })}
               onJobStarted={handleJobStarted("audio")}
+              onRequestPlaylistSelection={requestPlaylistSelection}
               disabled={tabDisabled("audio")}
             />
           )}
@@ -255,6 +306,7 @@ function App() {
               onLangsChange={(l) => patch({ subs_langs: l })}
               onPlaylistChange={(v) => patch({ playlist: v })}
               onJobStarted={handleJobStarted("subs")}
+              onRequestPlaylistSelection={requestPlaylistSelection}
               disabled={tabDisabled("subs")}
             />
           )}
@@ -283,6 +335,15 @@ function App() {
         status={modalStatus}
         logs={logLines}
         onClose={() => setModalOpen(false)}
+      />
+
+      <PlaylistSelectionModal
+        isOpen={playlistModalOpen}
+        items={playlistItems}
+        loading={playlistLoading}
+        error={playlistError}
+        onConfirm={handlePlaylistConfirm}
+        onCancel={handlePlaylistCancel}
       />
 
       {showDisclaimerAgain && (

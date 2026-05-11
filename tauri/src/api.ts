@@ -3,6 +3,7 @@ import { listen, UnlistenFn } from "@tauri-apps/api/event";
 import {
   PlatformInfo,
   VideoInfo,
+  PlaylistItem,
   DownloadStarted,
   ProgressEvent,
   CompleteEvent,
@@ -20,12 +21,16 @@ export const getDisclaimer = () => invoke<string>("get_disclaimer");
 export const fetchInfo = (url: string, cookiesBrowser?: string) =>
   invoke<VideoInfo>("fetch_info", { url, cookiesBrowser });
 
+export const fetchPlaylistInfo = (url: string, cookiesBrowser?: string) =>
+  invoke<PlaylistItem[]>("fetch_playlist_info", { url, cookiesBrowser });
+
 export const downloadVideo = (args: {
   url: string;
   quality: string;
   outDir: string;
   cookiesBrowser?: string;
   playlist: boolean;
+  playlistItems?: string;
 }) => invoke<DownloadStarted>("download_video", args);
 
 export const downloadAudio = (args: {
@@ -34,6 +39,7 @@ export const downloadAudio = (args: {
   outDir: string;
   cookiesBrowser?: string;
   playlist: boolean;
+  playlistItems?: string;
 }) => invoke<DownloadStarted>("download_audio", args);
 
 export const downloadSubs = (args: {
@@ -42,6 +48,7 @@ export const downloadSubs = (args: {
   outDir: string;
   cookiesBrowser?: string;
   playlist: boolean;
+  playlistItems?: string;
 }) => invoke<DownloadStarted>("download_subs", args);
 
 export const cancelDownload = (jobId: string) =>

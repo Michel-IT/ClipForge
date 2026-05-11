@@ -58,6 +58,15 @@ pub struct FfmpegStatus {
     pub path: String,
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct PlaylistItem {
+    pub index: u32,                          // 1-based, as expected by --playlist-items
+    pub id: String,
+    pub title: String,
+    pub duration: Option<f64>,
+    pub duration_formatted: Option<String>,
+}
+
 fn format_duration(secs: f64) -> String {
     let total = secs as u64;
     let h = total / 3600;
@@ -171,6 +180,85 @@ pub async fn fetch_info(
     Ok(VideoInfo { title, uploader, duration, duration_formatted, thumbnail })
 }
 
+// Returns the playlist entries (id/title/duration) via yt-dlp's --flat-playlist
+// metadata pass. Empty Vec means the URL is not actually a playlist — frontend
+// should fall through to the normal single-video download. Mirrors the cookie
+// retry fallback of fetch_info.
+#[tauri::command]
+pub async fn fetch_playlist_info(
+    app: AppHandle,
+    url: String,
+    cookies_browser: Option<String>,
+) -> Result<Vec<PlaylistItem>, AppError> {
+    validate_url(&url)?;
+    let mut args: Vec<String> = vec![
+        "--flat-playlist".into(),
+        "--dump-single-json".into(),
+        "--no-warnings".into(),
+        "--extractor-args".into(),
+        "youtube:player_client=tv_simply,android_vr".into(),
+        "--socket-timeout".into(),
+        "10".into(),
+    ];
+    let used_cookies = cookies_browser.as_ref().is_some_and(|s| !s.is_empty());
+    if let Some(b) = cookies_browser.as_ref().filter(|s| !s.is_empty()) {
+        args.push("--cookies-from-browser".into());
+        args.push(b.clone());
+    }
+    args.push(url);
+
+    let output = app
+        .shell()
+        .sidecar("yt-dlp")
+        .map_err(|e| AppError::Sidecar(e.to_string()))?
+        .args(args.clone())
+        .output()
+        .await
+        .map_err(|e| AppError::Sidecar(e.to_string()))?;
+
+    let stderr_text = String::from_utf8_lossy(&output.stderr).to_string();
+    let final_output = if !output.status.success() && used_cookies && looks_like_browser_lock(&stderr_text) {
+        let retry_args = strip_cookies_flag(&args);
+        let r = app
+            .shell()
+            .sidecar("yt-dlp")
+            .map_err(|e| AppError::Sidecar(e.to_string()))?
+            .args(retry_args)
+            .output()
+            .await
+            .map_err(|e| AppError::Sidecar(e.to_string()))?;
+        if !r.status.success() {
+            return Err(AppError::Sidecar(String::from_utf8_lossy(&r.stderr).to_string()));
+        }
+        r
+    } else if !output.status.success() {
+        return Err(AppError::Sidecar(stderr_text));
+    } else {
+        output
+    };
+
+    let json: serde_json::Value = serde_json::from_slice(&final_output.stdout)?;
+    let entries = match json.get("entries").and_then(|v| v.as_array()) {
+        Some(arr) => arr,
+        None => return Ok(Vec::new()),
+    };
+    let mut items = Vec::with_capacity(entries.len());
+    for (i, e) in entries.iter().enumerate() {
+        let title = e.get("title").and_then(|v| v.as_str()).unwrap_or("").to_string();
+        let id = e.get("id").and_then(|v| v.as_str()).unwrap_or("").to_string();
+        let duration = e.get("duration").and_then(|v| v.as_f64());
+        let duration_formatted = duration.map(format_duration);
+        items.push(PlaylistItem {
+            index: (i as u32) + 1,
+            id,
+            title,
+            duration,
+            duration_formatted,
+        });
+    }
+    Ok(items)
+}
+
 #[tauri::command]
 pub async fn ffmpeg_status() -> Result<FfmpegStatus, AppError> {
     match ffmpeg_path() {
@@ -196,6 +284,7 @@ pub async fn download_video(
     out_dir: String,
     cookies_browser: Option<String>,
     playlist: bool,
+    playlist_items: Option<String>,
 ) -> Result<DownloadStarted, AppError> {
     validate_url(&url)?;
     let format = match quality.as_str() {
@@ -223,9 +312,7 @@ pub async fn download_video(
         args.push("--ffmpeg-location".into());
         args.push(p);
     }
-    if !playlist {
-        args.push("--no-playlist".into());
-    }
+    apply_playlist_args(&mut args, playlist, playlist_items.as_deref());
     if let Some(b) = cookies_browser.as_ref().filter(|s| !s.is_empty()) {
         args.push("--cookies-from-browser".into());
         args.push(b.clone());
@@ -244,6 +331,7 @@ pub async fn download_audio(
     out_dir: String,
     cookies_browser: Option<String>,
     playlist: bool,
+    playlist_items: Option<String>,
 ) -> Result<DownloadStarted, AppError> {
     validate_url(&url)?;
     let out_dir = resolve_out_dir(&app, out_dir)?;
@@ -269,9 +357,7 @@ pub async fn download_audio(
         args.push("--ffmpeg-location".into());
         args.push(p);
     }
-    if !playlist {
-        args.push("--no-playlist".into());
-    }
+    apply_playlist_args(&mut args, playlist, playlist_items.as_deref());
     if let Some(b) = cookies_browser.as_ref().filter(|s| !s.is_empty()) {
         args.push("--cookies-from-browser".into());
         args.push(b.clone());
@@ -292,6 +378,7 @@ pub async fn download_subs(
     out_dir: String,
     cookies_browser: Option<String>,
     playlist: bool,
+    playlist_items: Option<String>,
 ) -> Result<DownloadStarted, AppError> {
     validate_url(&url)?;
     let out_dir = resolve_out_dir(&app, out_dir)?;
@@ -306,9 +393,7 @@ pub async fn download_subs(
         "--progress-template".into(),
         "PROGRESS:%(progress._percent_str)s|%(progress._speed_str)s|%(progress._eta_str)s".into(),
     ];
-    if !playlist {
-        args.push("--no-playlist".into());
-    }
+    apply_playlist_args(&mut args, playlist, playlist_items.as_deref());
     if let Some(b) = cookies_browser.as_ref().filter(|s| !s.is_empty()) {
         args.push("--cookies-from-browser".into());
         args.push(b.clone());
@@ -317,6 +402,19 @@ pub async fn download_subs(
 
     let subs_dir = std::path::PathBuf::from(&out_dir);
     spawn_download(&app, args, out_dir, Some(subs_dir)).await
+}
+
+// Helper: add the right playlist flag to yt-dlp's args.
+//   playlist_items takes precedence (selective download, implicit playlist mode);
+//   else `--no-playlist` if the user didn't ask for the whole list;
+//   else nothing (yt-dlp downloads the whole playlist by default when the URL is one).
+fn apply_playlist_args(args: &mut Vec<String>, playlist: bool, playlist_items: Option<&str>) {
+    if let Some(items) = playlist_items.filter(|s| !s.is_empty()) {
+        args.push("--playlist-items".into());
+        args.push(items.to_string());
+    } else if !playlist {
+        args.push("--no-playlist".into());
+    }
 }
 
 #[tauri::command]
@@ -457,17 +555,23 @@ fn snapshot_dir(dir: &std::path::Path) -> std::collections::HashSet<std::path::P
     set
 }
 
-fn cleanup_partial(dir: &std::path::Path,
-                   baseline: &std::collections::HashSet<std::path::PathBuf>) -> usize {
+fn cleanup_partial(
+    dir: &std::path::Path,
+    baseline: &std::collections::HashSet<std::path::PathBuf>,
+    keep: &std::collections::HashSet<std::path::PathBuf>,
+) -> usize {
     let mut deleted = 0;
     if let Ok(rd) = std::fs::read_dir(dir) {
         for entry in rd.flatten() {
             let path = entry.path();
-            if !baseline.contains(&path) {
-                // New file created during this job. Delete (incomplete by definition).
-                if std::fs::remove_file(&path).is_ok() {
-                    deleted += 1;
-                }
+            if baseline.contains(&path) || keep.contains(&path) {
+                continue;
+            }
+            // New file created during this job AND not in the keep set (i.e. not
+            // a final output yt-dlp already reported as complete for an earlier
+            // playlist item). Delete — incomplete by definition.
+            if std::fs::remove_file(&path).is_ok() {
+                deleted += 1;
             }
         }
     }
@@ -510,6 +614,11 @@ async fn spawn_download(
         const TOTAL_STEPS: u32 = 3; // download → merge/extract → embed
 
         let mut last_output: Option<String> = None;
+        // Final outputs of playlist items that yt-dlp already finished — protected
+        // from the cancel-cleanup pass so we don't wipe successful downloads when
+        // the user aborts mid-playlist.
+        let mut completed_outputs: std::collections::HashSet<std::path::PathBuf>
+            = std::collections::HashSet::new();
         let mut phase: (&str, &str, u32) = PHASE_DOWNLOADING;
         let mut stderr_buf = String::new();
         while let Some(event) = rx.recv().await {
@@ -551,6 +660,15 @@ async fn spawn_download(
                     //   [ExtractAudio]  Destination: <final>.mp3
                     //   [EmbedThumbnail] ... (no path; same file as previous step)
                     let prev_step = phase.2;
+                    // Item transition in a playlist — yt-dlp logs e.g.
+                    // "[download] Downloading item 2 of 10". Treat the previous
+                    // `last_output` as a completed item that must survive a cancel.
+                    if line.contains("] Downloading item ") && line.contains(" of ") {
+                        if let Some(p) = last_output.take() {
+                            completed_outputs.insert(std::path::PathBuf::from(p));
+                        }
+                        phase = PHASE_DOWNLOADING;
+                    }
                     if let Some(path) = line.strip_prefix("[download] Destination: ") {
                         last_output = Some(path.trim().to_string());
                     } else if let Some(rest) = line.strip_prefix("[Merger] Merging formats into \"") {
@@ -627,9 +745,10 @@ async fn spawn_download(
                     } else if sidecar::was_canceled(&job_for_task) {
                         // User pressed Cancel — wait briefly for yt-dlp to
                         // release file handles, then delete partial / intermediate
-                        // files that this job created.
+                        // files that this job created, EXCLUDING completed playlist
+                        // items so we don't wipe successful downloads.
                         tokio::time::sleep(std::time::Duration::from_millis(400)).await;
-                        let removed = cleanup_partial(&out_dir_for_task, &baseline);
+                        let removed = cleanup_partial(&out_dir_for_task, &baseline, &completed_outputs);
                         let _ = app_handle.emit(
                             "download-canceled",
                             serde_json::json!({

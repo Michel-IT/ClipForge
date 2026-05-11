@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { downloadSubs, cancelDownload } from "../api";
+import { PlaylistSelectionResult } from "../types";
 
 interface Props {
   url: string;
@@ -11,6 +12,7 @@ interface Props {
   onLangsChange: (l: string) => void;
   onPlaylistChange: (v: boolean) => void;
   onJobStarted: (jobId: string) => void;
+  onRequestPlaylistSelection: (url: string) => Promise<PlaylistSelectionResult>;
   disabled: boolean;
 }
 
@@ -24,16 +26,24 @@ export function SubsTab({
   onLangsChange,
   onPlaylistChange,
   onJobStarted,
+  onRequestPlaylistSelection,
   disabled,
 }: Props) {
   const { t } = useTranslation();
   const start = async () => {
+    let playlistItems: string | undefined;
+    if (playlist) {
+      const r = await onRequestPlaylistSelection(url);
+      if (r.kind === "cancel") return;
+      if (r.kind === "items") playlistItems = r.value;
+    }
     const { job_id } = await downloadSubs({
       url,
       langs,
       outDir,
       cookiesBrowser: cookieBrowser || undefined,
       playlist,
+      playlistItems,
     });
     onJobStarted(job_id);
   };

@@ -18,6 +18,7 @@ pub fn run() {
             commands::detect_platform,
             commands::get_disclaimer,
             commands::fetch_info,
+            commands::fetch_playlist_info,
             commands::ffmpeg_status,
             commands::open_dir,
             commands::download_video,

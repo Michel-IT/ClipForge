@@ -76,6 +76,18 @@ main > .app { flex: 1 1 auto; min-height: 0; }
   flex-shrink: 0;
 }
 .footer-sep { opacity: 0.5; }
+
+.link-button {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  padding: 0;
+  font-size: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link-button:hover { opacity: 0.85; }
 .footer-link {
   background: transparent;
   border: none;
@@ -421,6 +433,87 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   background: var(--surface);
   border-color: var(--border);
   color: var(--text-faint);
+}
+
+/* ===== Playlist selection modal ===== */
+.playlist-modal {
+  width: min(720px, 92vw);
+  max-height: 80vh;
+}
+.playlist-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.playlist-counter {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.playlist-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+}
+.playlist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.playlist-row {
+  border-bottom: 1px solid var(--border);
+}
+.playlist-row:last-child { border-bottom: none; }
+.playlist-row label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  font-size: 13px;
+}
+.playlist-row label:hover { background: var(--surface); }
+.playlist-row input[type="checkbox"] { margin: 0; }
+.playlist-index {
+  color: var(--text-muted);
+  min-width: 32px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.playlist-title {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.playlist-duration {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.playlist-loading,
+.playlist-error {
+  padding: var(--space-4);
+  text-align: center;
+  font-size: 13px;
+}
+.playlist-error { color: var(--danger); }
+.playlist-support {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  color: var(--text-muted);
 }
 
 /* ===== Log panel ===== */

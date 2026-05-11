@@ -137,6 +137,19 @@
   "log": {
     "empty": "Download output will appear here."
   },
+  "playlist": {
+    "modal": {
+      "title": "Select items from playlist",
+      "loading": "Fetching playlist…",
+      "error": "Failed to load playlist: {{message}}",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "support": "ClipForge is free. Support its development:",
+      "confirm_one": "Download {{count}} selected",
+      "confirm_other": "Download {{count}} selected",
+      "cancel": "Cancel"
+    }
+  },
   "phase": {
     "downloading": "downloading…",
     "merging": "merging…",

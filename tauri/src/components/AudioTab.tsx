@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { downloadAudio, cancelDownload } from "../api";
-import { BITRATES, Bitrate } from "../types";
+import { BITRATES, Bitrate, PlaylistSelectionResult } from "../types";
 
 interface Props {
   url: string;
@@ -12,6 +12,7 @@ interface Props {
   onBitrateChange: (b: Bitrate) => void;
   onPlaylistChange: (v: boolean) => void;
   onJobStarted: (jobId: string) => void;
+  onRequestPlaylistSelection: (url: string) => Promise<PlaylistSelectionResult>;
   disabled: boolean;
 }
 
@@ -25,16 +26,24 @@ export function AudioTab({
   onBitrateChange,
   onPlaylistChange,
   onJobStarted,
+  onRequestPlaylistSelection,
   disabled,
 }: Props) {
   const { t } = useTranslation();
   const start = async () => {
+    let playlistItems: string | undefined;
+    if (playlist) {
+      const r = await onRequestPlaylistSelection(url);
+      if (r.kind === "cancel") return;
+      if (r.kind === "items") playlistItems = r.value;
+    }
     const { job_id } = await downloadAudio({
       url,
       bitrate,
       outDir,
       cookiesBrowser: cookieBrowser || undefined,
       playlist,
+      playlistItems,
     });
     onJobStarted(job_id);
   };

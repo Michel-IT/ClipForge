@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { downloadVideo, cancelDownload } from "../api";
-import { VIDEO_QUALITIES, VideoQuality } from "../types";
+import { VIDEO_QUALITIES, VideoQuality, PlaylistSelectionResult } from "../types";
 
 interface Props {
   url: string;
@@ -12,6 +12,7 @@ interface Props {
   onQualityChange: (q: VideoQuality) => void;
   onPlaylistChange: (v: boolean) => void;
   onJobStarted: (jobId: string) => void;
+  onRequestPlaylistSelection: (url: string) => Promise<PlaylistSelectionResult>;
   disabled: boolean;
 }
 
@@ -25,16 +26,25 @@ export function VideoTab({
   onQualityChange,
   onPlaylistChange,
   onJobStarted,
+  onRequestPlaylistSelection,
   disabled,
 }: Props) {
   const { t } = useTranslation();
   const start = async () => {
+    let playlistItems: string | undefined;
+    if (playlist) {
+      const r = await onRequestPlaylistSelection(url);
+      if (r.kind === "cancel") return;
+      if (r.kind === "items") playlistItems = r.value;
+      // "single" → URL isn't really a playlist, proceed normally
+    }
     const { job_id } = await downloadVideo({
       url,
       quality,
       outDir,
       cookiesBrowser: cookieBrowser || undefined,
       playlist,
+      playlistItems,
     });
     onJobStarted(job_id);
   };
