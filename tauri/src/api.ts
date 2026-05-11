@@ -71,3 +71,8 @@ export const onDownloadCanceled = (cb: (e: CanceledEvent) => void): Promise<Unli
 
 export const onDownloadLog = (cb: (e: LogEvent) => void): Promise<UnlistenFn> =>
   listen<LogEvent>("download-log", (evt) => cb(evt.payload));
+
+export const onPlaylistFetchProgress = (
+  cb: (e: { count: number }) => void
+): Promise<UnlistenFn> =>
+  listen<{ count: number }>("playlist-fetch-progress", (evt) => cb(evt.payload));

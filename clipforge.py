@@ -43,10 +43,10 @@ def _apply_window_icon(window):
 
 PLATFORMS = [
     {"name": "YouTube",     "hosts": ("youtube.com", "youtu.be"),    "video": True, "audio": True, "subs": True,  "color": "#ff0033", "label": "YouTube",     "notes": "Video, audio, automatic and manual subtitles."},
-    {"name": "TikTok",      "hosts": ("tiktok.com",),                "video": True, "audio": True, "subs": False, "color": "#ff0050", "label": "TikTok",      "notes": "Video (no watermark by default) and audio."},
-    {"name": "Instagram",   "hosts": ("instagram.com",),             "video": True, "audio": True, "subs": False, "color": "#c13584", "label": "Instagram",   "notes": "Public Reels and posts. For stories / private content: use cookies."},
-    {"name": "Facebook",    "hosts": ("facebook.com", "fb.watch"),   "video": True, "audio": True, "subs": False, "color": "#1877f2", "label": "Facebook",    "notes": "Public videos. For private / age-gated content: use cookies."},
-    {"name": "X/Twitter",   "hosts": ("twitter.com", "x.com"),       "video": True, "audio": True, "subs": False, "color": "#1d9bf0", "label": "X/Twitter",   "notes": "Public videos. For protected accounts: use cookies."},
+    {"name": "TikTok",      "hosts": ("tiktok.com",),                "video": True, "audio": True, "subs": False, "color": "#ff0050", "label": "TikTok",      "notes": "Video and audio."},
+    {"name": "Instagram",   "hosts": ("instagram.com",),             "video": True, "audio": True, "subs": False, "color": "#c13584", "label": "Instagram",   "notes": "Reels and posts visible to your account."},
+    {"name": "Facebook",    "hosts": ("facebook.com", "fb.watch"),   "video": True, "audio": True, "subs": False, "color": "#1877f2", "label": "Facebook",    "notes": "Videos visible to your account."},
+    {"name": "X/Twitter",   "hosts": ("twitter.com", "x.com"),       "video": True, "audio": True, "subs": False, "color": "#1d9bf0", "label": "X/Twitter",   "notes": "Videos visible to your account."},
     {"name": "Vimeo",       "hosts": ("vimeo.com",),                 "video": True, "audio": True, "subs": True,  "color": "#1ab7ea", "label": "Vimeo",       "notes": "Video, audio and subtitles (when available)."},
     {"name": "Twitch",      "hosts": ("twitch.tv",),                 "video": True, "audio": True, "subs": False, "color": "#9146ff", "label": "Twitch",      "notes": "VOD and clips. Live streams not supported."},
     {"name": "Reddit",      "hosts": ("reddit.com", "redd.it"),      "video": True, "audio": True, "subs": False, "color": "#ff4500", "label": "Reddit",      "notes": "Public post videos."},

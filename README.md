@@ -20,7 +20,7 @@ ClipForge is a single-file Windows desktop application built on top of [`yt-dlp`
 
 ClipForge is a generic downloader. It is intended **only** for content that you own, that is in the public domain, or that you have explicit permission to download. Using ClipForge to bypass DRM, scrape commercial content, or violate a platform's Terms of Service is **not** an authorized use.
 
-The full legal terms — including the limitation of liability and the list of permitted/forbidden uses — are in [DISCLAIMER.md](DISCLAIMER.md). The same text is shown inside the application at every launch and must be explicitly accepted before the main window opens.
+The full legal terms — including the limitation of liability, the list of permitted/forbidden uses, the tool-neutrality clause, the indemnification clause, the donations clause, and the trademark notice — are in [DISCLAIMER.md](DISCLAIMER.md). The same text is shown inside the application at every launch and must be explicitly accepted before the main window opens. Companion documents: [Terms of Use](docs/TERMS.md), [Privacy Policy](docs/PRIVACY.md).
 
 ---
 
@@ -62,7 +62,7 @@ Most users want the **stable** build. The Tauri preview is for early adopters wh
 | Platform | Video | Audio | Subtitles |
 |---|---|---|---|
 | YouTube | ✓ | ✓ | ✓ |
-| TikTok | ✓ (no watermark) | ✓ | — |
+| TikTok | ✓ | ✓ | — |
 | Instagram | ✓ | ✓ | — |
 | Facebook | ✓ | ✓ | — |
 | X / Twitter | ✓ | ✓ | — |

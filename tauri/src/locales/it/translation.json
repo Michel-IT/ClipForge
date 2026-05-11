@@ -141,13 +141,20 @@
     "modal": {
       "title": "Seleziona elementi dalla playlist",
       "loading": "Caricamento playlist…",
+      "loadingFound_one": "Trovato {{count}} elemento…",
+      "loadingFound_other": "Trovati {{count}} elementi…",
       "error": "Caricamento playlist fallito: {{message}}",
       "selectAll": "Seleziona tutto",
       "deselectAll": "Deseleziona tutto",
       "support": "ClipForge è gratuito. Sostieni lo sviluppo:",
       "confirm_one": "Scarica {{count}} elemento selezionato",
       "confirm_other": "Scarica {{count}} elementi selezionati",
-      "cancel": "Annulla"
+      "cancel": "Annulla",
+      "bulkTitle": "Conferma download multiplo",
+      "bulkBody_one": "Stai per scaricare {{count}} file. Confermi?",
+      "bulkBody_other": "Stai per scaricare {{count}} file. Confermi?",
+      "bulkBack": "Indietro",
+      "bulkProceed": "Conferma"
     }
   },
   "phase": {

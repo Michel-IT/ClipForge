@@ -4,8 +4,8 @@
     "source": "claude-direct",
     "generated": "2026-05-02T14:43:25.881077+00:00",
     "note": "Initial translation by Claude. Native-speaker review welcome via PR.",
-    "lastAligned": "2026-05-11T19:20:22.932830+00:00",
-    "pendingTranslationKeys": 44
+    "lastAligned": "2026-05-11T20:46:37.152569+00:00",
+    "pendingTranslationKeys": 51
   },
   "app": {
     "title": "ClipForge",
@@ -177,7 +177,14 @@
       "support": "ClipForge is free. Support its development:",
       "confirm_one": "Download {{count}} selected",
       "confirm_other": "Download {{count}} selected",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "bulkTitle": "Confirm bulk download",
+      "bulkBody_one": "You are about to download {{count}} file. Continue?",
+      "bulkBody_other": "You are about to download {{count}} files. Continue?",
+      "bulkBack": "Back",
+      "bulkProceed": "Confirm",
+      "loadingFound_one": "Found {{count}} item…",
+      "loadingFound_other": "Found {{count}} items…"
     }
   }
 }

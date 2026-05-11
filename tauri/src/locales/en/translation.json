@@ -141,13 +141,20 @@
     "modal": {
       "title": "Select items from playlist",
       "loading": "Fetching playlist…",
+      "loadingFound_one": "Found {{count}} item…",
+      "loadingFound_other": "Found {{count}} items…",
       "error": "Failed to load playlist: {{message}}",
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
       "support": "ClipForge is free. Support its development:",
       "confirm_one": "Download {{count}} selected",
       "confirm_other": "Download {{count}} selected",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "bulkTitle": "Confirm bulk download",
+      "bulkBody_one": "You are about to download {{count}} file. Continue?",
+      "bulkBody_other": "You are about to download {{count}} files. Continue?",
+      "bulkBack": "Back",
+      "bulkProceed": "Confirm"
     }
   },
   "phase": {

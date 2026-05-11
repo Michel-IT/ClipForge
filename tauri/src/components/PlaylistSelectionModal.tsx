@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { open as openExternal } from "@tauri-apps/plugin-shell";
+import { onPlaylistFetchProgress } from "../api";
 import { PlaylistItem } from "../types";
 
 interface Props {
@@ -32,14 +33,41 @@ function compressIndices(indices: number[]): string {
   return groups.join(",");
 }
 
+// Above this many selected items we surface an explicit "you are about to
+// download N files" confirmation before proceeding. Two reasons:
+//   1. UX: bulk downloads are easy to misclick — friction prevents accidents.
+//   2. Legal: the user makes an affirmative informed choice for the whole batch,
+//      so ClipForge stays in the "neutral tool" category instead of the
+//      "actively induces mass infringement" one. See Grokster / YOUT case law.
+const BULK_WARN_THRESHOLD = 50;
+
 export function PlaylistSelectionModal({ isOpen, items, loading, error, onConfirm, onCancel }: Props) {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [bulkWarnPending, setBulkWarnPending] = useState(false);
+  // Live counter of entries discovered while yt-dlp streams the playlist —
+  // reassures the user that the long YouTube radio-mix enumeration is making
+  // progress instead of looking frozen.
+  const [discoveredCount, setDiscoveredCount] = useState(0);
 
-  // Reset selection when the modal reopens with a new list.
+  // Reset selection (empty) when the modal reopens — user picks explicitly.
   useEffect(() => {
-    if (isOpen) setSelected(new Set(items.map((it) => it.index)));
+    if (isOpen) {
+      setSelected(new Set());
+      setBulkWarnPending(false);
+      setDiscoveredCount(0);
+    }
   }, [isOpen, items]);
+
+  // Subscribe to streaming "found N" events only while the fetch is in flight.
+  useEffect(() => {
+    if (!isOpen || !loading) return;
+    let unlisten: (() => void) | undefined;
+    onPlaylistFetchProgress((e) => setDiscoveredCount(e.count)).then((un) => {
+      unlisten = un;
+    });
+    return () => { unlisten?.(); };
+  }, [isOpen, loading]);
 
   const toggle = (index: number) => {
     setSelected((prev) => {
@@ -55,12 +83,43 @@ export function PlaylistSelectionModal({ isOpen, items, loading, error, onConfir
 
   const confirm = () => {
     if (selected.size === 0) return;
+    if (selected.size > BULK_WARN_THRESHOLD && !bulkWarnPending) {
+      setBulkWarnPending(true);
+      return;
+    }
     onConfirm(compressIndices([...selected]));
   };
+
+  const backFromBulkWarn = () => setBulkWarnPending(false);
 
   const counter = useMemo(() => `${selected.size} / ${items.length}`, [selected, items.length]);
 
   if (!isOpen) return null;
+
+  // Bulk confirmation step — replaces the list view until the user accepts or backs out.
+  if (bulkWarnPending) {
+    return (
+      <div className="modal-overlay playlist-overlay">
+        <div className="modal playlist-modal playlist-bulk-confirm">
+          <h2>{t("playlist.modal.bulkTitle", { defaultValue: "Confirm bulk download" })}</h2>
+          <p>
+            {t("playlist.modal.bulkBody", {
+              defaultValue: "You are about to download {{count}} files. Continue?",
+              count: selected.size,
+            })}
+          </p>
+          <div className="modal-actions">
+            <button className="modal-decline" onClick={backFromBulkWarn}>
+              {t("playlist.modal.bulkBack", { defaultValue: "Back" })}
+            </button>
+            <button className="modal-accept" onClick={confirm}>
+              {t("playlist.modal.bulkProceed", { defaultValue: "Confirm" })}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="modal-overlay playlist-overlay">
@@ -72,7 +131,15 @@ export function PlaylistSelectionModal({ isOpen, items, loading, error, onConfir
 
         {loading && (
           <div className="playlist-loading">
-            {t("playlist.modal.loading", { defaultValue: "Fetching playlist…" })}
+            <div className="playlist-spinner" aria-hidden="true" />
+            <div>
+              {discoveredCount > 0
+                ? t("playlist.modal.loadingFound", {
+                    defaultValue: "Found {{count}} items…",
+                    count: discoveredCount,
+                  })
+                : t("playlist.modal.loading", { defaultValue: "Fetching playlist…" })}
+            </div>
           </div>
         )}
 
@@ -119,23 +186,9 @@ export function PlaylistSelectionModal({ isOpen, items, loading, error, onConfir
           <span>💛 {t("playlist.modal.support", { defaultValue: "ClipForge is free. Support its development:" })}</span>
           <button
             className="link-button"
-            onClick={() => openExternal("https://github.com/sponsors/Michel-IT")}
-          >
-            GitHub Sponsors
-          </button>
-          <span className="footer-sep">·</span>
-          <button
-            className="link-button"
-            onClick={() => openExternal("https://buymeacoffee.com/michelmarrazzo")}
-          >
-            Buy Me a Coffee
-          </button>
-          <span className="footer-sep">·</span>
-          <button
-            className="link-button"
             onClick={() => openExternal("https://paypal.me/MichelMarrazzo")}
           >
-            PayPal
+            ☕ PayPal
           </button>
         </div>
 

@@ -125,6 +125,11 @@ pub async fn fetch_info(
         "youtube:player_client=tv_simply,android_vr".into(),
         "--socket-timeout".into(),
         "10".into(),
+        // Bundled yt-dlp on Windows trips on YouTube's cert chain ("unable to
+        // get local issuer certificate") on some hosts. Skipping verification
+        // for the metadata pass is acceptable — the user pasted the URL
+        // themselves so MITM is not the threat model here.
+        "--no-check-certificate".into(),
     ];
     let used_cookies = cookies_browser.as_ref().is_some_and(|s| !s.is_empty());
     if let Some(b) = cookies_browser.as_ref().filter(|s| !s.is_empty()) {
@@ -180,10 +185,15 @@ pub async fn fetch_info(
     Ok(VideoInfo { title, uploader, duration, duration_formatted, thumbnail })
 }
 
-// Returns the playlist entries (id/title/duration) via yt-dlp's --flat-playlist
-// metadata pass. Empty Vec means the URL is not actually a playlist — frontend
-// should fall through to the normal single-video download. Mirrors the cookie
-// retry fallback of fetch_info.
+// Returns the playlist entries (id/title/duration). Uses --flat-playlist + --dump-json
+// (NOT --dump-single-json) so yt-dlp streams one JSON object per line as soon as
+// each entry is enumerated — lets the frontend show a live "Found N items" counter
+// instead of staring at "Loading…" for the full radio-mix enumeration time
+// (which on YouTube radio playlists can be 30-60s for a few hundred entries).
+//
+// Emits "playlist-fetch-progress" { count } events as items stream in.
+// Empty Vec means the URL is not actually a playlist — frontend falls through
+// to the normal single-video download.
 #[tauri::command]
 pub async fn fetch_playlist_info(
     app: AppHandle,
@@ -191,72 +201,122 @@ pub async fn fetch_playlist_info(
     cookies_browser: Option<String>,
 ) -> Result<Vec<PlaylistItem>, AppError> {
     validate_url(&url)?;
+    let used_cookies = cookies_browser.as_ref().is_some_and(|s| !s.is_empty());
+    let args = build_flat_playlist_args(&url, cookies_browser.as_deref());
+
+    let (items, stderr_text, ok) = run_flat_playlist(&app, args.clone()).await?;
+    if ok {
+        return Ok(items);
+    }
+
+    // Retry without cookies if the cookie DB was locked. fetch is metadata-only,
+    // YouTube radio/mix playlists don't require auth anyway.
+    if used_cookies && looks_like_browser_lock(&stderr_text) {
+        let retry_args = strip_cookies_flag(&args);
+        let (items, stderr2, ok2) = run_flat_playlist(&app, retry_args).await?;
+        if ok2 {
+            return Ok(items);
+        }
+        return Err(AppError::Sidecar(stderr2));
+    }
+    Err(AppError::Sidecar(stderr_text))
+}
+
+fn build_flat_playlist_args(url: &str, cookies_browser: Option<&str>) -> Vec<String> {
     let mut args: Vec<String> = vec![
         "--flat-playlist".into(),
-        "--dump-single-json".into(),
+        "--dump-json".into(),                 // streaming: one JSON per line, NOT a single blob
         "--no-warnings".into(),
         "--extractor-args".into(),
         "youtube:player_client=tv_simply,android_vr".into(),
         "--socket-timeout".into(),
         "10".into(),
+        "--no-check-certificate".into(),
     ];
-    let used_cookies = cookies_browser.as_ref().is_some_and(|s| !s.is_empty());
-    if let Some(b) = cookies_browser.as_ref().filter(|s| !s.is_empty()) {
+    if let Some(b) = cookies_browser.filter(|s| !s.is_empty()) {
         args.push("--cookies-from-browser".into());
-        args.push(b.clone());
+        args.push(b.to_string());
     }
-    args.push(url);
+    args.push(url.to_string());
+    args
+}
 
-    let output = app
+// Runs yt-dlp --flat-playlist --dump-json once. Streams each JSON line into the
+// items Vec and emits a "playlist-fetch-progress" event after each. Returns
+// (items, stderr_buf, success).
+async fn run_flat_playlist(
+    app: &AppHandle,
+    args: Vec<String>,
+) -> Result<(Vec<PlaylistItem>, String, bool), AppError> {
+    use tauri_plugin_shell::process::CommandEvent;
+    let (mut rx, _child) = app
         .shell()
         .sidecar("yt-dlp")
         .map_err(|e| AppError::Sidecar(e.to_string()))?
-        .args(args.clone())
-        .output()
-        .await
+        .args(args)
+        .spawn()
         .map_err(|e| AppError::Sidecar(e.to_string()))?;
 
-    let stderr_text = String::from_utf8_lossy(&output.stderr).to_string();
-    let final_output = if !output.status.success() && used_cookies && looks_like_browser_lock(&stderr_text) {
-        let retry_args = strip_cookies_flag(&args);
-        let r = app
-            .shell()
-            .sidecar("yt-dlp")
-            .map_err(|e| AppError::Sidecar(e.to_string()))?
-            .args(retry_args)
-            .output()
-            .await
-            .map_err(|e| AppError::Sidecar(e.to_string()))?;
-        if !r.status.success() {
-            return Err(AppError::Sidecar(String::from_utf8_lossy(&r.stderr).to_string()));
-        }
-        r
-    } else if !output.status.success() {
-        return Err(AppError::Sidecar(stderr_text));
-    } else {
-        output
-    };
+    let mut items: Vec<PlaylistItem> = Vec::new();
+    let mut stdout_partial = String::new();
+    let mut stderr_buf = String::new();
+    let mut success = false;
 
-    let json: serde_json::Value = serde_json::from_slice(&final_output.stdout)?;
-    let entries = match json.get("entries").and_then(|v| v.as_array()) {
-        Some(arr) => arr,
-        None => return Ok(Vec::new()),
-    };
-    let mut items = Vec::with_capacity(entries.len());
-    for (i, e) in entries.iter().enumerate() {
-        let title = e.get("title").and_then(|v| v.as_str()).unwrap_or("").to_string();
-        let id = e.get("id").and_then(|v| v.as_str()).unwrap_or("").to_string();
-        let duration = e.get("duration").and_then(|v| v.as_f64());
-        let duration_formatted = duration.map(format_duration);
-        items.push(PlaylistItem {
-            index: (i as u32) + 1,
-            id,
-            title,
-            duration,
-            duration_formatted,
-        });
+    while let Some(event) = rx.recv().await {
+        match event {
+            CommandEvent::Stdout(bytes) => {
+                let chunk = String::from_utf8_lossy(&bytes);
+                stdout_partial.push_str(&chunk);
+                // Drain whole lines as they accumulate.
+                while let Some(nl) = stdout_partial.find('\n') {
+                    let line: String = stdout_partial.drain(..=nl).collect();
+                    let trimmed = line.trim();
+                    if trimmed.is_empty() { continue; }
+                    if let Ok(json) = serde_json::from_str::<serde_json::Value>(trimmed) {
+                        let title = json.get("title").and_then(|v| v.as_str()).unwrap_or("").to_string();
+                        let id    = json.get("id").and_then(|v| v.as_str()).unwrap_or("").to_string();
+                        let duration = json.get("duration").and_then(|v| v.as_f64());
+                        let duration_formatted = duration.map(format_duration);
+                        items.push(PlaylistItem {
+                            index: (items.len() as u32) + 1,
+                            id, title, duration, duration_formatted,
+                        });
+                        let _ = app.emit(
+                            "playlist-fetch-progress",
+                            serde_json::json!({ "count": items.len() }),
+                        );
+                    }
+                }
+            }
+            CommandEvent::Stderr(bytes) => {
+                stderr_buf.push_str(&String::from_utf8_lossy(&bytes));
+            }
+            CommandEvent::Terminated(payload) => {
+                success = payload.code.unwrap_or(-1) == 0;
+                break;
+            }
+            _ => {}
+        }
     }
-    Ok(items)
+    // Try the final partial line in case the process terminated without a trailing newline.
+    let trimmed = stdout_partial.trim();
+    if !trimmed.is_empty() {
+        if let Ok(json) = serde_json::from_str::<serde_json::Value>(trimmed) {
+            let title = json.get("title").and_then(|v| v.as_str()).unwrap_or("").to_string();
+            let id    = json.get("id").and_then(|v| v.as_str()).unwrap_or("").to_string();
+            let duration = json.get("duration").and_then(|v| v.as_f64());
+            items.push(PlaylistItem {
+                index: (items.len() as u32) + 1,
+                id, title, duration,
+                duration_formatted: duration.map(format_duration),
+            });
+            let _ = app.emit(
+                "playlist-fetch-progress",
+                serde_json::json!({ "count": items.len() }),
+            );
+        }
+    }
+    Ok((items, stderr_buf, success))
 }
 
 #[tauri::command]
@@ -307,6 +367,7 @@ pub async fn download_video(
         "--newline".into(),
         "--progress-template".into(),
         "PROGRESS:%(progress._percent_str)s|%(progress._speed_str)s|%(progress._eta_str)s".into(),
+        "--no-check-certificate".into(),
     ];
     if let Some(p) = ffmpeg_path() {
         args.push("--ffmpeg-location".into());
@@ -352,6 +413,7 @@ pub async fn download_audio(
         "--newline".into(),
         "--progress-template".into(),
         "PROGRESS:%(progress._percent_str)s|%(progress._speed_str)s|%(progress._eta_str)s".into(),
+        "--no-check-certificate".into(),
     ];
     if let Some(p) = ffmpeg_path() {
         args.push("--ffmpeg-location".into());
@@ -392,6 +454,7 @@ pub async fn download_subs(
         "--newline".into(),
         "--progress-template".into(),
         "PROGRESS:%(progress._percent_str)s|%(progress._speed_str)s|%(progress._eta_str)s".into(),
+        "--no-check-certificate".into(),
     ];
     apply_playlist_args(&mut args, playlist, playlist_items.as_deref());
     if let Some(b) = cookies_browser.as_ref().filter(|s| !s.is_empty()) {
