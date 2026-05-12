@@ -57,6 +57,17 @@ export const cancelDownload = (jobId: string) =>
 export const ffmpegStatus = () => invoke<FfmpegStatus>("ffmpeg_status");
 export const openDir = (path: string) => invoke<void>("open_dir", { path });
 
+export const downloadUpdate = (url: string) => invoke<string>("download_update", { url });
+export const revealInFolder = (path: string) => invoke<void>("reveal_in_folder", { path });
+
+export const onUpdateDownloadProgress = (
+  cb: (e: { percent: number; downloaded: number; total: number }) => void
+): Promise<UnlistenFn> =>
+  listen<{ percent: number; downloaded: number; total: number }>(
+    "update-download-progress",
+    (evt) => cb(evt.payload)
+  );
+
 export const onDownloadProgress = (cb: (e: ProgressEvent) => void): Promise<UnlistenFn> =>
   listen<ProgressEvent>("download-progress", (evt) => cb(evt.payload));
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation, Trans } from "react-i18next";
-import { COOKIE_BROWSERS, FfmpegStatus, Theme } from "../types";
+import { COOKIE_BROWSERS, FfmpegStatus, Theme, UpdateInfo } from "../types";
 import { ffmpegStatus } from "../api";
 import { LanguagePicker } from "./LanguagePicker";
 
@@ -13,6 +13,9 @@ interface Props {
   onPlaylistChange: (v: boolean) => void;
   autoPaste: boolean;
   onAutoPasteChange: (v: boolean) => void;
+  autoUpdateCheck: boolean;
+  onAutoUpdateCheckChange: (v: boolean) => void;
+  onCheckUpdatesNow: () => Promise<UpdateInfo | null>;
   onLangChange: (lang: string) => void;
   onShowDisclaimer: () => void;
 }
@@ -24,14 +27,37 @@ export function SettingsTab({
   theme, onThemeChange,
   playlist, onPlaylistChange,
   autoPaste, onAutoPasteChange,
+  autoUpdateCheck, onAutoUpdateCheckChange,
+  onCheckUpdatesNow,
   onLangChange, onShowDisclaimer,
 }: Props) {
   const { t } = useTranslation();
   const [ffmpeg, setFfmpeg] = useState<FfmpegStatus | null>(null);
+  const [updateStatus, setUpdateStatus] = useState<
+    { kind: "idle" } | { kind: "checking" } | { kind: "uptodate"; version: string } | { kind: "available"; version: string } | { kind: "error" }
+  >({ kind: "idle" });
 
   useEffect(() => {
     ffmpegStatus().then(setFfmpeg).catch(() => setFfmpeg({ available: false, path: "" }));
   }, []);
+
+  const handleCheckNow = async () => {
+    setUpdateStatus({ kind: "checking" });
+    try {
+      const info = await onCheckUpdatesNow();
+      if (!info) {
+        setUpdateStatus({ kind: "error" });
+        return;
+      }
+      setUpdateStatus(
+        info.available
+          ? { kind: "available", version: info.latestVersion }
+          : { kind: "uptodate", version: info.currentVersion }
+      );
+    } catch {
+      setUpdateStatus({ kind: "error" });
+    }
+  };
 
   return (
     <div className="tab-content settings-tab">
@@ -104,6 +130,43 @@ export function SettingsTab({
           />
           {t("settings.autoPaste", { defaultValue: "Auto-paste URL from clipboard at startup" })}
         </label>
+      </div>
+
+      <div className="settings-row">
+        <label>
+          <input
+            type="checkbox"
+            checked={autoUpdateCheck}
+            onChange={(e) => onAutoUpdateCheckChange(e.target.checked)}
+          />
+          {t("settings.autoUpdateCheck", { defaultValue: "Check for updates at startup" })}
+        </label>
+        <button onClick={handleCheckNow} disabled={updateStatus.kind === "checking"}>
+          {updateStatus.kind === "checking"
+            ? t("settings.update.checking", { defaultValue: "Checking…" })
+            : t("settings.update.checkNow", { defaultValue: "Check now" })}
+        </button>
+        {updateStatus.kind === "uptodate" && (
+          <span className="settings-update-msg ok">
+            {t("settings.update.upToDate", {
+              defaultValue: "Up to date (v{{version}}).",
+              version: updateStatus.version,
+            })}
+          </span>
+        )}
+        {updateStatus.kind === "available" && (
+          <span className="settings-update-msg new">
+            {t("settings.update.availableShort", {
+              defaultValue: "v{{version}} available — see banner.",
+              version: updateStatus.version,
+            })}
+          </span>
+        )}
+        {updateStatus.kind === "error" && (
+          <span className="settings-update-msg err">
+            {t("settings.update.error", { defaultValue: "Check failed." })}
+          </span>
+        )}
       </div>
 
       <div className="settings-row">

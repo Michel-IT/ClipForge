@@ -21,6 +21,8 @@ pub fn run() {
             commands::fetch_playlist_info,
             commands::ffmpeg_status,
             commands::open_dir,
+            commands::download_update,
+            commands::reveal_in_folder,
             commands::download_video,
             commands::download_audio,
             commands::download_subs,

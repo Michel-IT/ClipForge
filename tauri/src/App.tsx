@@ -14,9 +14,11 @@ import { DisclaimerModal } from "./components/DisclaimerModal";
 import { DownloadModal, ModalStatus } from "./components/DownloadModal";
 import { PlaylistSelectionModal } from "./components/PlaylistSelectionModal";
 import { StatusIndicator, StatusKind } from "./components/StatusIndicator";
+import { UpdateBanner } from "./components/UpdateBanner";
 import { detectPlatform, fetchPlaylistInfo, onDownloadCanceled, onDownloadComplete, onDownloadError, onDownloadLog, onDownloadProgress } from "./api";
 import { DEFAULTS, loadSettings, saveSettings, Settings } from "./store";
-import { LogEvent, PlatformInfo, PlaylistItem, PlaylistSelectionResult, ProgressEvent, Theme, VideoInfo } from "./types";
+import { LogEvent, PlatformInfo, PlaylistItem, PlaylistSelectionResult, ProgressEvent, Theme, UpdateInfo, VideoInfo } from "./types";
+import { checkForUpdates } from "./updater";
 
 type Tab = "video" | "audio" | "subs" | "settings";
 const LOG_BUFFER_MAX = 1000;
@@ -50,6 +52,8 @@ function App() {
   const [status, setStatus] = useState<StatusKind>({ kind: "ready" });
   const [logLines, setLogLines] = useState<LogEvent[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null);
+  const [updateBannerDismissed, setUpdateBannerDismissed] = useState(false);
 
   // Playlist preflight modal — opens when a tab's start() runs against a playlist
   // URL. Items list is fetched lazily; resolver is set so the modal's confirm/cancel
@@ -113,6 +117,15 @@ function App() {
         setSettings((prev) => ({ ...prev, language: lang }));
       }
       setBootstrapped(true);
+
+      // Update check (non-blocking) — fires once on bootstrap if enabled.
+      // Failure is silent; we don't bother the user when there's no network or
+      // GitHub is rate-limiting.
+      if (s.auto_update_check) {
+        checkForUpdates()
+          .then((info) => { if (info?.available) setUpdateInfo(info); })
+          .catch(() => { /* silent */ });
+      }
 
       // Auto-paste: if clipboard contains a recognised platform URL, prefill.
       if (s.auto_paste) {
@@ -238,6 +251,9 @@ function App() {
         <h1>{t("app.title")}</h1>
         <StatusIndicator status={status} />
       </header>
+      {updateInfo && !updateBannerDismissed && (
+        <UpdateBanner info={updateInfo} onDismiss={() => setUpdateBannerDismissed(true)} />
+      )}
       <main>
         <div className="app">
           <section className="card">
@@ -320,6 +336,19 @@ function App() {
               onPlaylistChange={(v) => patch({ playlist: v })}
               autoPaste={settings.auto_paste}
               onAutoPasteChange={(v) => patch({ auto_paste: v })}
+              autoUpdateCheck={settings.auto_update_check}
+              onAutoUpdateCheckChange={(v) => patch({ auto_update_check: v })}
+              onCheckUpdatesNow={async () => {
+                const info = await checkForUpdates().catch(() => null);
+                if (info?.available) {
+                  setUpdateInfo(info);
+                  setUpdateBannerDismissed(false);
+                } else {
+                  // No update (or check failed) — clear any stale banner state.
+                  setUpdateInfo(null);
+                }
+                return info;
+              }}
               onLangChange={handleLangChange}
               onShowDisclaimer={() => setShowDisclaimerAgain(true)}
             />

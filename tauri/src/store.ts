@@ -10,7 +10,8 @@ export interface Settings {
   bitrate: Bitrate;
   video_quality: VideoQuality;
   language: string;
-  auto_paste: boolean;   // read clipboard at startup if URL recognised
+  auto_paste: boolean;       // read clipboard at startup if URL recognised
+  auto_update_check: boolean; // GitHub Releases lookup on launch
 }
 
 export const DEFAULTS: Settings = {
@@ -23,6 +24,7 @@ export const DEFAULTS: Settings = {
   video_quality: "Auto",
   language: "",
   auto_paste: true,
+  auto_update_check: true,
 };
 
 const store = new LazyStore("settings.json");

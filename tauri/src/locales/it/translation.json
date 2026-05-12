@@ -120,6 +120,14 @@
     "themeOption": { "dark": "Scuro", "light": "Chiaro", "system": "Sistema" },
     "playlist": "Scarica intera playlist (quando l'URL contiene &list=)",
     "autoPaste": "Incolla automaticamente l'URL dalla clipboard all'avvio",
+    "autoUpdateCheck": "Controlla aggiornamenti all'avvio",
+    "update": {
+      "checkNow": "Controlla ora",
+      "checking": "Controllo…",
+      "upToDate": "Versione aggiornata (v{{version}}).",
+      "availableShort": "v{{version}} disponibile — vedi banner in alto.",
+      "error": "Controllo fallito."
+    },
     "legal": "Legale:",
     "viewDisclaimer": "Vedi disclaimer legale",
     "cookieBrowser": {
@@ -163,6 +171,15 @@
     "extractingAudio": "estrazione audio…",
     "embeddingThumbnail": "incorporamento copertina…",
     "cookieRetry": "cookie del browser bloccati — riprovo senza"
+  },
+  "update": {
+    "available": "Versione {{latest}} disponibile (sei alla {{current}}).",
+    "download": "Scarica",
+    "downloading": "Scarico… {{percent}}%",
+    "ready": "Installer scaricato. Chiudi ClipForge e lancialo.",
+    "openFolder": "Apri cartella",
+    "error": "Download fallito: {{message}}",
+    "dismiss": "Chiudi"
   },
   "error": {
     "invalidUrl": "URL non valido",

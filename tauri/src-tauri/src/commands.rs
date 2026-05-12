@@ -335,6 +335,97 @@ pub async fn open_dir(app: AppHandle, path: String) -> Result<(), AppError> {
     Ok(())
 }
 
+// Download the update asset to <temp>/ClipForge-update/<filename> with progress
+// events. Returns the absolute output path so the frontend can reveal it.
+// Used by the update banner's half-auto install flow — no auto-replace, just
+// "stage the installer next door so the user can run it after quitting".
+#[tauri::command]
+pub async fn download_update(app: AppHandle, url: String) -> Result<String, AppError> {
+    use futures_util::StreamExt;
+    use std::io::Write;
+    use tauri::Emitter;
+
+    // Derive filename from the URL path (already follows our naming convention).
+    let filename = url
+        .rsplit('/')
+        .next()
+        .filter(|s| !s.is_empty())
+        .unwrap_or("ClipForge-update.bin")
+        .to_string();
+    let dir = std::env::temp_dir().join("ClipForge-update");
+    std::fs::create_dir_all(&dir)?;
+    let out_path = dir.join(&filename);
+
+    let client = reqwest::Client::builder()
+        .user_agent("ClipForge/updater")
+        .build()
+        .map_err(|e| AppError::Sidecar(e.to_string()))?;
+    let resp = client
+        .get(&url)
+        .send()
+        .await
+        .map_err(|e| AppError::Sidecar(e.to_string()))?;
+    let total = resp.content_length().unwrap_or(0);
+    let mut downloaded: u64 = 0;
+    let mut stream = resp.bytes_stream();
+    let mut file = std::fs::File::create(&out_path)?;
+
+    while let Some(chunk) = stream.next().await {
+        let chunk = chunk.map_err(|e| AppError::Sidecar(e.to_string()))?;
+        file.write_all(&chunk)?;
+        downloaded += chunk.len() as u64;
+        let percent = if total > 0 {
+            (downloaded as f64 / total as f64) * 100.0
+        } else { 0.0 };
+        let _ = app.emit(
+            "update-download-progress",
+            serde_json::json!({
+                "percent":    percent,
+                "downloaded": downloaded,
+                "total":      total,
+            }),
+        );
+    }
+    file.flush()?;
+
+    Ok(out_path.to_string_lossy().into_owned())
+}
+
+// Reveal a file in the OS file manager with the file pre-selected/highlighted.
+// Falls back to opening the containing folder when explorer/finder selection
+// isn't supported.
+#[tauri::command]
+pub async fn reveal_in_folder(_app: AppHandle, path: String) -> Result<(), AppError> {
+    let p = std::path::PathBuf::from(&path);
+    #[cfg(target_os = "windows")]
+    {
+        // explorer.exe /select,"C:\path\to\file"
+        std::process::Command::new("explorer.exe")
+            .arg(format!("/select,{}", p.display()))
+            .spawn()
+            .map_err(|e| AppError::Sidecar(e.to_string()))?;
+    }
+    #[cfg(target_os = "macos")]
+    {
+        // open -R reveals the file in Finder
+        std::process::Command::new("open")
+            .arg("-R")
+            .arg(&p)
+            .spawn()
+            .map_err(|e| AppError::Sidecar(e.to_string()))?;
+    }
+    #[cfg(target_os = "linux")]
+    {
+        // No universal "reveal" — open the parent dir with xdg-open
+        let parent = p.parent().unwrap_or(std::path::Path::new("/tmp"));
+        std::process::Command::new("xdg-open")
+            .arg(parent)
+            .spawn()
+            .map_err(|e| AppError::Sidecar(e.to_string()))?;
+    }
+    Ok(())
+}
+
 // Mirrors _run_video (clipforge.py:1040-1076).
 #[tauri::command]
 pub async fn download_video(

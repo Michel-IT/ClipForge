@@ -4,8 +4,8 @@
     "source": "claude-direct",
     "generated": "2026-05-02T14:43:25.858595+00:00",
     "note": "Initial translation by Claude. Native-speaker review welcome via PR.",
-    "lastAligned": "2026-05-11T20:46:37.266443+00:00",
-    "pendingTranslationKeys": 51
+    "lastAligned": "2026-05-12T00:11:56.054157+00:00",
+    "pendingTranslationKeys": 64
   },
   "app": {
     "title": "ClipForge",
@@ -104,7 +104,15 @@
     "playlist": "Download whole playlist (when URL contains &list=)",
     "autoPaste": "Auto-paste URL from clipboard at startup",
     "legal": "Legal:",
-    "viewDisclaimer": "View legal disclaimer"
+    "viewDisclaimer": "View legal disclaimer",
+    "autoUpdateCheck": "Check for updates at startup",
+    "update": {
+      "checkNow": "Check now",
+      "checking": "Checking…",
+      "upToDate": "Up to date (v{{version}}).",
+      "availableShort": "v{{version}} available — see banner.",
+      "error": "Check failed."
+    }
   },
   "progress": {
     "ready": "Gotowy",
@@ -186,5 +194,14 @@
       "loadingFound_one": "Found {{count}} item…",
       "loadingFound_other": "Found {{count}} items…"
     }
+  },
+  "update": {
+    "available": "Version {{latest}} available (you are on {{current}}).",
+    "download": "Download",
+    "dismiss": "Dismiss",
+    "downloading": "Downloading… {{percent}}%",
+    "ready": "Installer downloaded. Quit ClipForge and run it.",
+    "openFolder": "Open folder",
+    "error": "Download failed: {{message}}"
   }
 }

@@ -28,6 +28,15 @@ export type PlaylistSelectionResult =
   | { kind: "items"; value: string }   // user selected; value is `--playlist-items` syntax
   | { kind: "cancel" };                // user cancelled the modal
 
+export interface UpdateInfo {
+  available: boolean;
+  currentVersion: string;     // e.g. "0.1.2"
+  latestVersion: string;      // e.g. "0.1.3" — parsed from the tauri-v* tag
+  htmlUrl: string;            // GitHub release page URL (fallback)
+  directAssetUrl?: string;    // OS+arch-specific asset URL (preferred download target)
+  publishedAt?: string;       // ISO date string
+}
+
 export interface FfmpegStatus {
   available: boolean;
   path: string;
