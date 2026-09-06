@@ -55,3 +55,20 @@ Desktop.ini
 secrets.*
 credentials.*
 tauri/node_modules/
+
+# Dati e config degli strumenti di D:\IA\ClaudeCode (sessioni, token, cache).
+.claudecode/
+# Residui della build Python ritirata (commit 33baa30): copie rimaste nella root
+# dopo lo spostamento in legacy/. Le versioni valide e tracciate stanno in
+# legacy/ — queste sono duplicati byte-identici, non vanno nel repo pubblico.
+# Lo slash iniziale ancora la regola alla root: senza, "clipforge.py" matcherebbe
+# anche legacy/clipforge.py, che invece deve restare tracciato.
+scripts/build-linux.sh
+scripts/build-macos.sh
+scripts/build-windows.bat
+scripts/run-unix.sh
+scripts/run-windows.bat
+/clipforge.py
+/clipforge.spec
+/requirements.txt
+/docs/BUILD.md
