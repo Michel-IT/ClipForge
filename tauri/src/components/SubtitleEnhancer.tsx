@@ -8,12 +8,17 @@ import { ApiKeyModal } from "./ApiKeyModal";
 
 const PRICING_URL = "https://api.kuramalab.net/pricing";
 
-/** Defaults recommended by the API for each task. The full catalogue is loaded
- *  at runtime — prices and availability change, so nothing is hardcoded beyond
- *  these starting points. */
+/** Defaults chosen by testing against the live API, not from the catalogue.
+ *
+ *  The catalogue exposes {streaming, tools, vision} but no "reasoning" flag,
+ *  and reasoning models are unusable here: qwen3.5:397b and deepseek-v4-pro
+ *  spend the entire token budget on internal reasoning and return
+ *  `content: null` with finish_reason "length" — billing ~128x gemma for no
+ *  output at all. The two below were verified to return correct SRT.
+ *  The full catalogue is still loaded at runtime so the user can pick another. */
 const SUGGESTED: Record<string, string> = {
   fix: "gemma4:31b",
-  translate: "qwen3.5:397b",
+  translate: "deepseek-v4-flash:0731",
   summary: "deepseek-v4-flash:0731",
 };
 

@@ -234,7 +234,9 @@
       "model": "Quel modello non è più disponibile. Scegline un altro.",
       "rate": "Limite di frequenza raggiunto. Aspetta un momento e riprova.",
       "maintenance": "KuramaLab è momentaneamente non disponibile. Riprova tra poco.",
-      "emptySrt": "Il file di sottotitoli è vuoto o non è un SRT valido."
+      "emptySrt": "Il file di sottotitoli è vuoto o non è un SRT valido.",
+      "empty": "Il modello non ha restituito nulla. Prova un altro modello: quelli di reasoning spesso non producono output per questo compito.",
+      "truncated": "La risposta è stata troncata e si perderebbero delle battute. Prova un altro modello."
     }
   },
   "engine": {

@@ -69,9 +69,12 @@ pub async fn kurama_verify(api_key: String) -> Result<KuramaAccount, AppError> {
     let balance = serde_json::from_str::<serde_json::Value>(&body)
         .ok()
         .and_then(|v| {
-            ["balance", "credits", "credit_balance", "wallet_balance"]
-                .iter()
-                .find_map(|k| v.get(*k).and_then(|x| x.as_f64()))
+            // Verified shape: {"balance":{"credits":2,"currency":"EUR"}}.
+            v.get("balance")
+                .and_then(|b| b.get("credits"))
+                .and_then(|c| c.as_f64())
+                // Tolerate a flatter shape if the API ever simplifies it.
+                .or_else(|| v.get("balance").and_then(|b| b.as_f64()))
         })
         .unwrap_or(-1.0);
 
@@ -127,10 +130,14 @@ struct ChatResponse {
 #[derive(Debug, Deserialize)]
 struct Choice {
     message: ChatMessage,
+    finish_reason: Option<String>,
 }
 #[derive(Debug, Deserialize)]
 struct ChatMessage {
-    content: String,
+    // Nullable on purpose: reasoning models spend the whole token budget on
+    // internal reasoning and return `"content": null`. Typed as String this
+    // fails deserialization and the feature dies with a JSON parse error.
+    content: Option<String>,
 }
 
 /// One chat completion. Returns the assistant text plus what it cost, taken
@@ -176,12 +183,23 @@ async fn complete(
         return Err(AppError::Other(explain(status.as_u16(), &body)));
     }
     let parsed: ChatResponse = serde_json::from_str(&body).map_err(AppError::Json)?;
-    let text = parsed
+    let choice = parsed
         .choices
         .into_iter()
         .next()
-        .map(|c| c.message.content)
-        .unwrap_or_default();
+        .ok_or_else(|| AppError::Other("error.kurama.empty".into()))?;
+
+    // Truncated output would silently drop cues, so it is a failure, not a
+    // partial result. Reasoning models hit this even with a generous budget:
+    // they exhaust it before emitting a single character.
+    if choice.finish_reason.as_deref() == Some("length") {
+        return Err(AppError::Other("error.kurama.truncated".into()));
+    }
+    let text = choice
+        .message
+        .content
+        .filter(|c| !c.trim().is_empty())
+        .ok_or_else(|| AppError::Other("error.kurama.empty".into()))?;
     Ok((text, charged))
 }
 

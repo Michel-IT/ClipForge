@@ -234,7 +234,9 @@
       "model": "That model is no longer available. Pick another one.",
       "rate": "Rate limit reached. Wait a moment and try again.",
       "maintenance": "KuramaLab is temporarily unavailable. Try again shortly.",
-      "emptySrt": "The subtitle file is empty or not valid SRT."
+      "emptySrt": "The subtitle file is empty or not valid SRT.",
+      "empty": "The model returned nothing. Try another model — reasoning models often produce no output for this task.",
+      "truncated": "The answer was cut off, so cues would be lost. Try a smaller chunk or another model."
     }
   },
   "engine": {
