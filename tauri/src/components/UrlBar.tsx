@@ -26,7 +26,7 @@ export function UrlBar({ url, onUrlChange, platform, onPlatformDetected, cookieB
       // we surface an explicit error rather than spinning forever.
       const info = await Promise.race<Awaited<ReturnType<typeof fetchInfo>>>([
         fetchInfo(target.trim(), cookieBrowser || undefined),
-        new Promise((_, rej) => setTimeout(() => rej(new Error("Timeout (30s) — yt-dlp didn't respond")), 30_000)),
+        new Promise((_, rej) => setTimeout(() => rej(new Error(t("url.timeout"))), 30_000)),
       ]);
       console.log("[VideoInfo] fetchInfo ok", info);
       onInfoFetched(info, false, null);

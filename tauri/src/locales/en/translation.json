@@ -1,5 +1,9 @@
 {
-  "_meta": { "autoTranslated": false, "generated": null, "source": "human" },
+  "_meta": {
+    "autoTranslated": false,
+    "generated": null,
+    "source": "human"
+  },
   "app": {
     "title": "ClipForge",
     "tagline": "Universal media downloader"
@@ -42,16 +46,16 @@
     "download": {
       "titleVideo": "Downloading video",
       "titleAudio": "Extracting MP3",
-      "titleSubs":  "Extracting subtitles",
+      "titleSubs": "Extracting subtitles",
       "canceledTitle": "Canceled",
-      "canceledMsg_zero":  "Canceled. No partial files to remove.",
-      "canceledMsg_one":   "Canceled. Removed {{count}} partial file.",
+      "canceledMsg_zero": "Canceled. No partial files to remove.",
+      "canceledMsg_one": "Canceled. Removed {{count}} partial file.",
       "canceledMsg_other": "Canceled. Removed {{count}} partial files.",
       "showDetails": "Show details",
       "hideDetails": "Hide details",
-      "openFolder":  "Open folder",
-      "close":       "Close",
-      "cancel":      "Cancel"
+      "openFolder": "Open folder",
+      "close": "Close",
+      "cancel": "Cancel"
     }
   },
   "section": {
@@ -62,10 +66,16 @@
   "url": {
     "placeholder": "Paste a video URL (YouTube, Reddit, TikTok, ...)",
     "detect": "Detect",
-    "detecting": "…"
+    "detecting": "…",
+    "timeout": "No response after 30s. Check the link or your connection."
   },
-  "paste": { "button": "Paste" },
-  "videoInfo": { "button": "Video info", "loading": "…" },
+  "paste": {
+    "button": "Paste"
+  },
+  "videoInfo": {
+    "button": "Video info",
+    "loading": "…"
+  },
   "status": {
     "ready": "Ready",
     "downloading": "Downloading…",
@@ -111,13 +121,32 @@
     "languages": "Languages (comma-separated):",
     "playlist": "Download whole playlist",
     "start": "Extract Subtitles → Text",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "langsPlaceholder": "it,en",
+    "source": "Source:",
+    "sourceExisting": "Download existing subtitles",
+    "sourceWhisper": "Generate with Whisper (from audio)",
+    "language": "Language (blank = detect):",
+    "model": "Model:",
+    "startWhisper": "Generate subtitles",
+    "whisperNote": "The audio is transcribed on this computer. Larger models are more accurate and slower.",
+    "setupChecking": "Checking whether Whisper is installed…",
+    "setupInstalling": "Installing Whisper. This happens only once and can take a few minutes.",
+    "setupBlocked": "Whisper cannot be installed automatically. Do this first, then press the button again:",
+    "gpuReady": "GPU acceleration active ({{gpu}}).",
+    "gpuOffer": "{{gpu}} detected, but Whisper is running on the CPU. Enabling GPU acceleration downloads about 2.5 GB and makes transcription several times faster.",
+    "gpuEnable": "Enable GPU acceleration",
+    "gpuInstalling": "Installing… (~2.5 GB)"
   },
   "settings": {
     "title": "Settings",
     "language": "Language:",
     "theme": "Theme:",
-    "themeOption": { "dark": "Dark", "light": "Light", "system": "System" },
+    "themeOption": {
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System"
+    },
     "playlist": "Download whole playlist (when URL contains &list=)",
     "autoPaste": "Auto-paste URL from clipboard at startup",
     "autoUpdateCheck": "Check for updates at startup",
@@ -134,7 +163,8 @@
       "label": "Cookies from browser:",
       "none": "None",
       "warning": "Close <strong>{{browser}}</strong> before downloading — Windows holds a file lock on its cookie database. The app will retry without cookies if the lock blocks the read."
-    }
+    },
+    "open": "Settings"
   },
   "progress": {
     "ready": "Ready",
@@ -143,7 +173,9 @@
     "error": "Error: {{message}}"
   },
   "log": {
-    "empty": "Download output will appear here."
+    "empty": "Download output will appear here.",
+    "copy": "Copy log",
+    "copied": "Copied"
   },
   "playlist": {
     "modal": {
@@ -163,14 +195,16 @@
       "bulkBody_other": "You are about to download {{count}} files. Continue?",
       "bulkBack": "Back",
       "bulkProceed": "Confirm"
-    }
+    },
+    "untitled": "(untitled #{{index}})"
   },
   "phase": {
     "downloading": "downloading…",
     "merging": "merging…",
     "extractingAudio": "extracting audio…",
     "embeddingThumbnail": "embedding thumbnail…",
-    "cookieRetry": "browser cookies locked — retrying without"
+    "cookieRetry": "browser cookies locked — retrying without",
+    "transcribing": "transcribing"
   },
   "update": {
     "available": "Version {{latest}} available (you are on {{current}}).",
@@ -186,6 +220,101 @@
     "sidecar": "Sidecar failed",
     "io": "I/O error",
     "json": "Parse error",
-    "other": "Error"
+    "other": "Error",
+    "forbidden": "The site refused the download (HTTP 403). The download engine is probably out of date — check Engine in the console.",
+    "signin": "This video needs a signed-in account. Pick your browser under Settings, Cookies from.",
+    "unavailable": "The video is private, removed, or reserved for members.",
+    "network": "Could not reach the site. Check your connection and try again.",
+    "format": "The requested quality is not available for this video. Try another quality.",
+    "whisperMissing": "Whisper is not available. Restart ClipForge so it can install it.",
+    "transcribe": "Transcription failed. See the console for what Whisper reported.",
+    "kurama": {
+      "auth": "The API key was refused. Check it in Settings.",
+      "credits": "Your KuramaLab credit is exhausted. Top up to continue.",
+      "model": "That model is no longer available. Pick another one.",
+      "rate": "Rate limit reached. Wait a moment and try again.",
+      "maintenance": "KuramaLab is temporarily unavailable. Try again shortly.",
+      "emptySrt": "The subtitle file is empty or not valid SRT."
+    }
+  },
+  "engine": {
+    "label": "Engine",
+    "age": "yt-dlp {{version}} · {{days}} days old",
+    "stale": "yt-dlp {{version}} · {{days}} days old — an update is recommended",
+    "unknown": "yt-dlp version unavailable"
+  },
+  "preflight": {
+    "title": "Checking components",
+    "checking": "Verifying that everything ClipForge needs is installed…",
+    "installing": "Installing a missing component. This can take a few minutes the first time.",
+    "missing": "not found",
+    "needManual": "Install these yourself, then press Retry:",
+    "retry": "Check again",
+    "dep": {
+      "ytdlp": "Download engine (yt-dlp)",
+      "ffmpeg": "Media converter (ffmpeg)",
+      "python": "Python",
+      "pip": "pip",
+      "whisper": "Whisper (subtitles)"
+    },
+    "install": {
+      "ytdlp": "Reinstall ClipForge: the bundled downloader is missing or was quarantined by antivirus.",
+      "ffmpeg": "Reinstall ClipForge: the bundled converter is missing or was quarantined by antivirus.",
+      "python": "Install Python 3.10+ from python.org and tick \"Add Python to PATH\"",
+      "pip": "python -m ensurepip --upgrade"
+    }
+  },
+  "enhance": {
+    "title": "Improve subtitles with AI",
+    "apiKey": "API key:",
+    "file": "Subtitle file:",
+    "noFile": "no file selected",
+    "browse": "Choose…",
+    "modeLabel": "Task:",
+    "modes": {
+      "fix": "Fix transcription mistakes",
+      "translate": "Translate",
+      "summary": "Summarise"
+    },
+    "targetLang": "Target language:",
+    "targetLangPlaceholder": "e.g. Italian",
+    "model": "Model:",
+    "pricing": "Prices",
+    "start": "Send and improve",
+    "running": "Processing… {{done}}/{{total}}",
+    "spent": "Spent so far: € {{cost}}",
+    "done": "Saved: {{path}} — cost € {{cost}}",
+    "privacy": "The subtitle text is sent to api.kuramalab.net and processed abroad. Transient processing, no prompt logging, no training on your data. Nothing is sent until you press the button.",
+    "key": {
+      "checking": "checking…",
+      "ok": "key valid",
+      "okBalance": "valid · € {{balance}} left",
+      "bad": "key refused"
+    },
+    "guide": {
+      "lede": "This uses KuramaLab, a paid service with a small free credit when you sign up. You need your own key.",
+      "step1": "Create an account: ",
+      "register": "Sign up",
+      "step2": "Generate a key and copy it: ",
+      "createKey": "Create your key",
+      "step3": "Paste it below. Fixing a 10-minute subtitle file costs a fraction of a cent."
+    },
+    "setupKey": "Set up key",
+    "changeKey": "Change key"
+  },
+  "apikey": {
+    "title": "Set up your KuramaLab key",
+    "lede": "ClipForge uses KuramaLab to improve subtitles. The key is yours and stays on this computer.",
+    "step1": "Create an account: ",
+    "step2": "Open the API keys page: ",
+    "step3": "Click \"Create key\" and copy it.",
+    "step4": "Paste it here:",
+    "verify": "Verify",
+    "checking": "Checking…",
+    "save": "Save",
+    "ok": "Key valid.",
+    "okBalance": "Key valid · € {{balance}} available.",
+    "bad": "The key was refused.",
+    "badShape": "A key looks like kl_ followed by 48 characters."
   }
 }

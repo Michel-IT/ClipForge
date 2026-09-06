@@ -899,3 +899,150 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   color: var(--accent);
   font-weight: 700;
 }
+
+/* ============================================================================
+   Download dock — sostituisce la modale bloccante.
+   Il progresso resta sempre visibile e la console si apre QUI dentro: aprirla
+   fa crescere la finestra (DownloadDock.tsx), non comparire una scrollbar.
+   ========================================================================== */
+.download-dock{
+  position:sticky; bottom:0; z-index:5;
+  display:flex; flex-direction:column; gap:var(--space-2);
+  padding:var(--space-3) var(--space-4);
+  background:var(--bg-elevated); border-top:1px solid var(--border);
+}
+.download-dock.dock-error{border-top-color:var(--danger)}
+.download-dock.dock-done{border-top-color:var(--success)}
+
+.dock-row{display:flex; align-items:center; justify-content:space-between; gap:var(--space-3)}
+.dock-id{display:flex; align-items:center; gap:var(--space-2); min-width:0}
+.dock-title{font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.dock-icon{font-size:14px; line-height:1}
+.dock-icon-done{color:var(--success)}
+.dock-icon-error{color:var(--danger)}
+.dock-icon-canceled{color:var(--text-muted)}
+
+.dock-actions{display:flex; align-items:center; gap:var(--space-2); flex:none}
+.dock-toggle{background:none; border:none; color:var(--text-muted); cursor:pointer; padding:4px 6px}
+.dock-toggle:hover{color:var(--text)}
+.dock-caret{display:inline-block; width:1em; margin-inline-end:2px}
+
+.dock-path,.dock-error,.dock-canceled{margin:0; font-size:12px; overflow-wrap:anywhere}
+.dock-path{font-family:var(--font-mono); color:var(--text-muted)}
+.dock-error{color:var(--danger)}
+.dock-canceled{color:var(--text-muted)}
+
+/* Altezza allineata a CONSOLE_H in DownloadDock.tsx: la finestra cresce di
+   esattamente questo, quindi il blocco non deve mai eccedere il proprio spazio. */
+.dock-console{display:flex; flex-direction:column; gap:var(--space-2); height:188px}
+.dock-console .log-panel{flex:1; min-height:0; overflow-y:auto}
+.dock-console-foot{
+  display:flex; align-items:center; justify-content:space-between; gap:var(--space-3);
+  font-size:11px; color:var(--text-faint); flex:none;
+}
+.dock-engine{font-family:var(--font-mono); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.dock-copy{background:none; border:1px solid var(--border); color:var(--text-muted);
+  border-radius:var(--r-sm); padding:2px 8px; cursor:pointer; flex:none}
+.dock-copy:hover:not(:disabled){color:var(--text)}
+.dock-copy:disabled{opacity:.45; cursor:default}
+
+/* Ingranaggio impostazioni: "dove vai", separato dalle azioni nei tab. */
+.header-right{display:flex; align-items:center; gap:var(--space-3)}
+.gear{
+  background:none; border:1px solid transparent; color:var(--text-muted);
+  font-size:15px; line-height:1; padding:4px 7px; border-radius:var(--r-sm); cursor:pointer;
+}
+.gear:hover{color:var(--text); background:var(--surface-hover)}
+.gear-on{color:var(--accent); border-color:var(--border); background:var(--surface)}
+
+/* Allineamento tabulare: le colonne etichetta/valore cadono alla stessa x in
+   OGNI blocco, invece di una larghezza fissa che vale solo per le impostazioni. */
+.settings-row > label,
+.output-dir-picker > label{width:var(--label-col); flex:none}
+:root{--label-col:150px}
+.progress-meta,.dock-engine,.playlist-count{font-variant-numeric:tabular-nums}
+
+/* ============================================================================
+   Preflight — gate di avvio. Nessuna finestra principale finche' il toolchain
+   non risponde. Colonne condivise: segno / nome / dettaglio cadono alla stessa
+   x in ogni riga.
+   ========================================================================== */
+.preflight{
+  position:fixed; inset:0; display:grid; place-items:center;
+  background:var(--bg); padding:var(--space-5);
+}
+.preflight-box{width:min(520px,100%); display:flex; flex-direction:column; gap:var(--space-3)}
+.preflight-title{margin:0; font-size:20px; font-weight:600}
+.preflight-sub{margin:0; color:var(--text-muted); font-size:13px}
+
+.preflight-list{list-style:none; margin:var(--space-2) 0 0; padding:0; display:flex; flex-direction:column; gap:1px;
+  border:1px solid var(--border); border-radius:var(--r-md); overflow:hidden; background:var(--border)}
+.preflight-row{
+  display:grid; grid-template-columns:22px 1fr auto; gap:var(--space-3);
+  align-items:baseline; padding:var(--space-2) var(--space-3); background:var(--bg-elevated);
+}
+.preflight-mark{text-align:center}
+.preflight-ok    .preflight-mark{color:var(--success)}
+.preflight-missing .preflight-mark{color:var(--danger)}
+.preflight-busy  .preflight-mark{color:var(--accent)}
+.preflight-name{font-weight:500}
+.preflight-detail{
+  font-family:var(--font-mono); font-size:11px; color:var(--text-faint);
+  max-width:52%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.preflight-log{
+  margin:0; font-family:var(--font-mono); font-size:11px; color:var(--text-faint);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.preflight-blocked{display:flex; flex-direction:column; gap:var(--space-2)}
+.preflight-cmd{
+  margin:0; padding:var(--space-2) var(--space-3); background:var(--surface);
+  border:1px solid var(--border); border-radius:var(--r-sm);
+  font-family:var(--font-mono); font-size:11px; white-space:pre-wrap; overflow-wrap:anywhere;
+}
+.preflight-error{margin:0; color:var(--danger); font-size:12px; overflow-wrap:anywhere}
+.preflight-retry{align-self:flex-start; padding:6px 14px; border-radius:var(--r-sm);
+  border:1px solid var(--border); background:var(--surface); color:var(--text); cursor:pointer}
+.preflight-retry:hover{background:var(--surface-hover)}
+
+/* Pannello di miglioramento sottotitoli (KuramaLab). Riusa .settings-row, cosi'
+   le colonne etichetta/valore cadono alla stessa x del resto dell'app. */
+.enhancer{gap:var(--space-2)}
+.enhance-lede{margin:0 0 var(--space-2); color:var(--text-muted); font-size:12px}
+.enhance-steps{margin:0 0 var(--space-3); padding-left:1.2em; display:flex; flex-direction:column; gap:4px; font-size:12px}
+.enhance-steps li::marker{color:var(--accent)}
+.link-btn{background:none; border:none; color:var(--accent); cursor:pointer; padding:0 2px; text-decoration:underline}
+.link-btn:hover{color:var(--accent-hover)}
+.enhance-path{flex:1; min-width:0; font-family:var(--font-mono); font-size:11px;
+  color:var(--text-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.key-state{font-size:11px; white-space:nowrap}
+.key-ok{color:var(--success)} .key-bad{color:var(--danger)} .key-checking{color:var(--text-muted)}
+.enhance-privacy{margin:var(--space-2) 0 0; font-size:11px; color:var(--text-faint); line-height:1.5}
+.enhance-cost,.enhance-done{margin:0; font-size:11px; font-variant-numeric:tabular-nums; color:var(--text-muted)}
+.enhance-done{color:var(--success); overflow-wrap:anywhere}
+.enhance-error{margin:0; font-size:12px; color:var(--danger); overflow-wrap:anywhere}
+.tab-note{margin:0; font-size:11px; color:var(--text-faint)}
+.subs-blocked{display:flex; flex-direction:column; gap:var(--space-2); font-size:12px}
+.subs-blocked p{margin:0; color:var(--warn, var(--text-muted))}
+
+/* Offerta GPU: compare solo quando installare cambierebbe davvero qualcosa. */
+.gpu-offer{display:flex; flex-direction:column; gap:var(--space-2); padding:var(--space-3);
+  border:1px solid var(--border); border-left:3px solid var(--accent);
+  border-radius:var(--r-sm); background:var(--surface)}
+.gpu-offer p{margin:0; font-size:12px; color:var(--text-muted)}
+.gpu-offer button{align-self:flex-start}
+.gpu-ready{color:var(--success)}
+
+/* Modale chiave API: passi numerati perche' sono una sequenza reale svolta
+   fuori dall'app, non una decorazione. */
+.apikey-modal{max-width:560px; display:flex; flex-direction:column; gap:var(--space-3)}
+.apikey-lede{margin:0; font-size:12px; color:var(--text-muted)}
+.apikey-steps{margin:0; padding-left:1.4em; display:flex; flex-direction:column; gap:var(--space-2); font-size:13px}
+.apikey-steps li::marker{color:var(--accent); font-variant-numeric:tabular-nums}
+.apikey-steps li{display:list-item}
+.apikey-steps .link-btn{display:inline; font-family:var(--font-mono); font-size:11px; overflow-wrap:anywhere}
+.apikey-field{display:flex; gap:var(--space-2)}
+.apikey-field input{flex:1; min-width:0; font-family:var(--font-mono)}
+.apikey-state{margin:0; font-size:12px; min-height:1.2em}
+.apikey-state.key-ok{color:var(--success)}
+.apikey-state.key-bad{color:var(--danger)}

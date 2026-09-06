@@ -1,9 +1,12 @@
 mod commands;
 mod error;
+mod kurama;
 mod platforms;
+mod preflight;
 mod progress;
 mod sidecar;
 mod subs;
+mod whisper;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -20,6 +23,7 @@ pub fn run() {
             commands::fetch_info,
             commands::fetch_playlist_info,
             commands::ffmpeg_status,
+            commands::ytdlp_status,
             commands::open_dir,
             commands::download_update,
             commands::reveal_in_folder,
@@ -27,6 +31,14 @@ pub fn run() {
             commands::download_audio,
             commands::download_subs,
             commands::cancel_download,
+            preflight::preflight_check,
+            preflight::preflight_install,
+            preflight::whisper_check,
+            preflight::gpu_status,
+            whisper::transcribe,
+            kurama::kurama_verify,
+            kurama::kurama_models,
+            kurama::kurama_enhance,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

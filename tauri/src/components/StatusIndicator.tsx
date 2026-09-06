@@ -4,7 +4,7 @@ export type StatusKind =
   | { kind: "ready" }
   | { kind: "phase"; key: string; legacy: string; step?: number; total?: number }
   | { kind: "done"; path: string }
-  | { kind: "error"; message: string }
+  | { kind: "error"; message: string; errorKey?: string }
   | { kind: "canceled"; filesRemoved: number };
 
 interface Props {

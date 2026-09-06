@@ -42,6 +42,45 @@ export interface FfmpegStatus {
   path: string;
 }
 
+export interface KuramaAccount {
+  ok: boolean;
+  balance: number;   // EUR, -1 when the field was absent
+  raw: string;
+}
+
+export interface EnhanceResult {
+  output_path: string;
+  chunks: number;
+  cost_eur: number;
+}
+
+export interface GpuStatus {
+  has_gpu: boolean;
+  gpu_name: string;
+  cuda_ready: boolean;
+  upgradable: boolean;   // GPU present but torch cannot use it
+}
+
+export interface DepStatus {
+  id: string;
+  path: string;
+  version: string;
+  found: boolean;
+  required: boolean;
+  installable: boolean;
+}
+
+export interface PreflightReport {
+  deps: DepStatus[];
+  ok: boolean;
+}
+
+export interface YtdlpStatus {
+  version: string;
+  age_days: number;   // -1 when the version string could not be parsed
+  stale: boolean;     // true past 90 days, matching yt-dlp's own warning
+}
+
 export interface DownloadStarted {
   job_id: string;
 }

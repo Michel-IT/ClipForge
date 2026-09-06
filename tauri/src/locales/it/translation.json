@@ -1,5 +1,9 @@
 {
-  "_meta": { "autoTranslated": false, "generated": null, "source": "human" },
+  "_meta": {
+    "autoTranslated": false,
+    "generated": null,
+    "source": "human"
+  },
   "app": {
     "title": "ClipForge",
     "tagline": "Downloader media universale"
@@ -42,20 +46,25 @@
     "download": {
       "titleVideo": "Scaricamento video",
       "titleAudio": "Estrazione MP3",
-      "titleSubs":  "Estrazione sottotitoli",
+      "titleSubs": "Estrazione sottotitoli",
       "canceledTitle": "Annullato",
-      "canceledMsg_zero":  "Annullato. Nessun file parziale da rimuovere.",
-      "canceledMsg_one":   "Annullato. Rimosso {{count}} file parziale.",
+      "canceledMsg_zero": "Annullato. Nessun file parziale da rimuovere.",
+      "canceledMsg_one": "Annullato. Rimosso {{count}} file parziale.",
       "canceledMsg_other": "Annullato. Rimossi {{count}} file parziali.",
       "showDetails": "Mostra dettagli",
       "hideDetails": "Nascondi dettagli",
-      "openFolder":  "Apri cartella",
-      "close":       "Chiudi",
-      "cancel":      "Annulla"
+      "openFolder": "Apri cartella",
+      "close": "Chiudi",
+      "cancel": "Annulla"
     }
   },
-  "paste": { "button": "Incolla" },
-  "videoInfo": { "button": "Info video", "loading": "…" },
+  "paste": {
+    "button": "Incolla"
+  },
+  "videoInfo": {
+    "button": "Info video",
+    "loading": "…"
+  },
   "status": {
     "ready": "Pronto",
     "downloading": "Scaricamento…",
@@ -75,7 +84,8 @@
   "url": {
     "placeholder": "Incolla un URL video (YouTube, Reddit, TikTok, ...)",
     "detect": "Rileva",
-    "detecting": "…"
+    "detecting": "…",
+    "timeout": "Nessuna risposta dopo 30s. Controlla il link o la connessione."
   },
   "capabilities": {
     "video": "Video",
@@ -111,13 +121,32 @@
     "languages": "Lingue (separate da virgola):",
     "playlist": "Scarica intera playlist",
     "start": "Estrai Sottotitoli → Testo",
-    "cancel": "Annulla"
+    "cancel": "Annulla",
+    "langsPlaceholder": "it,en",
+    "source": "Sorgente:",
+    "sourceExisting": "Scarica i sottotitoli esistenti",
+    "sourceWhisper": "Genera con Whisper (dall’audio)",
+    "language": "Lingua (vuoto = rileva):",
+    "model": "Modello:",
+    "startWhisper": "Genera sottotitoli",
+    "whisperNote": "L’audio viene trascritto su questo computer. I modelli grandi sono più accurati e più lenti.",
+    "setupChecking": "Controllo se Whisper è installato…",
+    "setupInstalling": "Installo Whisper. Succede una volta sola e può richiedere qualche minuto.",
+    "setupBlocked": "Whisper non può essere installato in automatico. Fai prima questo, poi ripremi il bottone:",
+    "gpuReady": "Accelerazione GPU attiva ({{gpu}}).",
+    "gpuOffer": "Ho rilevato {{gpu}}, ma Whisper sta usando la CPU. Attivare l’accelerazione GPU scarica circa 2,5 GB e rende la trascrizione molte volte più veloce.",
+    "gpuEnable": "Attiva accelerazione GPU",
+    "gpuInstalling": "Installazione… (~2,5 GB)"
   },
   "settings": {
     "title": "Impostazioni",
     "language": "Lingua:",
     "theme": "Tema:",
-    "themeOption": { "dark": "Scuro", "light": "Chiaro", "system": "Sistema" },
+    "themeOption": {
+      "dark": "Scuro",
+      "light": "Chiaro",
+      "system": "Sistema"
+    },
     "playlist": "Scarica intera playlist (quando l'URL contiene &list=)",
     "autoPaste": "Incolla automaticamente l'URL dalla clipboard all'avvio",
     "autoUpdateCheck": "Controlla aggiornamenti all'avvio",
@@ -134,7 +163,8 @@
       "label": "Cookie dal browser:",
       "none": "Nessuno",
       "warning": "Chiudi <strong>{{browser}}</strong> prima di scaricare — Windows blocca il file dei cookie. L'app riproverà senza cookie se il blocco impedisce la lettura."
-    }
+    },
+    "open": "Impostazioni"
   },
   "progress": {
     "ready": "Pronto",
@@ -143,7 +173,9 @@
     "error": "Errore: {{message}}"
   },
   "log": {
-    "empty": "L'output del download apparirà qui."
+    "empty": "L'output del download apparirà qui.",
+    "copy": "Copia log",
+    "copied": "Copiato"
   },
   "playlist": {
     "modal": {
@@ -163,14 +195,16 @@
       "bulkBody_other": "Stai per scaricare {{count}} file. Confermi?",
       "bulkBack": "Indietro",
       "bulkProceed": "Conferma"
-    }
+    },
+    "untitled": "(senza titolo #{{index}})"
   },
   "phase": {
     "downloading": "scaricamento…",
     "merging": "unione tracce…",
     "extractingAudio": "estrazione audio…",
     "embeddingThumbnail": "incorporamento copertina…",
-    "cookieRetry": "cookie del browser bloccati — riprovo senza"
+    "cookieRetry": "cookie del browser bloccati — riprovo senza",
+    "transcribing": "trascrizione"
   },
   "update": {
     "available": "Versione {{latest}} disponibile (sei alla {{current}}).",
@@ -186,6 +220,101 @@
     "sidecar": "Sidecar fallito",
     "io": "Errore I/O",
     "json": "Errore di parsing",
-    "other": "Errore"
+    "other": "Errore",
+    "forbidden": "Il sito ha rifiutato il download (HTTP 403). Il motore di download è probabilmente obsoleto: controlla Motore nella console.",
+    "signin": "Questo video richiede un account collegato. Scegli il browser in Impostazioni, Cookie da.",
+    "unavailable": "Il video è privato, rimosso o riservato agli iscritti.",
+    "network": "Impossibile raggiungere il sito. Controlla la connessione e riprova.",
+    "format": "La qualità richiesta non è disponibile per questo video. Provane un’altra.",
+    "whisperMissing": "Whisper non è disponibile. Riavvia ClipForge per farlo installare.",
+    "transcribe": "Trascrizione fallita. Guarda la console per quello che ha riportato Whisper.",
+    "kurama": {
+      "auth": "La chiave API è stata rifiutata. Controllala nelle impostazioni.",
+      "credits": "Il credito KuramaLab è esaurito. Ricarica per continuare.",
+      "model": "Quel modello non è più disponibile. Scegline un altro.",
+      "rate": "Limite di frequenza raggiunto. Aspetta un momento e riprova.",
+      "maintenance": "KuramaLab è momentaneamente non disponibile. Riprova tra poco.",
+      "emptySrt": "Il file di sottotitoli è vuoto o non è un SRT valido."
+    }
+  },
+  "engine": {
+    "label": "Motore",
+    "age": "yt-dlp {{version}} · {{days}} giorni",
+    "stale": "yt-dlp {{version}} · {{days}} giorni — conviene aggiornare",
+    "unknown": "versione di yt-dlp non disponibile"
+  },
+  "preflight": {
+    "title": "Controllo componenti",
+    "checking": "Verifico che sia installato tutto quello che serve a ClipForge…",
+    "installing": "Sto installando un componente mancante. La prima volta può richiedere qualche minuto.",
+    "missing": "non trovato",
+    "needManual": "Installa questi a mano, poi premi Ricontrolla:",
+    "retry": "Ricontrolla",
+    "dep": {
+      "ytdlp": "Motore di download (yt-dlp)",
+      "ffmpeg": "Convertitore media (ffmpeg)",
+      "python": "Python",
+      "pip": "pip",
+      "whisper": "Whisper (sottotitoli)"
+    },
+    "install": {
+      "ytdlp": "Reinstalla ClipForge: il downloader incluso manca o è stato messo in quarantena dall’antivirus.",
+      "ffmpeg": "Reinstalla ClipForge: il convertitore incluso manca o è stato messo in quarantena dall’antivirus.",
+      "python": "Installa Python 3.10+ da python.org e spunta \"Add Python to PATH\"",
+      "pip": "python -m ensurepip --upgrade"
+    }
+  },
+  "enhance": {
+    "title": "Migliora i sottotitoli con l’AI",
+    "apiKey": "Chiave API:",
+    "file": "File sottotitoli:",
+    "noFile": "nessun file selezionato",
+    "browse": "Scegli…",
+    "modeLabel": "Operazione:",
+    "modes": {
+      "fix": "Correggi gli errori di trascrizione",
+      "translate": "Traduci",
+      "summary": "Riassumi"
+    },
+    "targetLang": "Lingua di destinazione:",
+    "targetLangPlaceholder": "es. italiano",
+    "model": "Modello:",
+    "pricing": "Prezzi",
+    "start": "Invia e migliora",
+    "running": "Elaborazione… {{done}}/{{total}}",
+    "spent": "Speso finora: € {{cost}}",
+    "done": "Salvato: {{path}} — costo € {{cost}}",
+    "privacy": "Il testo dei sottotitoli viene inviato a api.kuramalab.net ed elaborato all’estero. Elaborazione transitoria, nessuna registrazione dei prompt, nessun addestramento sui tuoi dati. Non parte nulla finché non premi il bottone.",
+    "key": {
+      "checking": "verifica…",
+      "ok": "chiave valida",
+      "okBalance": "valida · € {{balance}} residui",
+      "bad": "chiave rifiutata"
+    },
+    "guide": {
+      "lede": "Usa KuramaLab, un servizio a pagamento con un piccolo credito omaggio alla registrazione. Serve una chiave tua.",
+      "step1": "Crea un account: ",
+      "register": "Registrati",
+      "step2": "Genera una chiave e copiala: ",
+      "createKey": "Crea la tua chiave",
+      "step3": "Incollala qui sotto. Correggere un file da 10 minuti costa frazioni di centesimo."
+    },
+    "setupKey": "Configura chiave",
+    "changeKey": "Cambia chiave"
+  },
+  "apikey": {
+    "title": "Configura la tua chiave KuramaLab",
+    "lede": "ClipForge usa KuramaLab per migliorare i sottotitoli. La chiave è tua e resta su questo computer.",
+    "step1": "Registrati: ",
+    "step2": "Vai alla pagina delle chiavi: ",
+    "step3": "Clicca su \"Crea chiave\" e copiala.",
+    "step4": "Incollala qui:",
+    "verify": "Verifica",
+    "checking": "Verifica…",
+    "save": "Salva",
+    "ok": "Chiave valida.",
+    "okBalance": "Chiave valida · € {{balance}} disponibili.",
+    "bad": "La chiave è stata rifiutata.",
+    "badShape": "Una chiave è kl_ seguito da 48 caratteri."
   }
 }

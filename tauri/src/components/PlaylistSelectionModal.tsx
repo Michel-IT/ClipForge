@@ -171,7 +171,7 @@ export function PlaylistSelectionModal({ isOpen, items, loading, error, onConfir
                       onChange={() => toggle(it.index)}
                     />
                     <span className="playlist-index">{it.index}.</span>
-                    <span className="playlist-title">{it.title || `(untitled #${it.index})`}</span>
+                    <span className="playlist-title">{it.title || t("playlist.untitled", { index: it.index })}</span>
                     {it.duration_formatted && (
                       <span className="playlist-duration">{it.duration_formatted}</span>
                     )}

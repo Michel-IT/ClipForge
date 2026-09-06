@@ -10,7 +10,7 @@ use crate::sidecar;
 // yt-dlp needs to know where ffmpeg lives to merge streams, embed thumbnails,
 // extract audio, etc. Tauri copies the externalBin sidecars next to the running
 // binary (and drops the target-triple suffix), so we resolve from current_exe().
-fn ffmpeg_path() -> Option<String> {
+pub fn ffmpeg_path() -> Option<String> {
     let exe = std::env::current_exe().ok()?;
     let dir = exe.parent()?;
     let name = if cfg!(windows) { "ffmpeg.exe" } else { "ffmpeg" };
@@ -56,6 +56,94 @@ pub struct VideoInfo {
 pub struct FfmpegStatus {
     pub available: bool,
     pub path: String,
+}
+
+// Maps yt-dlp's stderr onto a translated headline. The raw text still reaches
+// the console — this only decides which sentence the user reads first, so the
+// common failures say what to *do* instead of quoting a status code.
+//
+// The 403 arm is the reason this exists: when the bundled engine goes stale,
+// YouTube answers 403 after the thumbnail downloads, and the app used to relay
+// "HTTP Error 403: Forbidden" — accurate, and useless to the person reading it.
+pub fn classify_failure(stderr: &str) -> &'static str {
+    let s = stderr.to_ascii_lowercase();
+    if s.contains("403") && (s.contains("forbidden") || s.contains("unable to download video data")) {
+        "error.forbidden"
+    } else if s.contains("sign in to confirm") || s.contains("confirm you're not a bot") {
+        "error.signin"
+    } else if s.contains("private video") || s.contains("video unavailable") || s.contains("members-only") {
+        "error.unavailable"
+    } else if s.contains("unable to download webpage")
+        || s.contains("failed to resolve")
+        || s.contains("connection")
+        || s.contains("timed out")
+    {
+        "error.network"
+    } else if s.contains("requested format is not available") {
+        "error.format"
+    } else {
+        "error.other"
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct YtdlpStatus {
+    pub version: String,
+    pub age_days: i64,
+    /// True once the engine is old enough that extractor breakage is likely.
+    pub stale: bool,
+}
+
+/// Days from 1970-01-01 for a civil date (Howard Hinnant's days_from_civil).
+/// Used instead of pulling in chrono/time just to age-compare one date.
+fn days_from_civil(y: i64, m: i64, d: i64) -> i64 {
+    let y = if m <= 2 { y - 1 } else { y };
+    let era = if y >= 0 { y } else { y - 399 } / 400;
+    let yoe = y - era * 400;
+    let mp = (m + 9) % 12;
+    let doy = (153 * mp + 2) / 5 + d - 1;
+    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    era * 146_097 + doe - 719_468
+}
+
+/// yt-dlp releases are named after their date (`YYYY.MM.DD`), so the version
+/// string alone tells us how old the engine is — no network call needed.
+fn ytdlp_age_days(version: &str) -> Option<i64> {
+    let mut it = version.trim().split('.');
+    let y: i64 = it.next()?.parse().ok()?;
+    let m: i64 = it.next()?.parse().ok()?;
+    let d: i64 = it.next()?.trim_end_matches(|c: char| !c.is_ascii_digit()).parse().ok()?;
+    let today = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .ok()?
+        .as_secs() as i64
+        / 86_400;
+    Some(today - days_from_civil(y, m, d))
+}
+
+// Reports the bundled yt-dlp's version and age. The sidecar is baked into the
+// installer and never updates itself, so it silently rots: every release from
+// v0.1.0 to v0.1.3 shipped the same 2026.03.17 build and eventually started
+// failing on YouTube with HTTP 403 while the app still looked healthy. Ninety
+// days matches yt-dlp's own "your version is older than 90 days" warning.
+#[tauri::command]
+pub async fn ytdlp_status(app: AppHandle) -> Result<YtdlpStatus, AppError> {
+    let output = app
+        .shell()
+        .sidecar("yt-dlp")
+        .map_err(|e| AppError::Sidecar(e.to_string()))?
+        .args(["--version", "--no-update"])
+        .output()
+        .await
+        .map_err(|e| AppError::Sidecar(e.to_string()))?;
+
+    let version = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    let age_days = ytdlp_age_days(&version).unwrap_or(-1);
+    Ok(YtdlpStatus {
+        version,
+        age_days,
+        stale: age_days >= 90,
+    })
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -573,7 +661,11 @@ fn apply_playlist_args(args: &mut Vec<String>, playlist: bool, playlist_items: O
 
 #[tauri::command]
 pub async fn cancel_download(job_id: String) -> Result<(), AppError> {
+    // A transcription job owns a yt-dlp sidecar in stage 1 and a plain whisper
+    // process in stage 2, tracked in two different registries under the same
+    // id. Ask both: only one of them holds a live child at any moment.
     sidecar::cancel(&job_id);
+    crate::whisper::cancel(&job_id);
     Ok(())
 }
 
@@ -955,6 +1047,7 @@ async fn spawn_download(
                             "download-error",
                             serde_json::json!({
                                 "job_id":  job_for_task,
+                                "error_key": classify_failure(&stderr_buf),
                                 "message": if stderr_buf.trim().is_empty() {
                                     format!("yt-dlp exited with code {code}")
                                 } else {

@@ -11,16 +11,18 @@ import { AudioTab } from "./components/AudioTab";
 import { SubsTab } from "./components/SubsTab";
 import { SettingsTab } from "./components/SettingsTab";
 import { DisclaimerModal } from "./components/DisclaimerModal";
-import { DownloadModal, ModalStatus } from "./components/DownloadModal";
+import { DownloadDock, DockStatus } from "./components/DownloadDock";
+import { PreflightScreen } from "./components/PreflightScreen";
+import { SubtitleEnhancer } from "./components/SubtitleEnhancer";
 import { PlaylistSelectionModal } from "./components/PlaylistSelectionModal";
 import { StatusIndicator, StatusKind } from "./components/StatusIndicator";
 import { UpdateBanner } from "./components/UpdateBanner";
-import { detectPlatform, fetchPlaylistInfo, onDownloadCanceled, onDownloadComplete, onDownloadError, onDownloadLog, onDownloadProgress } from "./api";
+import { detectPlatform, fetchPlaylistInfo, onDownloadCanceled, onDownloadComplete, onDownloadError, onDownloadLog, onDownloadProgress, ytdlpStatus } from "./api";
 import { DEFAULTS, loadSettings, saveSettings, Settings } from "./store";
-import { LogEvent, PlatformInfo, PlaylistItem, PlaylistSelectionResult, ProgressEvent, Theme, UpdateInfo, VideoInfo } from "./types";
+import { LogEvent, PlatformInfo, PlaylistItem, PlaylistSelectionResult, ProgressEvent, Theme, UpdateInfo, VideoInfo, YtdlpStatus } from "./types";
 import { checkForUpdates } from "./updater";
 
-type Tab = "video" | "audio" | "subs" | "settings";
+type Tab = "video" | "audio" | "subs";
 const LOG_BUFFER_MAX = 1000;
 
 function applyTheme(theme: Theme) {
@@ -52,6 +54,9 @@ function App() {
   const [status, setStatus] = useState<StatusKind>({ kind: "ready" });
   const [logLines, setLogLines] = useState<LogEvent[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [preflightPassed, setPreflightPassed] = useState(false);
+  const [engine, setEngine] = useState<YtdlpStatus | null>(null);
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null);
   const [updateBannerDismissed, setUpdateBannerDismissed] = useState(false);
 
@@ -127,6 +132,8 @@ function App() {
           .catch(() => { /* silent */ });
       }
 
+      ytdlpStatus().then(setEngine).catch(() => { /* sidecar missing: stays null */ });
+
       // Auto-paste: if clipboard contains a recognised platform URL, prefill.
       if (s.auto_paste) {
         try {
@@ -172,7 +179,7 @@ function App() {
         setPercent(100);
       }),
       onDownloadError((e) => {
-        setStatus({ kind: "error", message: e.message });
+        setStatus({ kind: "error", message: e.message, errorKey: e.error_key });
         setActiveJobId(null);
       }),
       onDownloadCanceled((e) => {
@@ -214,7 +221,6 @@ function App() {
   };
 
   const tabDisabled = (tab: Tab) => {
-    if (tab === "settings") return false;
     if (!platform) return false;
     if (tab === "video") return !platform.video;
     if (tab === "audio") return !platform.audio;
@@ -222,10 +228,10 @@ function App() {
   };
 
   // Compose the modal status object from the current state.
-  const modalStatus: ModalStatus = useMemo(() => {
+  const dockStatus: DockStatus = useMemo(() => {
     switch (status.kind) {
       case "done":     return { kind: "done", outputPath: status.path };
-      case "error":    return { kind: "error", message: status.message };
+      case "error":    return { kind: "error", message: status.message, errorKey: status.errorKey };
       case "canceled": return { kind: "canceled", filesRemoved: status.filesRemoved };
       case "phase":    return {
         kind: "running",
@@ -241,6 +247,10 @@ function App() {
 
   if (!bootstrapped) return null;
 
+  if (!preflightPassed) {
+    return <PreflightScreen onReady={() => setPreflightPassed(true)} />;
+  }
+
   if (!disclaimerAccepted) {
     return <DisclaimerModal onAccept={() => setDisclaimerAccepted(true)} onLangChange={handleLangChange} />;
   }
@@ -249,7 +259,17 @@ function App() {
     <>
       <header className="app-header">
         <h1>{t("app.title")}</h1>
-        <StatusIndicator status={status} />
+        <div className="header-right">
+          <StatusIndicator status={status} />
+          <button
+            className={settingsOpen ? "gear gear-on" : "gear"}
+            onClick={() => setSettingsOpen((v) => !v)}
+            aria-label={t("settings.open")}
+            title={t("settings.open")}
+          >
+            {"⚙"}
+          </button>
+        </div>
       </header>
       {updateInfo && !updateBannerDismissed && (
         <UpdateBanner info={updateInfo} onDismiss={() => setUpdateBannerDismissed(true)} />
@@ -278,14 +298,14 @@ function App() {
           </section>
 
           <nav className="tabs">
-            {(["video", "audio", "subs", "settings"] as Tab[]).map((tab) => (
+            {(["video", "audio", "subs"] as Tab[]).map((tab) => (
               <button
                 key={tab}
                 className={activeTab === tab ? "tab tab-active" : "tab"}
                 onClick={() => setActiveTab(tab)}
                 disabled={tabDisabled(tab)}
               >
-                {tab === "settings" ? t("settings.title") : t(`tabs.${tab}`)}
+                {t(`tabs.${tab}`)}
               </button>
             ))}
           </nav>
@@ -317,7 +337,7 @@ function App() {
           {activeTab === "subs" && (
             <SubsTab
               url={url} outDir={settings.out_dir}
-              langs={settings.subs_langs} playlist={settings.playlist}
+              langs={settings.subs_langs} playlist={settings.playlist} videoInfo={videoInfo}
               cookieBrowser={settings.cookie_browser} activeJobId={activeJobId}
               onLangsChange={(l) => patch({ subs_langs: l })}
               onPlaylistChange={(v) => patch({ playlist: v })}
@@ -326,7 +346,18 @@ function App() {
               disabled={tabDisabled("subs")}
             />
           )}
-          {activeTab === "settings" && (
+          {activeTab === "subs" && (
+            <SubtitleEnhancer
+              apiKey={settings.kurama_api_key}
+              model={settings.kurama_model}
+              targetLang={settings.kurama_target_lang}
+              onApiKeyChange={(k) => patch({ kurama_api_key: k })}
+              onModelChange={(m) => patch({ kurama_model: m })}
+              onTargetLangChange={(l) => patch({ kurama_target_lang: l })}
+            />
+          )}
+
+          {settingsOpen && (
             <SettingsTab
               cookieBrowser={settings.cookie_browser}
               onCookieBrowserChange={(b) => patch({ cookie_browser: b })}
@@ -357,11 +388,21 @@ function App() {
       </main>
       <Footer />
 
-      <DownloadModal
+      <DownloadDock
+        engineNote={
+          engine
+            ? engine.age_days < 0
+              ? t("engine.unknown")
+              : t(engine.stale ? "engine.stale" : "engine.age", {
+                  version: engine.version,
+                  days: engine.age_days,
+                })
+            : undefined
+        }
         isOpen={modalOpen}
         jobKind={activeJobKind}
         jobId={activeJobId}
-        status={modalStatus}
+        status={dockStatus}
         logs={logLines}
         onClose={() => setModalOpen(false)}
       />

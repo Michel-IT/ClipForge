@@ -12,6 +12,12 @@ export interface Settings {
   language: string;
   auto_paste: boolean;       // read clipboard at startup if URL recognised
   auto_update_check: boolean; // GitHub Releases lookup on launch
+  // KuramaLab API key (kl_ + 48 hex). Stored in settings.json in plain text,
+  // like every other setting: it is a per-user prepaid credit key, not a
+  // credential to anything else. Never sent anywhere except api.kuramalab.net.
+  kurama_api_key: string;
+  kurama_model: string;
+  kurama_target_lang: string;
 }
 
 export const DEFAULTS: Settings = {
@@ -25,6 +31,9 @@ export const DEFAULTS: Settings = {
   language: "",
   auto_paste: true,
   auto_update_check: true,
+  kurama_api_key: "",
+  kurama_model: "gemma4:31b",
+  kurama_target_lang: "",
 };
 
 const store = new LazyStore("settings.json");

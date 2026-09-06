@@ -11,6 +11,11 @@ import {
   CanceledEvent,
   LogEvent,
   FfmpegStatus,
+  YtdlpStatus,
+  PreflightReport,
+  GpuStatus,
+  KuramaAccount,
+  EnhanceResult,
 } from "./types";
 
 export const detectPlatform = (url: string) =>
@@ -55,6 +60,32 @@ export const cancelDownload = (jobId: string) =>
   invoke<void>("cancel_download", { jobId });
 
 export const ffmpegStatus = () => invoke<FfmpegStatus>("ffmpeg_status");
+export const ytdlpStatus = () => invoke<YtdlpStatus>("ytdlp_status");
+
+export const transcribe = (a: {
+  url: string; outDir: string; model: string;
+  language?: string; durationSecs?: number; cookiesBrowser?: string;
+}) => invoke<DownloadStarted>("transcribe", {
+  url: a.url, outDir: a.outDir, model: a.model,
+  language: a.language, durationSecs: a.durationSecs, cookiesBrowser: a.cookiesBrowser,
+});
+
+export const kuramaVerify = (apiKey: string) => invoke<KuramaAccount>("kurama_verify", { apiKey });
+export const kuramaModels = (apiKey?: string) => invoke<string>("kurama_models", { apiKey });
+export const kuramaEnhance = (a: {
+  apiKey: string; srtPath: string; mode: string; targetLang: string; model: string;
+}) => invoke<EnhanceResult>("kurama_enhance", a);
+
+export const onKuramaProgress = (
+  cb: (p: { done: number; total: number; cost_eur: number }) => void,
+): Promise<UnlistenFn> => listen<{ done: number; total: number; cost_eur: number }>("kurama-progress", (e) => cb(e.payload));
+
+export const preflightCheck = () => invoke<PreflightReport>("preflight_check");
+export const gpuStatus = () => invoke<GpuStatus>("gpu_status");
+export const whisperCheck = () => invoke<PreflightReport>("whisper_check");
+export const preflightInstall = (id: string) => invoke<string>("preflight_install", { id });
+export const onPreflightLog = (cb: (line: string) => void): Promise<UnlistenFn> =>
+  listen<string>("preflight-log", (e) => cb(e.payload));
 export const openDir = (path: string) => invoke<void>("open_dir", { path });
 
 export const downloadUpdate = (url: string) => invoke<string>("download_update", { url });
